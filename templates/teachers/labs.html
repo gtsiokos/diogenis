@@ -1,0 +1,12 @@
+{% extends "teachers/base.html" %}
+
+{% block content %}
+<div id="content">
+	<h2>Εργαστήρια</h2>
+	<ul>
+		{% for q in results %}
+		<li>{{ q.lesson.name }} - {{ q.lab }} - {{ q.teacher.name }}</li>
+		{% endfor %}
+	</ul>
+</div>
+{% endblock content %}

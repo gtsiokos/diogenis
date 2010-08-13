@@ -1,0 +1,13 @@
+body { }
+
+#container { width: 850px; margin: 0 auto; }
+
+#header { width: auto; height: 120px; background: #efefef; border-bottom: solid 1px #bfbfbf; }
+
+#header h1 { color: #a1a1a1; text-shadow: #fff 1px 1px 0px; }
+
+#main { float: left; border-top: solid 1px #fff; }
+
+#sidebar { float: left; width: 299px; height: 400px; background: #d5d5d5; border-right: solid 1px #d1d1d1; }
+
+#content { float: left; width: 550px; height: 400px; background: #efefef; }

@@ -1,6 +1,6 @@
 body { }
 
-#container { width: 850px; margin: 0 auto; }
+#container { width: 960px; margin: 0 auto; }
 
 #header { width: auto; height: 120px; background: #efefef; border-bottom: solid 1px #bfbfbf; }
 
@@ -10,4 +10,4 @@ body { }
 
 #sidebar { float: left; width: 299px; height: 400px; background: #d5d5d5; border-right: solid 1px #d1d1d1; }
 
-#content { float: left; width: 550px; height: 400px; background: #efefef; }
+#content { float: left; width: 660px; height: 400px; background: #efefef; }

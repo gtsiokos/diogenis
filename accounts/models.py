@@ -13,14 +13,17 @@ class UserProfile(models.Model):
 		return u'%s %s' % (self.user.last_name, self.user.first_name)
 
 class AuthTeacher(UserProfile):
-	is_gtp = models.BooleanField(default=True)
 	
 	def __unicode__(self):
-		return u'%s  f %s' % (self.user.last_name, self.user.first_name)
+		return u'%s %s' % (self.user.last_name, self.user.first_name)
 
 
 class AuthStudent(UserProfile):
-	is_tourist = models.BooleanField(default=True)
+	am = models.CharField(max_length=7)
+	
+	class Meta:
+		ordering = ['am']
+
 	
 	def __unicode__(self):
 		return u'%s %s' % (self.user.last_name, self.user.first_name)

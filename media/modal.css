@@ -1,0 +1,61 @@
+/*
+ * SimpleModal OSX Style Modal Dialog
+ * http://www.ericmmartin.com/projects/simplemodal/
+ * http://code.google.com/p/simplemodal/
+ *
+ * Copyright (c) 2010 Eric Martin - http://ericmmartin.com
+ *
+ * Licensed under the MIT license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ *
+ * Revision: $Id: osx.css 242 2010-03-14 00:55:02Z emartin24 $
+ *
+ */
+
+#osx-modal-content {display:none;}
+#osx-modal-data { display: block; }
+/* Overlay */
+#osx-overlay {background-color:#000;}
+
+/* Container */
+#osx-container {
+	width:600px; height: 500px;
+	padding-bottom:4px;
+	background-color:#eee;
+	color:#000;
+	font: 16px/24px "Lucida Grande",Arial,sans-serif;
+	
+	-moz-border-radius: 0 0 8px 8px; /* FF1+ */
+	-webkit-border-radius: 0 0 8px 8px; /* Saf3+, Chrome */
+	border-radius: 0 0 8px 8px; /* Opera 10.5, IE 9 */
+	
+	-moz-box-shadow: 0 -5px 50px #000; /* FF3.5+ */
+	-webkit-box-shadow: 0 -5px 50px #000; /* Saf3.0+, Chrome */
+	box-shadow: 0 -5px 50px #000; /* Opera 10.5, IE 9.0 */
+}
+#osx-container>a {color:#141414; font: normal 15px Verdana; border-bottom: 1px solid #141414; }
+#osx-container #osx-modal-title {color:#000; background-color:#ddd; border-bottom:1px solid #ccc; font-weight:bold; padding:6px 8px; text-shadow:0 1px 0 #f4f4f4;}
+#osx-container .close {display:none; position:absolute; right:0; top:0;}
+#osx-container .close a {display:block; color:#777; font-weight:bold; padding:6px 12px 0; text-decoration:none; text-shadow:0 1px 0 #f4f4f4;}
+#osx-container .close a:hover {color:#000;}
+#osx-container #osx-modal-data {font-size:12px; padding:18px 18px;}
+#osx-container h2 {margin:10px 0 6px;}
+#osx-container p {margin: 0 0 10px 10px;}
+#osx-container span {color:#555;}
+
+
+#osx-modal-data h3>sup { vertical-align: super; }
+
+#lab-registration>li{
+	display: block;
+	margin: 0 0 20px 0; padding: 20px 25px 40px 25px;
+	border: 1px solid transparent;
+	
+	-moz-border-radius: 8px; /* FF1+ */
+	-webkit-border-radius: 8px; /* Saf3+, Chrome */
+	border-radius: 8px; /* Opera 10.5, IE 9 */
+
+
+}
+#lab-registration li.focused { background: #d6e4f1; border: solid 1px #5690C7; }
+#lab-registration li.focused h3 { color: #5690C7; }

@@ -33,6 +33,7 @@ class StudentToLesson(models.Model):
 class StudentSubscription(models.Model):
 	teacher_to_lab = models.ForeignKey('TeacherToLab')
 	student = models.ForeignKey('accounts.AuthStudent')
+	in_transit = models.BooleanField(default=False)
 	
 	def __unicode__(self):
 		return u'%s [ %s - %s - %s ]' % (self.student.user.get_full_name(), self.teacher_to_lab.lesson.name, self.teacher_to_lab.teacher.name, self.teacher_to_lab.lab.name)

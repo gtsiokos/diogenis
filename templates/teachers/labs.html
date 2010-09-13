@@ -1,12 +1,70 @@
 {% extends "teachers/base.html" %}
 
 {% block content %}
-<div id="content">
-	<h2>Εργαστήρια</h2>
-	<ul>
-		{% for q in results %}
-		<li>{{ q.lesson.name }} - {{ q.lab }} - {{ q.teacher.name }}</li>
-		{% endfor %}
-	</ul>
+
+<div id="content" class="logged">
+	<h2>ΤΑ ΕΡΓΑΣΤΗΡΙΑ ΜΟΥ</h2>
+	<div id="ui-messages">
+		<p>Κονσόλα Μηνυμάτων</p>
+	</div>
+	
+	{% if results %}
+			{% for q in results %}
+				{% if q.name %}
+					<h3>{{ q.name }}</h3>
+				{% endif %}
+				
+				{% for q2 in q.labs %}
+				<div class="lab">
+					
+					<h4>
+						<span class="lab-name">{{ q2.name }}</span>
+						<span class="lab-date">{{ q2.day }} {{ q2.hour }}</span>
+						{% if q.labs_count > 1 and q2.students %}
+							<span class="transfer enabled">
+								<span>Μετακίνηση σε V</span>
+								<ul class="labs-list">
+									{% for s in q.labs_list %}
+										<li><span class="name">{{ s.name }}</span> &ndash; <span class="day">{{ s.day }}</span> &ndash; <span class="hour">{{ s.hour }}</span></li>
+									{% endfor %}
+								</ul>
+							</span>
+						{% else %}
+							<span class="transfer disabled">
+								Μετακίνηση σε V
+							</span>
+						{% endif %}
+					</h4>
+					{% if q2.students %}
+						<table>
+							<thead>
+								<tr>
+									<th class="selection" abbr="Selections" scope="col">#</th>
+									<th abbr="Last Name" scope="col">Επώνυμο</th>
+									<th abbr="First Name" scope="col">Όνομα</th>
+									<th class="am" abbr="AM" scope="col">Αριθμός Μητρώου</th>
+								</tr>
+							</thead>
+							<tbody>				
+							{% for q3 in q2.students %}
+								<tr>
+									<td class="cb"><input type="checkbox" name="{{ q3.am }}" value="{{ q3.am }}"></td>
+									<td>{{ q3.last }}</td>
+									<td>{{ q3.first }}</td>
+									<td>{{ q3.am }}</td>
+								</tr>
+							{% endfor %}
+							</tbody>
+						</table>
+					{% else %}
+						<p>Δεν έχει εγγραφεί κανένας σε αυτό το εργαστήριο.</p>
+					{% endif %}
+				</div>
+				{% endfor %}
+			{% endfor %}
+		{% else %}
+			<p>Δεν έχετε προσθέσει τα εργαστήρια σας στο Διογένη.</p>
+		{% endif %}
+
 </div>
 {% endblock content %}

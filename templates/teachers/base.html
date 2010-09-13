@@ -1,11 +1,24 @@
 {% extends "base.html" %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="/media/modal.css">
+{% endblock %}
+
 {% block sidebar %}
 <div id="sidebar">
+	<a href="#">Προσθήκη Εργαστηρίου</a>
 	<ul>
-		<li>Προφίλ</li>
-		<li>Εργαστήρια</li>
-		<li>Διαχείριση Εργαστηρίων</li>
+		<li><a href="#">Διαχείριση Εργαστηρίων</a></li>
+		<li><a href="#">Αίθουσα Αναμονής</a></li>
 	</ul>
 </div>
+{% endblock %}
+
+{% block extra_js_bottom %}
+	
+	<script type="text/javascript" src="/media/js/jquery.scrollTo-1.4.2-min.js"></script>
+	<script type="text/javascript" src="/media/js/jquery.json-2.2.min.js"></script>
+	<script type="text/javascript" src="/media/js/gui.js"></script>
+	
+
 {% endblock %}

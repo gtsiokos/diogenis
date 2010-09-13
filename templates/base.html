@@ -3,15 +3,20 @@
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 		<title>{% block title %}{% endblock title %}Diogenis</title>
+		<link rel="stylesheet" href="/media/reset.css">
 		<link rel="stylesheet" href="/media/style.css">
+		<link href="http://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet" type="text/css">
 		{% block extra_css %}{% endblock %}
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+		<script type="text/javascript" src="/media/js/layout.js"></script>
 		<script type="text/javascript">
 		</script>
 		{% block extra_js_top %}{% endblock %}
+		
+
 	</head>
 	<body>
-		<div id="container">
+		<div id="container1">
 			<div id="header">
 			{% block header %}<h1>Diogenis</h1>{% endblock %}
 				<div id="login">
@@ -31,6 +36,8 @@
 					{% endif %}
 				</div>
 			</div>
+		</div>
+		<div id="container2">
 			<div id="main">
 				{% block sidebar %}{% endblock %}
 				{% block alerts %}

@@ -1,8 +1,17 @@
 {% extends "students/base.html" %}
 
 {% block content %}
-<div id="content">
-	<h2>Είσαι Βλάκανς?</h2>
-	<p>O LDAP δεν είναι έτοιμος ρε μπαγλαμά!</p>
+
+<div id="content" class="logged">
+	<h2>ΤΑ ΕΡΓΑΣΤΗΡΙΑ ΜΟΥ</h2>
+	<dl class="labs">
+	{% for labt in results %}
+		<dt> {{ labt.lesson_name }} </dt>
+		<dd>
+			<p>{{ labt.lab_name }} | {{ labt.lab_day }} {{ labt.lab_hour }} | {{ labt.teacher }}</p>
+		</dd>
+	{% endfor %}
+	</dl>
 </div>
+
 {% endblock content %}

@@ -23,8 +23,7 @@ urlpatterns = patterns('',
     (r'^save_db_labs/', fill_labs),
     (r'^api/', excel_api),
     (r'^$', index),
-    (r'^temp/', lab_display),
-
+    
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),

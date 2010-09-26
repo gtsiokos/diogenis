@@ -18,11 +18,6 @@ def user_is_student(user):
 	return user.is_authenticated() and not user.get_profile().is_teacher
 
 
-@user_passes_test(user_is_student, login_url="/login/")
-def labs(request, username):
-	if username == request.user.username:
-		return render_to_response('students/labs.html', {}, context_instance = RequestContext(request))
-
 def excel_api(request):
 	results = []
 	tmp = []
@@ -38,7 +33,7 @@ def excel_api(request):
 
 
 @user_passes_test(user_is_student, login_url="/login/")
-def lab_display(request, username):
+def display_labs(request, username):
 	result = []
 	if username == request.user.username:
 		q1 = User.objects.get(username=username)
@@ -54,10 +49,11 @@ def lab_display(request, username):
 				if i.teacher_to_lab==j:
 					res2=j
 					resar.append(res2)
-					result.append ({ "lesson_name":res2.lesson.name,
+					result.append ({
+								"lesson_name":res2.lesson.name,
 								"lab_name":res2.lab.name,
 								"lab_day":res2.lab.day,
 								"lab_hour":res2.lab.hour,
 								"teacher":res2.teacher.name
-							})
-	return render_to_response('students/temp.html', {'results': result}, context_instance = RequestContext(request))
+								})
+	return render_to_response('students/labs.html', {'results': result}, context_instance = RequestContext(request))

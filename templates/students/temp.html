@@ -1,0 +1,24 @@
+
+<div id="content" class="logged">
+		<h3>Τα εργαστήρια μου</h3>
+        {% for labt in results %}
+            <h2> ΟΝΟΜΑ ΕΡΓΑΣΤΗΡΙΟΥ</h2>
+            <h4> ---------------- </h4>
+            <h4> {{ labt.lesson_name }} </h4>
+            <h4> {{ labt.lab_name }} </h4>
+            <h4> {{ labt.lab_day }} </h4>
+            <h4> {{ labt.lab_hour }} </h4>
+            <h4> {{ labt.teacher }} </h4>
+            <h3> ==================== </h3>
+        {% endfor %}
+</div>
+
+
+
+
+
+#sxolia gia treksimo tis listas finalresult sto shell tis django
+#for e in finalresult:
+#     for j in e:
+#             print e[j]
+#fdfdsfdsfdsfds

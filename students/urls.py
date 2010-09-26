@@ -4,5 +4,6 @@ from diogenis.students.views import *
 
 
 urlpatterns = patterns('',
+	(r'^(?P<username>\w{0,50})/', lab_display),
 	(r'^(?P<username>\w{0,50})/', labs),
 )

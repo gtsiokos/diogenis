@@ -35,3 +35,29 @@ def excel_api(request):
 		results.append({"lesson": result.name})#, "professors": {tmp}})
 	data = simplejson.dumps(results)
 	return HttpResponse(data, mimetype='application/javascript')
+
+
+@user_passes_test(user_is_student, login_url="/login/")
+def lab_display(request, username):
+	result = []
+	if username == request.user.username:
+		q1 = User.objects.get(username=username)
+		q2 = AuthStudent()
+		for i in AuthStudent.objects.all():
+			if i.user.username == q1.username:
+				q2 = i
+		res1 = StudentSubscription.objects.filter(student=q2)
+		res2 = TeacherToLab()
+		resar=[]
+		for j in TeacherToLab.objects.all():
+			for i in res1:
+				if i.teacher_to_lab==j:
+					res2=j
+					resar.append(res2)
+					result.append ({ "lesson_name":res2.lesson.name,
+								"lab_name":res2.lab.name,
+								"lab_day":res2.lab.day,
+								"lab_hour":res2.lab.hour,
+								"teacher":res2.teacher.name
+							})
+	return render_to_response('students/temp.html', {'results': result}, context_instance = RequestContext(request))

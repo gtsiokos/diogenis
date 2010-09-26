@@ -54,7 +54,7 @@ def xls_rdr():
 	c=0
 	
 	
-	wb = xlrd.open_workbook('/home/vadmin/diogenis/media/ANATHESEIS.xls')
+	wb = xlrd.open_workbook('/Users/Lomar/Desktop/diogenis/media/ANATHESEIS.xls')
 	sh = wb.sheet_by_index(0)
 	
 	

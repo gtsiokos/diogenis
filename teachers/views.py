@@ -55,27 +55,18 @@ def manage_labs(request, username):
 									"am": sub.student.am
 									})
 				
-				
-					if time > 13:
-						time = time-12
-						lab_time = "%d %s" % (time, "μ.μ.")
-					else:
-						lab_time = "%d %s" % (time, "π.μ.")
+					lab_time = ("%d μ.μ." % (time-12) if time > 13 else "%d π.μ." % time)
 
 					data.append({	"name": lab.name,
 								"day": my_lab.lab.day,
-								"hour": lab_time, 
+								"hour": lab_time,
 								"students": stud
 								})
 				
 				for s in total_labs:
 					time = s.lab.hour
-					if time > 13:
-						time = time-12
-						lab_time = "%d %s" % (time, "μ.μ.")
-					else:
-						lab_time = "%d %s" % (time, "π.μ.")
-					
+					lab_time = ("%d μ.μ." % (time-12) if time > 13 else "%d π.μ." % time)
+
 					stripped_day = s.lab.day[:3]
 					
 

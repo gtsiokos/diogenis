@@ -4,6 +4,9 @@ from accounts.models import *
 class Lesson(models.Model):
 	name = models.CharField(max_length=40)
 	
+	class Meta:
+		ordering = ['name']
+	
 	def __unicode__(self):
 		return self.name
 
@@ -11,6 +14,9 @@ class Lab(models.Model):
 	name = models.CharField(max_length=20)
 	day = models.CharField(max_length=10)
 	hour = models.IntegerField(max_length=2, null=True)
+
+	class Meta:
+		ordering = ['name', 'day', 'hour']
 	
 	def __unicode__(self):
 		return u'%s %s %s' % (self.name, self.day, self.hour)
@@ -19,6 +25,9 @@ class TeacherToLab(models.Model):
 	lesson = models.ForeignKey('Lesson')
 	teacher = models.ForeignKey('Teacher')
 	lab = models.ForeignKey('Lab')
+	
+	class Meta:
+		ordering = ['lesson']
 	
 	def __unicode__(self):
 		return u'%s - %s [ %s - %s - %s ]' % (self.lesson.name, self.teacher.name, self.lab.name, self.lab.day, self.lab.hour)
@@ -40,6 +49,9 @@ class StudentSubscription(models.Model):
 
 class Teacher(models.Model):
 	name = models.CharField(max_length=40)
+
+	class Meta:
+		ordering = ['name']
 	
 	def __unicode__(self):
 		return u'%s' % (self.name)

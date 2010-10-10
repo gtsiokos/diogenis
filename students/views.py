@@ -43,12 +43,10 @@ def display_labs(request, username):
 				q2 = i
 		res1 = StudentSubscription.objects.filter(student=q2)
 		res2 = TeacherToLab()
-		resar=[]
 		for j in TeacherToLab.objects.all():
 			for i in res1:
 				if i.teacher_to_lab==j:
 					res2=j
-					resar.append(res2)
 					result.append ({
 								"lesson_name":res2.lesson.name,
 								"lab_name":res2.lab.name,

@@ -22,6 +22,7 @@ def manage_labs(request, username):
 	if username == request.user.username:
 		q1 = User.objects.get(username=username)
 		q2 = u'%s %s' % (q1.last_name, q1.first_name)
+		q3=q2
 		q2 = Teacher.objects.get(name=q2)
 	#	qq2 = Lab.objects.get(day='')
 	#	qq3 = Lesson.objects.get(name='ΑΣΦΑΛΕΙΑ ΠΛΗΡΟΦΟΡΙΑΚΩΝ ΣΥΣΤΗΜΑΤΩΝ')
@@ -81,14 +82,16 @@ def manage_labs(request, username):
 					results.append({
 								"labs_count": total_labs_count,
 								"labs": data,
-								"labs_list": lab_data
+								"labs_list": lab_data,
+								"t_name": q3
 								})
 				else:
 					results.append({
 								"name": lesson.name,
 								"labs_count": total_labs_count,
 								"labs": data,
-								"labs_list": lab_data
+								"labs_list": lab_data,
+								"t_name": q3
 								})
 					tmp = lesson.name
 				

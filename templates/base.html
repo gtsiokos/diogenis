@@ -21,7 +21,7 @@
 			{% block header %}<h1>Diogenis</h1>{% endblock %}
 				<div id="login">
 					{% if user.is_authenticated %}
-		    				<p>{{ user.username }} <a href="/logout/">Έξοδος</a></p>
+		    				<span class="username">{{ user.username }}</span><a href="/logout/">Έξοδος</a>
 					{% else %}
 		    				<a href="#">Είσοδος</a>
 		    				<form method="POST" action="/login/">

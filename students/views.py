@@ -42,6 +42,7 @@ def display_labs(request, username):
 			if i.user.username == q1.username:
 				q2 = i
 		res1 = StudentSubscription.objects.filter(student=q2)
+		q3 = u'%s %s' % (q1.last_name, q1.first_name)
 		res2 = TeacherToLab()
 		for j in TeacherToLab.objects.all():
 			for i in res1:
@@ -52,6 +53,7 @@ def display_labs(request, username):
 								"lab_name":res2.lab.name,
 								"lab_day":res2.lab.day,
 								"lab_hour":res2.lab.hour,
-								"teacher":res2.teacher.name
+								"teacher":res2.teacher.name,
+								"s_name":q3
 								})
 	return render_to_response('students/labs.html', {'results': result}, context_instance = RequestContext(request))

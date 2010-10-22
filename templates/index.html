@@ -4,4 +4,9 @@
 <div id="content">
 	<h2>Καλωσήρθατε στον <em>Διογένη</em></h2>
 </div>
+	{% block alerts %}
+		{% if msg %}
+			<p>{{ msg }}</p>
+		{% endif %}
+	{% endblock %}
 {% endblock content %}

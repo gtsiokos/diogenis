@@ -21,18 +21,25 @@
 			{% block header %}<h1>Diogenis</h1>{% endblock %}
 				<div id="login">
 					{% if user.is_authenticated %}
-		    				<span class="username">{{ user.username }}</span><a href="/logout/">Έξοδος</a>
+		    				<a href="#" class="options-panel">{{ user.username }}</a>
+							<div class="panel">
+								<ul>								
+									<li><a href="/logout/">Έξοδος</a></li>
+								</ul>
+							</div>
 					{% else %}
-		    				<a href="#">Είσοδος</a>
-		    				<form method="POST" action="/login/">
-				  			<label for="username">Username</label>
-							<input type="text" name="username" id="username">
-							<label for="password">Password</label>
-							<input type="text" name="password" id="password">
-							<label for="remember-me">Μείνε Συνδεμένος</label>
-							<input type="checkbox" name="remember" id="remember" value="true">
-							<input type="submit" value="Είσοδος">
-						</form>
+		    				<a href="#" class="options-panel">Είσοδος</a>
+							<div class="panel">
+								<form method="POST" action="/login/">
+						  			<label for="username">Username</label>
+									<input type="text" name="username" id="username">
+									<label for="password">Password</label>
+									<input type="text" name="password" id="password">
+									<label class="remember" for="remember">Μείνε Συνδεμένος</label>
+									<input type="checkbox" name="remember" id="remember" class="remember" value="true">
+									<input class="button important" type="submit" value="Είσοδος">
+								</form>
+							</div>
 					{% endif %}
 				</div>
 			</div>
@@ -40,19 +47,18 @@
 		<div id="container2">
 			<div id="main">
 				{% block sidebar %}{% endblock %}
-				{% block alerts %}
-					{% if msg %}
-						<p>{{ msg }}</p>
-					{% endif %}
-				{% endblock %}
 				{% block content %}
-				
+					
 
 				
 				{% endblock %}
 			</div>
 			{% block footer %}{% endblock %}
 		</div>
-		{% block extra_js_bottom %}{% endblock %}
+		{% block extra_js_bottom %}
+			
+			<script type="text/javascript" src="/media/js/gui.js"></script>
+		
+		{% endblock %}
 	</body>
 </html>

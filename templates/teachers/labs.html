@@ -2,12 +2,15 @@
 
 {% block content %}
 
-<div id="content" class="logged">
-	<h2>ΤΑ ΕΡΓΑΣΤΗΡΙΑ ΜΟΥ</h2>
-	<div id="ui-messages">
-		<p>Κονσόλα Μηνυμάτων</p>
-	</div>
-	
+{% if results %}
+        <div id="content" class="logged">
+                <h2>ΤΑ ΕΡΓΑΣΤΗΡΙΑ ΜΟΥ - {{ results.0.t_name }}</h2>
+                <div id="ui-messages">
+                    <p>Κονσόλα Μηνυμάτων</p>
+                </div>
+{% endif %}
+   
+    
 	{% if results %}
 			{% for q in results %}
 				{% if q.name %}

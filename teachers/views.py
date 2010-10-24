@@ -22,10 +22,9 @@ def manage_labs(request, username):
 	if username == request.user.username:
 		q1 = User.objects.get(username=username)
 		q2 = u'%s %s' % (q1.last_name, q1.first_name)
-		q3=q2
 		q2 = Teacher.objects.get(name=q2)
 		results = []
-		tmp = ""
+		tmp = "random string"
 		my_labs = TeacherToLab.objects.filter(teacher=q2).order_by('lesson')
 	
 		for my_lab in my_labs:
@@ -79,7 +78,6 @@ def manage_labs(request, username):
 								"labs_count": total_labs_count,
 								"labs": data,
 								"labs_list": lab_data,
-								"t_name": q3
 								})
 				else:
 					results.append({
@@ -87,7 +85,6 @@ def manage_labs(request, username):
 								"labs_count": total_labs_count,
 								"labs": data,
 								"labs_list": lab_data,
-								"t_name": q3
 								})
 					tmp = lesson.name
 				

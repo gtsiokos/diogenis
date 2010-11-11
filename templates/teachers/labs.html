@@ -61,10 +61,7 @@
 
 	{% if results %}
 		{% for q in results %}
-			{% if q.name %}
-				<h3>{{ q.name }}</h3>
-			{% endif %}
-			
+			{% ifchanged q.name %}<h3>{{ q.name }}</h3>{% endifchanged %}
 			{% for q2 in q.labs %}
 			<div class="lab">
 				

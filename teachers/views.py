@@ -30,7 +30,6 @@ def manage_labs(request, username):
 		q2 = u'%s %s' % (q1.last_name, q1.first_name)
 		q2 = Teacher.objects.get(name=q2)
 		results = []
-		tmp = "random string"
 		my_labs = TeacherToLab.objects.filter(teacher=q2).order_by('lesson')
 		
 		#####################################################################
@@ -69,7 +68,8 @@ def manage_labs(request, username):
 					stud = []
 				
 					for sub in subscriptions:
-						stud.append({	"first": sub.student.user.first_name,
+						stud.append({
+									"first": sub.student.user.first_name,
 									"last": sub.student.user.last_name,
 									"am": sub.student.am
 									})
@@ -95,22 +95,13 @@ def manage_labs(request, username):
 								"hour": lab_time
 								})
 				
-				
-				if tmp == lesson.name:
-					results.append({
-								"labs_count": total_labs_count,
-								"labs": data,
-								"labs_list": lab_data,
-								})
-				else:
-					results.append({
-								"name": lesson.name,
-								"labs_count": total_labs_count,
-								"labs": data,
-								"labs_list": lab_data,
-								})
-					tmp = lesson.name
-				
+				results.append({
+							"name": lesson.name,
+							"labs_count": total_labs_count,
+							"labs": data,
+							"labs_list": lab_data,
+							})
+
 		return render_to_response('teachers/labs.html', {'results':results, 'unique_lessons':unique_lessons, 'hash':username_hashed}, context_instance = RequestContext(request))
 
 

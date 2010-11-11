@@ -125,9 +125,9 @@ a { text-decoration: none; }
 	padding-bottom: 50px;
 	background: #fafafa; border: solid 1px #E6DB55; border-left: 0;
 	
-	-moz-border-radius: 0 7px 7px 7px;
-	-webkit-border-radius: 0 7px 7px 7px;
-	border-radius: 0 7px 7px 7px;
+	-moz-border-radius: 0 7px 7px 0;
+	-webkit-border-radius: 0 7px 7px 0;
+	border-radius: 0 7px 7px 0;
 }
 			
 	div.logged h2 {

@@ -26,6 +26,9 @@
 								<ul>								
 									<li><a href="/logout/">Έξοδος</a></li>
 								</ul>
+								{% if hash %}
+									<input type="hidden" value="{{hash}}" />
+								{% endif %}
 							</div>
 					{% else %}
 		    				<a href="#" class="options-panel">Είσοδος</a>

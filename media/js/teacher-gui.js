@@ -1,7 +1,13 @@
 $(function(){
+
+	//********************************
+	//Find Login Hash
+	//********************************	
+	
+	hashValue = $("input[type='hidden']", "#login").val();
 	
 	//********************************
-	//Focus-Out Feauture
+	//Focus-Out Feature
 	//********************************	
 	
 	transfer = $("div.lab span.transfer.enabled", "#content");
@@ -44,7 +50,7 @@ $(function(){
 	});
 	
 	//********************************
-	//Ajax-Transfer Feauture
+	//Ajax-Transfer Feature
 	//********************************	
 	
 	ajaxTrans = transfer.find("ul.labs-list li");
@@ -113,15 +119,14 @@ $(function(){
 		
 		if (newLabName != oldLabName || newLabDay != oldLabDay || newLabHour != oldLabHour) {
 			
-			
-			
 			var request = {	lnew: [ { newName: newLabName, newDay: newLabDay, newHour: newLabHour} ],
 							lold: [ {oldName: oldLabName, oldDay: oldLabDay, oldHour: oldLabHour} ],
 							stud: amToSend
 						};
 			
+			ajaxUrl = '/teachers/'+hashValue+'/submit-student-to-lab/';
 			$.ajax({
-				url: '/teachers/submit-labs/',
+				url: ajaxUrl,
 				type: 'POST',
 				contentType: 'application/json; charset=utf-8',
 				data: $.toJSON(request),
@@ -170,19 +175,63 @@ $(function(){
 		
 	});
 
+
+
+	//********************************
+	//Ajax-Register-Lab Feature
+	//********************************
+
+	modalDiv = $("#osx-modal-data");
+	lessonName = modalDiv.find("#select-lesson select[name='lesson-name']");
+	lessonDay = modalDiv.find("#select-lab select[name='lesson-day']");
+	lessonHour = modalDiv.find("#select-lab select[name='lesson-hour']");
+	lessonClass = modalDiv.find("#select-class select[name='lesson-class']");
+	
+	lessonDay.attr("disabled", "disabled").parent("li").addClass("disabled");
+	lessonHour.attr("disabled", "disabled");
+	lessonClass.attr("disabled", "disabled").parent("li").hide();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

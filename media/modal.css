@@ -19,7 +19,7 @@
 
 /* Container */
 #osx-container {
-	width:600px; height: 500px;
+	width:600px; height: 550px;
 	padding-bottom:4px;
 	background-color:#eee;
 	color:#000;
@@ -44,18 +44,35 @@
 #osx-container span {color:#555;}
 
 
-#osx-modal-data h3>sup { vertical-align: super; }
+/********************************^
+//Teacher Add-New-lab Styling
+//^*****************************/	
+
+#osx-modal-data h3 {
+	display: inline; position: absolute; top: 38px; left: 25px;
+	font: bold 37px/1.1 'Droid Sans', Verdana;
+}
 
 #lab-registration>li{
-	display: block;
-	margin: 0 0 20px 0; padding: 20px 25px 40px 25px;
+	display: block; position: relative;
+	margin: 0 0 20px 0; padding: 35px 25px 35px 50px;
 	border: 1px solid transparent;
 	
 	-moz-border-radius: 8px; /* FF1+ */
 	-webkit-border-radius: 8px; /* Saf3+, Chrome */
 	border-radius: 8px; /* Opera 10.5, IE 9 */
-
-
 }
 #lab-registration li.focused { background: #d6e4f1; border: solid 1px #5690C7; }
 #lab-registration li.focused h3 { color: #5690C7; }
+
+#submit-lab-loader { display: none; margin: 0 auto; }
+
+#lab-registration li.select-lab {}
+
+#osx-modal-data label { position: absolute; top: 15px; left: 15px; text-indent: -9999px; }
+
+#osx-modal-data select {
+	width: 370px; display: block;
+	margin: 0 auto; padding: 5px 6px 6px 6px;
+	font: normal 14px Verdana, Arial, Helvetica, sans-serif;
+}

@@ -59,6 +59,7 @@ $(function(){
 	
 	ajaxTrans.click(function(){
 		
+		var ms;
 		var parentDiv = $(this).parents("div.lab");
 		
 		
@@ -148,14 +149,20 @@ $(function(){
 							msg.fadeOut(100).removeClass().addClass("warning").text(data[0].msg).fadeIn(200);
 						},300);
 					}
-				}
+				},
+				error: function(xhr, err){
+					ms = "Παρουσιάστηκε σφάλμα, δοκιμάστε ξανά";
+	    				if(xhr.status==500){
+	    					msg.fadeOut(100).removeClass().addClass("error").text(ms).fadeIn(200);
+	    				}
+    			}
 			});
 		} else {
 			if(theActive) {
 				theActive.hide();
 				theActive.parent().removeClass("active");
 			}
-			var ms = "Δεν έχετε επιλέξει κάποιον σπουδαστή";
+			ms = "Δεν έχετε επιλέξει κάποιον σπουδαστή";
 			if (amToSend[0]) { ms = "Χρησιμοποιείτε το ίδιο εργαστήριο"; }
 			setTimeout( function() {
 				msg.fadeOut(100).removeClass().addClass("warning").text(ms).fadeIn(200);

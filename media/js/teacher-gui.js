@@ -1,13 +1,7 @@
 $(function(){
-
-	//********************************
-	//Find Login Hash
-	//********************************	
-	
-	hashValue = $("input[type='hidden']", "#login").val();
 	
 	//********************************
-	//Focus-Out Feature
+	//Focus-Out Feauture
 	//********************************	
 	
 	transfer = $("div.lab span.transfer.enabled", "#content");
@@ -50,7 +44,7 @@ $(function(){
 	});
 	
 	//********************************
-	//Ajax-Transfer Feature
+	//Ajax-Transfer Feauture
 	//********************************	
 	
 	ajaxTrans = transfer.find("ul.labs-list li");
@@ -59,7 +53,6 @@ $(function(){
 	
 	ajaxTrans.click(function(){
 		
-		var ms;
 		var parentDiv = $(this).parents("div.lab");
 		
 		
@@ -120,14 +113,15 @@ $(function(){
 		
 		if (newLabName != oldLabName || newLabDay != oldLabDay || newLabHour != oldLabHour) {
 			
+			
+			
 			var request = {	lnew: [ { newName: newLabName, newDay: newLabDay, newHour: newLabHour} ],
 							lold: [ {oldName: oldLabName, oldDay: oldLabDay, oldHour: oldLabHour} ],
 							stud: amToSend
 						};
 			
-			ajaxUrl = '/teachers/'+hashValue+'/submit-student-to-lab/';
 			$.ajax({
-				url: ajaxUrl,
+				url: '/teachers/submit-labs/',
 				type: 'POST',
 				contentType: 'application/json; charset=utf-8',
 				data: $.toJSON(request),
@@ -149,20 +143,14 @@ $(function(){
 							msg.fadeOut(100).removeClass().addClass("warning").text(data[0].msg).fadeIn(200);
 						},300);
 					}
-				},
-				error: function(xhr, err){
-					ms = "Παρουσιάστηκε σφάλμα, δοκιμάστε ξανά";
-	    				if(xhr.status==500){
-	    					msg.fadeOut(100).removeClass().addClass("error").text(ms).fadeIn(200);
-	    				}
-    			}
+				}
 			});
 		} else {
 			if(theActive) {
 				theActive.hide();
 				theActive.parent().removeClass("active");
 			}
-			ms = "Δεν έχετε επιλέξει κάποιον σπουδαστή";
+			var ms = "Δεν έχετε επιλέξει κάποιον σπουδαστή";
 			if (amToSend[0]) { ms = "Χρησιμοποιείτε το ίδιο εργαστήριο"; }
 			setTimeout( function() {
 				msg.fadeOut(100).removeClass().addClass("warning").text(ms).fadeIn(200);
@@ -182,63 +170,19 @@ $(function(){
 		
 	});
 
-
-
-	//********************************
-	//Ajax-Register-Lab Feature
-	//********************************
-
-	modalDiv = $("#osx-modal-data");
-	lessonName = modalDiv.find("#select-lesson select[name='lesson-name']");
-	lessonDay = modalDiv.find("#select-lab select[name='lesson-day']");
-	lessonHour = modalDiv.find("#select-lab select[name='lesson-hour']");
-	lessonClass = modalDiv.find("#select-class select[name='lesson-class']");
-	
-	lessonDay.attr("disabled", "disabled").parent("li").addClass("disabled");
-	lessonHour.attr("disabled", "disabled");
-	lessonClass.attr("disabled", "disabled").parent("li").hide();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

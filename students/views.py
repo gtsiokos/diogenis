@@ -57,14 +57,3 @@ def display_labs(request, username):
 								"s_name":q3
 								})
 	return render_to_response('students/labs.html', {'results': result}, context_instance = RequestContext(request))
-	
-@user_passes_test(user_is_student, login_url="/login/")
-def add_new_lab(request, username):
-	if request.method == "POST":
-		if request.is_ajax():
-			
-			message = []
-			json_data = simplejson.loads(request.raw_post_data)
-			
-			data = simplejson.dumps(message)
-			return HttpResponse(data, mimetype='application/javascript')

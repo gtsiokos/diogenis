@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 
 {% block extra_css %}
-	<link rel="stylesheet" href="/media/teacher-ui.css">
-	<link rel="stylesheet" href="/media/modal.css">
+	<link type="text/css" rel="stylesheet" href="/media/teacher-ui.css" />
+	<link type="text/css" rel="stylesheet" href="/media/redmond/jquery-ui.css" />
+	<link type="text/css" rel="stylesheet" href="/media/modal.css" />
 {% endblock %}
 
 {% block sidebar %}
@@ -20,12 +21,17 @@
 {% endblock %}
 
 {% block extra_js_bottom %}
+	{% spaceless %}
 
 	<script type="text/javascript" src="/media/js/gui.js"></script>
 	<script type="text/javascript" src="/media/js/jquery.json-2.2.min.js"></script>
-	<script type="text/javascript" src="/media/js/modal/jquery.simplemodal.js"></script>
-	<script type="text/javascript" src="/media/js/teacher-gui.js"></script>
-	<script type="text/javascript" src="/media/js/modal/osx.js"></script>
+	
 	<script type="text/javascript" src="/media/js/jquery.scrollTo-1.4.2-min.js"></script>
+	<script type="text/javascript" src="/media/js/teacher-gui.js"></script>
+	
+	<script type="text/javascript" src="/media/js/modal/jquery.simplemodal.js"></script>
+	<script type="text/javascript" src="/media/js/modal/osx.js"></script>
+	<script type="text/javascript" src="/media/js/jquery-ui-1.8.6.min.js"></script>
 
+	{% endspaceless %}
 {% endblock %}

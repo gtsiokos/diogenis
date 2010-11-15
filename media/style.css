@@ -9,6 +9,7 @@
 */
 
 body { background: #FFFFE0; }
+body.wait { cursor: wait !important; }
 a { text-decoration: none; }
 
 #container1, #container2 { width: 100%; }

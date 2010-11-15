@@ -3,7 +3,6 @@
 {% block content %}
 
 <div id="content" class="logged">
-	<h2>ΤΑ ΕΡΓΑΣΤΗΡΙΑ ΜΟΥ</h2>
 	<div id="ui-messages">
 		<p>Κονσόλα Μηνυμάτων</p>
 	</div>
@@ -16,7 +15,7 @@
 					<li id="select-lesson" class="focused">
 						<h3>1</h3>
 						<label for="lesson-name">Επιλέξτε Μάθημα</label>
-						<select name="lesson-name">
+						<select class="lesson-name" name="lesson-name">
 							<option value="">Όνομα Μαθήματος</option>
 							{% for r in unique_lessons %}
 								<option value="{{ r.name }}">{{ r.name }}</option>
@@ -26,16 +25,17 @@
 					<li id="select-lab">
 						<h3>2</h3>
 						<label for="lesson-day">Επιλέξτε Ημέρα</label>
-						<select name="lesson-day">
-							<option value="">Ημέρα Μαθήματος</option>
+						<select class="lesson-day" name="lesson-day">
+							<option value="">Ημέρα</option>
 							<option value="Δευτέρα">Δευτέρα</option>
 							<option value="Τρίτη">Τρίτη</option>
 							<option value="Τετάρτη">Τετάρτη</option>
 							<option value="Πέμπτη">Πέμπτη</option>
 							<option value="Παρασκευή">Παρασκευή</option>
 						</select>
+						<span class="ux-text" >και</span>
 						<label for="lesson-hour">Επιλέξτε Ώρα</label>
-						<select name="lesson-hour">
+						<select class="lesson-hour" name="lesson-hour">
 							<option value="">Ώρα Μαθήματος</option>
 							<option value="8">8 π.μ.</option>
 							<option value="10">10 π.μ.</option>
@@ -48,12 +48,18 @@
 					<li id="select-class">
 						<h3>3</h3>
 						<label for="lesson-class">Επιλέξτε Αίθουσα</label>
-						<select name="lesson-class">
+						<select class="lesson-class" name="lesson-class">
 							<option value="">Επιλέξτε Αίθουσα</option>
 						</select>
+						<label class="students-num" for="max-students">Αριθμός Φοιτητών:</label>
+						<input id="max-students" name="max-students" type="text" readonly="readonly" />
+						<div id="slider-max-students"></div>
 					</li>
 				</ol>
 				<img id="submit-lab-loader" src="/media/img/loader.gif" alt="" />
+				<div id="modal-messages">
+					<p>Badoo</p>
+				</div>
 				<p><button class="simplemodal-close">Close</button> <span>(or press ESC or click the overlay)</span></p>
 			</div>
 		</div>

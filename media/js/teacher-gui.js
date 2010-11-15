@@ -4,7 +4,7 @@ $(function(){
 	//Find Login Hash
 	//********************************	
 	
-	hashValue = $("input[type='hidden']", "#login").val();
+	var hashValue = $("input[type='hidden']", "#login").val();
 	
 	//********************************
 	//Focus-Out Feature
@@ -69,7 +69,7 @@ $(function(){
 		var date = newLabDate.split(" ");
 		var hour = parseInt(date[0], 10);
 		var AmPm = date[1];
-		if (AmPm == "π.μ.") {
+		if (AmPm == "π.μ." || AmPm == "μ.μ." && hour == 12) {
 			newLabHour = hour;
 		} else { newLabHour = hour+12; }
 		var dString = "Δευτέρα Τρίτη Τετάρτη Πέμπτη Παρασκευή";
@@ -92,7 +92,7 @@ $(function(){
 		var day = date[0];
 		var hour = parseInt(date[1], 10);
 		var AmPm = date[2];
-		if (AmPm == "π.μ.") {
+		if (AmPm == "π.μ." || AmPm == "μ.μ." && hour == 12) {
 			oldLabHour = hour;
 		} else { oldLabHour = hour+12; }
 		oldLabDay = day;
@@ -187,31 +187,158 @@ $(function(){
 	//********************************
 	//Ajax-Register-Lab Feature
 	//********************************
-
-	modalDiv = $("#osx-modal-data");
-	lessonName = modalDiv.find("#select-lesson select[name='lesson-name']");
-	lessonDay = modalDiv.find("#select-lab select[name='lesson-day']");
-	lessonHour = modalDiv.find("#select-lab select[name='lesson-hour']");
-	lessonClass = modalDiv.find("#select-class select[name='lesson-class']");
+	
+	
+	var labList = $("#lab-registration");
+	var lessonName = $("#select-lesson select[name='lesson-name']");
+	var lessonDay = $("#select-lab select[name='lesson-day']");
+	var lessonHour = $("#select-lab select[name='lesson-hour']");
+	var lessonClass = $("#select-class select[name='lesson-class']");
+	var maxSlider = $("#slider-max-students");
 	
 	lessonDay.attr("disabled", "disabled").parent("li").addClass("disabled");
 	lessonHour.attr("disabled", "disabled");
-	lessonClass.attr("disabled", "disabled").parent("li").hide();
+	lessonClass.attr("disabled", "disabled").parent("li").addClass("disabled").hide();
+	maxSlider.slider({ 	range: "min", min: 0, max: 41, value: 20,
+					slide: function() {
+						$("#max-students").val( maxSlider.slider("value") );
+					}
+				});
+	$("#max-students").val( maxSlider.slider("value") );
+	
+	labList.find("li>h3").click(function() {
+		if ( $(this).parent("li").hasClass("isset") && !$(this).parent("li").hasClass("disabled") ){
+			labList.find("li.focused").removeClass("focused");
+			$(this).parent("li").addClass("focused").find("select").first().focus();
+		}
+		return false;
+	});
+	
+	
+	var lessonToSend, dayToSend, hourToSend;
+	var classRequest = function(lessonToSend, dayToSend, hourToSend){
+		
+		var request = { newLesson: [ { action: "getClass", newName: lessonToSend, newDay: dayToSend, newHour: hourToSend} ] };
+		ajaxUrl = '/teachers/'+hashValue+'/add-new-lab/';
+		
+		$.ajax({
+			url: ajaxUrl,
+			type: 'POST',
+			contentType: 'application/json; charset=utf-8',
+			data: $.toJSON(request),
+			dataType: 'json',
+			success: function(data) {
+				if (data[0].status == 1){
+					lessonClass.children().not(":first-child").remove();
+					var len = data[0].classes.length;
+					for(var i=0; i<len; i++){
+						var str = "<option value='"+data[0].classes[i].name+"'>"+data[0].classes[i].name+"</option>";
+						lessonClass.append(str);
+					}
+					var parentClass = lessonClass.parent("li")
+					var parentMeridiam = lessonDay.parent("li")
+					
+					parentClass.removeClass("disabled");
+					lessonClass.removeAttr("disabled");
+					
+					if ( !parentClass.hasClass("isset") ) {
+						parentClass.addClass("focused").addClass("isset");
+						parentMeridiam.removeClass("focused");
+						$("body").addClass("wait");
+						
+						setTimeout( function() {
+							var boxHeight = parentClass.height();
+							parentClass.children().hide();
+							parentClass.height(30).fadeIn(350).animate({height: boxHeight}, 400);
+						},100);
+						setTimeout( function() {
+							parentClass.children().fadeIn(350);
+						},900);
+					} else { $("body").addClass("wait"); }
+					setTimeout( function() {
+						lessonClass.focus();
+						$("body").removeClass("wait");
+					},900);
+				}
+			},
+			error: function(xhr, err){
+				ms = "Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων";
+    				if(xhr.status==500){
+    					alert(ms);
+    				}
+			}
+		});
+		
+	};
+	
 
+	
+	
+	lessonName.change(function() {
+		var hisParent = $(this).parent("li");
+		if ( !hisParent.hasClass("isset") ){
+		
+			hisParent.removeClass("focused");
+			lessonToSend = $(this).val();
+			
+			lessonDay.parent("li").removeClass("disabled").addClass("focused").addClass("isset");
+			lessonDay.removeAttr("disabled").focus();
+			lessonHour.removeAttr("disabled");
+			
+			hisParent.addClass("isset");	
+		} else {
+			lessonToSend = $(this).val();
+		}
+	});
+	
+	lessonDay.change(function() {
+		var hisParent = $(this).parent("li");
+		if ( !hisParent.hasClass("isset") ){
+		
+			dayToSend = $(this).val();
+			
+			if( !hisParent.hasClass("isset" ) ) {
+				hisParent.addClass("isset");
+			}
+			
+		} else {
+			dayToSend = $(this).val();
+		}
+		if( lessonToSend && dayToSend && hourToSend ){
+			classRequest(lessonToSend, dayToSend, hourToSend);
+		}
+	});
+	
+	lessonHour.change(function() {
+		var hisParent = $(this).parent("li");
+		if ( !hisParent.hasClass("isset") ){
+		
+			hourToSend = $(this).attr("value");
+			
+			if( !hisParent.hasClass("isset" ) ) {
+				hisParent.addClass("isset");
+			}
+			
+		} else {
+			hourToSend = $(this).attr("value");
+		}
+		if( lessonToSend && dayToSend && hourToSend ){
+			classRequest(lessonToSend, dayToSend, hourToSend);
+		}
+	});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+	lessonClass.change(function() {
+		var hisParent = $(this).parent("li");
+		if ( !hisParent.hasClass("isset") ){
+		
+			classToSend = $(this).val();
+			hisParent.addClass("isset");
+		
+		} else {
+			classToSend = $(this).val();
+		}
+		
+	});
 
 
 

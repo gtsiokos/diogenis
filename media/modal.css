@@ -49,30 +49,77 @@
 //^*****************************/	
 
 #osx-modal-data h3 {
-	display: inline; position: absolute; top: 38px; left: 25px;
+	display: inline; position: absolute; top: 20px; left: 25px;
 	font: bold 37px/1.1 'Droid Sans', Verdana;
+	color: #999;
 }
 
 #lab-registration>li{
 	display: block; position: relative;
-	margin: 0 0 20px 0; padding: 35px 25px 35px 50px;
+	margin: 0 0 18px 0; padding: 25px 25px 25px 50px;
 	border: 1px solid transparent;
 	
 	-moz-border-radius: 8px; /* FF1+ */
 	-webkit-border-radius: 8px; /* Saf3+, Chrome */
 	border-radius: 8px; /* Opera 10.5, IE 9 */
 }
-#lab-registration li.focused { background: #d6e4f1; border: solid 1px #5690C7; }
-#lab-registration li.focused h3 { color: #5690C7; }
+#lab-registration li.focused 		{ background: #d6e4f1; border: solid 1px #5690C7; }
+#lab-registration li.focused h3 	{ color: #5690C7; cursor: pointer; }
+#lab-registration li.isset h3 	{ cursor: pointer; }
+#lab-registration li.disabled h3 	{ cursor: default; }
 
 #submit-lab-loader { display: none; margin: 0 auto; }
-
-#lab-registration li.select-lab {}
 
 #osx-modal-data label { position: absolute; top: 15px; left: 15px; text-indent: -9999px; }
 
 #osx-modal-data select {
 	width: 370px; display: block;
 	margin: 0 auto; padding: 5px 6px 6px 6px;
-	font: normal 14px Verdana, Arial, Helvetica, sans-serif;
+	font: normal 13px Verdana, Arial, Helvetica, sans-serif;
 }
+
+	/********************************^
+	//Second Step Add-New-lab
+	//^*****************************/
+
+	#lab-registration #select-lab select 			{ display: inline; width: 160px; }
+	#lab-registration #select-lab select.lesson-day 	{ margin-left: 58px; }
+	#lab-registration span.ux-text {
+		margin: 0 12px 0 11px;
+		font: normal 15px Verdana, Arial, Helvetica, sans-serif;
+	}
+	
+	/********************************^
+	//Third Add-New-lab
+	//^*****************************/
+	
+	#lab-registration #select-class select.lesson-class{ margin-bottom: 25px; }
+	#lab-registration #select-class label.students-num {
+		position: static;
+		margin: 0 0 0 79px;
+		text-indent: 0px;
+	}
+	#lab-registration #select-class #max-students {
+		display: inline;
+		border: 0; background: transparent;
+		color: #222; font-weight: bold;
+	}
+	#slider-max-students { width: 330px; margin: 0 auto; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

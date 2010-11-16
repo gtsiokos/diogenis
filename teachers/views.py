@@ -75,8 +75,7 @@ def manage_labs(request, username):
 									})
 				
 					lab_time = ("%d μ.μ." % (time-12) if time > 13 else "%d π.μ." % time)
-					if time == 12:
-						lab_time = "%d μ.μ." % time
+					if time == 12: lab_time = "%d μ.μ." % time
 
 					data.append({	"name": lab.name,
 								"day": my_lab.lab.day,
@@ -85,10 +84,10 @@ def manage_labs(request, username):
 								})
 				
 				for s in total_labs:
+				
 					time = s.lab.hour
 					lab_time = ("%d μ.μ." % (time-12) if time > 13 else "%d π.μ." % time)
-					if time == 12:
-						lab_time = "%d μ.μ." % time
+					if time == 12: lab_time = "%d μ.μ." % time
 					
 					stripped_day = s.lab.day[:3]
 					
@@ -184,29 +183,54 @@ def add_new_lab(request, hashed_request):
 				except KeyError:
 					msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
 					message.append({ "status": 2, "msg": msg })
-					
+				
+				
+				booked_labs = TeacherToLab.objects.filter(lab__day__contains=new_day).filter(lab__hour=new_hour)
+				booked_labs_names = []
+				for lab in booked_labs:
+					booked_labs_names.append(lab.lab.name)
+				open_labs = Lab.objects.exclude(name__in=booked_labs_names).filter(day=new_day).filter(hour=new_hour).select_related()
+				
 				if action == "getClass":
-					booked_labs = TeacherToLab.objects.filter(lab__day__contains=new_day).filter(lab__hour=new_hour)
-					booked_labs_names = []
-					for lab in booked_labs:
-						booked_labs_names.append(lab.lab.name)
-					
-					open_labs = Lab.objects.exclude(name__in=booked_labs_names).filter(day=new_day).filter(hour=new_hour)
 					if open_labs:
 						lab_names = []
 						for lab in open_labs:
 							lab_names.append({ "name": lab.name })
 						
-						message.append({ "status": 1, "classes": lab_names })
+						message.append({ "status": 1, "action": action, "classes": lab_names })
 					else:
 						msg = u"Δεν υπάρχουν διαθέσιμες αίθουσες για αυτήν την ώρα και ημέρα"
-						message.append({ "status": 2, "msg": msg })
+						message.append({ "status": 2, "action": action, "msg": msg })
 				elif action == "submitLab":
-					print "Den einai akoma etoimo :("
+					try:
+						new_class = json_data['newLesson'][0]['newClass']
+					except KeyError:
+						msg = u"Δεν επιλέξατε αίθουσα εργαστηρίου"
+						message.append({ "status": 2, "action": action, "msg": msg })
+					
+					available_lab = open_labs.filter(name=new_class)
+					if available_lab:
+						try:
+							new_lab = Lab.objects.get(name=new_class, day=new_day, hour=new_hour)
+							new_lesson = Lesson.objects.get(name=new_name)
+							q1 = User.objects.get(username=request.user.username)
+							q2 = u'%s %s' % (q1.last_name, q1.first_name)
+							new_teacher = Teacher.objects.get(name=q2)
+							
+							TeacherToLab.objects.create(lesson=new_lesson, teacher=new_teacher, lab=new_lab).save()
+						except:
+							msg = u"Παρουσιάστηκε σφάλμα κατά την αποθήκευση των δεδομένων"
+							message.append({ "status": 2, "action": action, "msg": msg })
+						
+						msg = u"Η προσθήκη ολοκληρώθηκε"
+						message.append({ "status": 1, "action": action, "msg": msg })
+					else:
+						msg = u"Σου πήρανε το εργαστήριο μέσα από τα χέρια"
+						message.append({ "status": 2, "action": action, "msg": msg })
 				
-				ok_msg = u"Η προσθήκη ολοκληρώθηκε"
+				error_msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
 				if not message:
-					message.append({ "status": 1, "msg": ok_msg })
+					message.append({ "status": 1, "action": action, "msg": error_msg })
 				data = simplejson.dumps(message)
 				return HttpResponse(data, mimetype='application/javascript')
 	else:

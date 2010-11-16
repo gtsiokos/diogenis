@@ -56,11 +56,16 @@
 						<div id="slider-max-students"></div>
 					</li>
 				</ol>
-				<img id="submit-lab-loader" src="/media/img/loader.gif" alt="" />
+				
+				
 				<div id="modal-messages">
+					<img id="modal-loader" src="/media/img/loader.gif" alt="" />
 					<p>Badoo</p>
 				</div>
-				<p><button class="simplemodal-close">Close</button> <span>(or press ESC or click the overlay)</span></p>
+				<ul class="modal-controls">
+					<li><button class="simplemodal-close">Ακύρωση</button></li>
+					<li><a id="submit-lab" class="button important" href="#">Αποθήκευση</a><li>
+				</ul>
 			</div>
 		</div>
 	{% endblock %}

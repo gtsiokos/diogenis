@@ -49,9 +49,12 @@ $(function(){
 		}
 	});
 	
+	
+	
 	//********************************
 	//Ajax-Transfer Feature
 	//********************************	
+	
 	
 	ajaxTrans = transfer.find("ul.labs-list li");
 	$("div.lab", "#content").find("table td>input").removeAttr("disabled").attr('checked', false);
@@ -134,7 +137,7 @@ $(function(){
 				dataType: 'json',
 				success: function(data) {
 				   	if (data[0].status == 1){
-				   		students.parents("tr").addClass("disabled").find("input").attr("disabled", "disabled");
+				   		students.parents("tr").addClass("disabled", 80).find("input").attr("disabled", "disabled");
 						setTimeout( function() {
 							msg.fadeOut(100).removeClass().addClass("ok").text(data[0].msg).fadeIn(200);
 						},300);
@@ -189,22 +192,28 @@ $(function(){
 	//********************************
 	
 	
-	var labList = $("#lab-registration");
-	var lessonName = $("#select-lesson select[name='lesson-name']");
-	var lessonDay = $("#select-lab select[name='lesson-day']");
-	var lessonHour = $("#select-lab select[name='lesson-hour']");
-	var lessonClass = $("#select-class select[name='lesson-class']");
-	var maxSlider = $("#slider-max-students");
+	var labList 		= $("#lab-registration");
+	var lessonName 		= $("#select-lesson select[name='lesson-name']");
+	var lessonDay 		= $("#select-lab select[name='lesson-day']");
+	var lessonHour 		= $("#select-lab select[name='lesson-hour']");
+	var lessonClass 	= $("#select-class select[name='lesson-class']");
+	var maxSlider 		= $("#slider-max-students");
+	var modalMsg 		= $("#modal-messages");
+	var submitLab 		= $("#submit-lab");
 	
 	lessonDay.attr("disabled", "disabled").parent("li").addClass("disabled");
 	lessonHour.attr("disabled", "disabled");
 	lessonClass.attr("disabled", "disabled").parent("li").addClass("disabled").hide();
-	maxSlider.slider({ 	range: "min", min: 0, max: 41, value: 20,
-					slide: function() {
-						$("#max-students").val( maxSlider.slider("value") );
-					}
-				});
+	modalMsg.find("#modal-loader").hide().siblings("p").hide();
+	maxSlider.slider({ 	range: "min", min: 5, max: 40, value: 20,
+						slide: function( event, ui ) {
+							$("#max-students").val(ui.value);
+						}
+					});
 	$("#max-students").val( maxSlider.slider("value") );
+	
+	submitLab.hide();
+	
 	
 	labList.find("li>h3").click(function() {
 		if ( $(this).parent("li").hasClass("isset") && !$(this).parent("li").hasClass("disabled") ){
@@ -215,10 +224,11 @@ $(function(){
 	});
 	
 	
-	var lessonToSend, dayToSend, hourToSend;
-	var classRequest = function(lessonToSend, dayToSend, hourToSend){
+	var lessonToSend, dayToSend, hourToSend, classToSend;
+	var theRequest = function(lessonToSend, dayToSend, hourToSend, classToSend){
 		
-		var request = { newLesson: [ { action: "getClass", newName: lessonToSend, newDay: dayToSend, newHour: hourToSend} ] };
+		if (classToSend) { var request = { newLesson: [{ action: "submitLab", newName: lessonToSend, newDay: dayToSend, newHour: hourToSend, newClass: classToSend}] }; }
+		else { var request = { newLesson: [{ action: "getClass", newName: lessonToSend, newDay: dayToSend, newHour: hourToSend}] }; }
 		ajaxUrl = '/teachers/'+hashValue+'/add-new-lab/';
 		
 		$.ajax({
@@ -229,50 +239,79 @@ $(function(){
 			dataType: 'json',
 			success: function(data) {
 				if (data[0].status == 1){
-					lessonClass.children().not(":first-child").remove();
-					var len = data[0].classes.length;
-					for(var i=0; i<len; i++){
-						var str = "<option value='"+data[0].classes[i].name+"'>"+data[0].classes[i].name+"</option>";
-						lessonClass.append(str);
-					}
-					var parentClass = lessonClass.parent("li")
-					var parentMeridiam = lessonDay.parent("li")
+
+					if (data[0].action == "getClass") {
+						lessonClass.children().not(":first-child").remove();
+						var len = data[0].classes.length;
+						for(var i=0; i<len; i++){
+							var str = "<option value='"+data[0].classes[i].name+"'>"+data[0].classes[i].name+"</option>";
+							lessonClass.append(str);
+						}
+						var parentClass = lessonClass.parent("li")
+						var parentMeridiam = lessonDay.parent("li")
 					
-					parentClass.removeClass("disabled");
-					lessonClass.removeAttr("disabled");
-					
-					if ( !parentClass.hasClass("isset") ) {
-						parentClass.addClass("focused").addClass("isset");
-						parentMeridiam.removeClass("focused");
-						$("body").addClass("wait");
+						parentClass.removeClass("disabled");
+						lessonClass.removeAttr("disabled");
+						
+						if ( !parentClass.hasClass("isset") ) {
+							parentClass.addClass("focused").addClass("isset");
+							parentMeridiam.removeClass("focused");
+							$("body").addClass("wait");
+						
+							setTimeout( function() {
+								var boxHeight = parentClass.height();
+								parentClass.children().hide();
+								parentClass.height(30).fadeIn(350).animate({height: boxHeight}, 400);
+							},100);
+							submitLab.fadeIn(350);
+							setTimeout( function() {
+								parentClass.children().fadeIn(350);
+							},900);
+						} else {
+							$("body").addClass("wait");
+							modalMsg.find("p").fadeOut(100);
+						}
 						
 						setTimeout( function() {
-							var boxHeight = parentClass.height();
-							parentClass.children().hide();
-							parentClass.height(30).fadeIn(350).animate({height: boxHeight}, 400);
-						},100);
-						setTimeout( function() {
-							parentClass.children().fadeIn(350);
+							lessonClass.focus();
+							$("body").removeClass("wait");
+							modalMsg.find("p").removeClass();
 						},900);
-					} else { $("body").addClass("wait"); }
-					setTimeout( function() {
-						lessonClass.focus();
-						$("body").removeClass("wait");
-					},900);
+					}
+					else if (data[0].action == "submitLab") {
+						modalMsg.find("#modal-loader").fadeOut(150);
+						setTimeout( function() {
+							modalMsg.find("p").removeClass().addClass("ok").text(data[0].msg).append("<a href='#' onClick='window.location.reload()'>Ανανέωση</a>").fadeIn(200);
+						},400);
+					}
+
+				}
+				else if (data[0].status == 2){
+				
+					if (data[0].action == "getClass") {
+						modalMsg.find("p").addClass("error").text(data[0].msg).fadeIn(200);
+					}
+					else if (data[0].action == "submitLab") {
+						modalMsg.find("#modal-loader").fadeOut(150);
+						setTimeout( function() {
+							modalMsg.find("p").removeClass().addClass("error").text(data[0].msg).fadeIn(200);
+						},400);
+					}
+					
 				}
 			},
 			error: function(xhr, err){
 				ms = "Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων";
-    				if(xhr.status==500){
-    					alert(ms);
-    				}
+				if(xhr.status==500){
+					modalMsg.find("#modal-loader").fadeOut(150);
+					setTimeout( function() {
+						modalMsg.find("p").fadeOut(100).removeClass().addClass("error").text(ms).fadeIn(200);
+					},400);
+				}
 			}
 		});
 		
 	};
-	
-
-	
 	
 	lessonName.change(function() {
 		var hisParent = $(this).parent("li");
@@ -305,7 +344,7 @@ $(function(){
 			dayToSend = $(this).val();
 		}
 		if( lessonToSend && dayToSend && hourToSend ){
-			classRequest(lessonToSend, dayToSend, hourToSend);
+			theRequest(lessonToSend, dayToSend, hourToSend);
 		}
 	});
 	
@@ -323,7 +362,7 @@ $(function(){
 			hourToSend = $(this).attr("value");
 		}
 		if( lessonToSend && dayToSend && hourToSend ){
-			classRequest(lessonToSend, dayToSend, hourToSend);
+			theRequest(lessonToSend, dayToSend, hourToSend);
 		}
 	});
 
@@ -340,7 +379,15 @@ $(function(){
 		
 	});
 
-
+	submitLab.click(function() {
+		if ( lessonToSend && dayToSend && hourToSend && classToSend ) {
+			modalMsg.find("p").hide().siblings("img").fadeIn(50);
+			theRequest(lessonToSend, dayToSend, hourToSend, classToSend);
+		} else { alert("Παρακαλώ συμπληρώστε τα στοιχεία του εργαστηρίου"); }
+	
+	
+		return false;
+	});
 
 
 

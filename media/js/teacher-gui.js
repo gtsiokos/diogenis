@@ -258,15 +258,16 @@ $(function(){
 							parentMeridiam.removeClass("focused");
 							$("body").addClass("wait");
 						
-							setTimeout( function() {
-								var boxHeight = parentClass.height();
-								parentClass.children().hide();
-								parentClass.height(30).fadeIn(350).animate({height: boxHeight}, 400);
-							},100);
+							var boxHeight = parentClass.height();
+							parentClass.children().hide();
+							parentClass.height(30).fadeIn(350,
+												function(){
+													$(this).animate({height: boxHeight}, 350);
+												});
 							submitLab.fadeIn(350);
 							setTimeout( function() {
 								parentClass.children().fadeIn(350);
-							},900);
+							},710);
 						} else {
 							$("body").addClass("wait");
 							modalMsg.find("p").fadeOut(100);
@@ -276,13 +277,16 @@ $(function(){
 							lessonClass.focus();
 							$("body").removeClass("wait");
 							modalMsg.find("p").removeClass();
-						},900);
+						},720);
 					}
 					else if (data[0].action == "submitLab") {
-						modalMsg.find("#modal-loader").fadeOut(150);
-						setTimeout( function() {
-							modalMsg.find("p").removeClass().addClass("ok").text(data[0].msg).append("<a href='#' onClick='window.location.reload()'>Ανανέωση</a>").fadeIn(200);
-						},400);
+						modalMsg.find("#modal-loader").fadeOut(150, function(){
+																modalMsg.find("p")
+																.removeClass().addClass("ok")
+																.text(data[0].msg).append("<a href='#' onClick='window.location.reload()'>Ανανέωση</a>")
+																.fadeIn(200);
+															}
+														);
 					}
 
 				}
@@ -292,12 +296,14 @@ $(function(){
 						modalMsg.find("p").addClass("error").text(data[0].msg).fadeIn(200);
 					}
 					else if (data[0].action == "submitLab") {
-						modalMsg.find("#modal-loader").fadeOut(150);
-						setTimeout( function() {
-							modalMsg.find("p").removeClass().addClass("error").text(data[0].msg).fadeIn(200);
-						},400);
+						modalMsg.find("#modal-loader").fadeOut(150, function(){
+																modalMsg.find("p")
+																.removeClass().addClass("error")
+																.text(data[0].msg)
+																.fadeIn(200);
+															}
+														);
 					}
-					
 				}
 			},
 			error: function(xhr, err){

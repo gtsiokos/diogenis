@@ -49,7 +49,7 @@
 //^*****************************/	
 
 #osx-modal-data h3 {
-	display: inline; position: absolute; top: 20px; left: 25px;
+	display: inline; position: absolute; top: 15px; left: 25px;
 	padding: 4px 6px;
 	font: bold 37px/1.1 'Droid Sans', Verdana;
 	color: #999; text-shadow: 1px 1px 0 #FCFCFC;

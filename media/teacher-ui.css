@@ -11,12 +11,11 @@
 div.logged #ui-messages {
 	float: left; width: 648px;
 	margin: 35px 16px 22px 16px;
-	
 }
 	
 	#ui-messages p {
-		display: block; width: 500px; height: 22px;
-		margin: 0 auto; padding: 10px 12px 7px 12px;
+		display: block; width: 500px; position: relative;
+		margin: 0 auto; padding: 10px 12px 12px 12px;
 		font: normal 14px Verdana, Arial, Helvetica, sans-serif;
 		background: #e9e9e9; color: #949494;
 		border: solid 1px #aaa;
@@ -31,6 +30,21 @@ div.logged #ui-messages {
 	background: #D3F8D4; color: #333333;
 	border: solid 1px #7ed082;
 	}
+	
+		#ui-messages p.ok a {
+			position: absolute; top: 6px; right: 7px;
+			padding: 5px 7px 6px 7px;
+			font: normal 12px 'Droid Sans', Verdana;
+			letter-spacing: 0.08em; text-align: center; text-shadow: none;
+		
+			-moz-border-radius: 5px;
+			-webkit-border-radius: 5px;
+			border-radius: 5px;
+		}
+		#ui-messages p.ok a:link, #ui-messages p.ok a:visited { 	background: #7ed082; color: #fff;
+																		border: solid 1px #359139; text-shadow: 1px 1px 1px #235F26; }
+		#ui-messages p.ok a:hover, #ui-messages p.ok a:focus { 	background: #333; color: #FCFCFC;
+																		border: solid 1px #141414; text-shadow: 1px 1px 1px #141414; }
 	
 	#ui-messages p.error{
 	background: #FFEBE8; color: #333333;

@@ -177,7 +177,6 @@ def add_new_lab(request, hashed_request):
 				
 				try:
 					action = json_data['newLesson'][0]['action']
-					new_name = json_data['newLesson'][0]['newName']
 					new_day = json_data['newLesson'][0]['newDay']
 					new_hour = json_data['newLesson'][0]['newHour']
 				except KeyError:
@@ -203,6 +202,7 @@ def add_new_lab(request, hashed_request):
 						message.append({ "status": 2, "action": action, "msg": msg })
 				elif action == "submitLab":
 					try:
+						new_name = json_data['newLesson'][0]['newName']
 						new_class = json_data['newLesson'][0]['newClass']
 					except KeyError:
 						msg = u"Δεν επιλέξατε αίθουσα εργαστηρίου"
@@ -230,7 +230,7 @@ def add_new_lab(request, hashed_request):
 				
 				error_msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
 				if not message:
-					message.append({ "status": 1, "action": action, "msg": error_msg })
+					message.append({ "status": 2, "action": action, "msg": error_msg })
 				data = simplejson.dumps(message)
 				return HttpResponse(data, mimetype='application/javascript')
 	else:

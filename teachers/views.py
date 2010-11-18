@@ -21,9 +21,13 @@ def user_is_teacher(user):
 	return user.is_authenticated() and user.get_profile().is_teacher
 
 def pdfexport(request):
-	selected_lesson =str("ΒΑΣΕΙΣ ΔΕΔΟΜΕΝΩΝ ΙΙ")
+	selected_lesson =str("ΑΝΑΛΥΣΗ ΚΑΙ ΣΧΕΔΙΑΣΜΟΣ ΠΛΗΡΟΦΟΡΙΑΚΩΝ ΣΥΣΤΗΜΑΤΩΝ")
+#	selected_lesson =str("ΑΣΥΡΜΑΤΕΣ ΕΠΙΚΟΙΝΩΝΙΕΣ")
+#	selected_lesson =str("ΒΑΣΕΙΣ ΔΕΔΟΜΕΝΩΝ ΙΙ")
 	selected_lesson = unicode(selected_lesson,"utf-8")
-	username = "ΤΣΙΑΚΜΑΚΗ ΜΑΡΙΑ"
+	username = request.user.username
+	username = User.objects.get(username=username)
+	username = u'%s %s' % (username.last_name, username.first_name)
 	tempname="teachers/temp.pdf"
 	response = HttpResponse(mimetype='application/pdf')
 	response['Content-Disposition'] = 'filename=%s' % (tempname)

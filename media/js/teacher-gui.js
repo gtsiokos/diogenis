@@ -52,6 +52,20 @@ $(function(){
 	
 	
 	//********************************
+	//Global Ajax Behaviour
+	//********************************		
+	
+	var theBody = $("body:first");
+	
+	theBody.ajaxStart(function(){
+		theBody.addClass("wait");
+	});
+	
+	theBody.ajaxComplete(function(){
+		theBody.removeClass("wait");
+	});
+	
+	//********************************
 	//Ajax-Transfer Feature
 	//********************************	
 	
@@ -160,6 +174,13 @@ $(function(){
 	    				if(xhr.status==500){
 	    					msg.fadeOut(100).removeClass().addClass("error").text(ms).fadeIn(200);
 	    				}
+    			},
+    			complete: function() {
+    				if(theActive) {
+						theActive.hide();
+						theActive.parent().removeClass("active");
+					}
+					$.scrollTo({top: 0}, 350, {axis:"y"});
     			}
 			});
 		} else {
@@ -174,18 +195,10 @@ $(function(){
 			},300);
 			$.scrollTo({top: 0}, 500, {axis:"y"});
 		}
-		
 		return false;
 	});
 	
-	msg.ajaxComplete(function(){
-		if(theActive) {
-			theActive.hide();
-			theActive.parent().removeClass("active");
-		}
-		$.scrollTo({top: 0}, 350, {axis:"y"});
-		
-	});
+	
 
 
 
@@ -200,6 +213,7 @@ $(function(){
 	var lessonHour 		= $("#select-lab select[name='lesson-hour']");
 	var lessonClass 	= $("#select-class select[name='lesson-class']");
 	var maxSlider 		= $("#slider-max-students");
+	var maxStudents 	= $("#max-students")
 	var modalMsg 		= $("#modal-messages");
 	var submitLab 		= $("#submit-lab");
 	
@@ -209,10 +223,10 @@ $(function(){
 	modalMsg.find("#modal-loader").hide().siblings("p").hide();
 	maxSlider.slider({ 	range: "min", min: 5, max: 40, value: 20,
 						slide: function( event, ui ) {
-							$("#max-students").val(ui.value);
+							maxStudents.val(ui.value);
 						}
 					});
-	$("#max-students").val( maxSlider.slider("value") );
+	maxStudents.val( maxSlider.slider("value") );
 	
 	submitLab.hide();
 	
@@ -227,9 +241,11 @@ $(function(){
 	
 	
 	var lessonToSend, dayToSend, hourToSend, classToSend;
-	var theRequest = function(dayToSend, hourToSend, lessonToSend, classToSend){
+	var theRequest = function(dayToSend, hourToSend, lessonToSend, classToSend) {
 		
-		if (classToSend) { var request = { newLesson: [{ action: "submitLab", newName: lessonToSend, newDay: dayToSend, newHour: hourToSend, newClass: classToSend}] }; }
+		var maxToSend = maxSlider.slider("value");
+		
+		if (classToSend) { var request = { newLesson: [{ action: "submitLab", newName: lessonToSend, newDay: dayToSend, newHour: hourToSend, newClass: classToSend, maxStudents: maxToSend}] }; }
 		else { var request = { newLesson: [{ action: "getClass", newDay: dayToSend, newHour: hourToSend}] }; }
 		ajaxUrl = '/teachers/'+hashValue+'/add-new-lab/';
 		
@@ -258,39 +274,29 @@ $(function(){
 						if ( !parentClass.hasClass("isset") ) {
 							parentClass.addClass("focused").addClass("isset");
 							parentMeridiam.removeClass("focused");
-							$("body").addClass("wait");
-						
+							
 							var boxHeight = parentClass.height();
 							parentClass.children().hide();
 							parentClass.height(30).fadeIn(350,
 												function(){
-													$(this).animate({height: boxHeight}, 350);
+													$(this).animate({height: boxHeight}, 350).children().delay(500).fadeIn(350);
 												});
 							submitLab.fadeIn(350);
+							
 							setTimeout( function() {
-								parentClass.children().fadeIn(350);
-							},710);
-						} else {
-							$("body").addClass("wait");
-							modalMsg.find("p").fadeOut(100);
-						}
-						
-						setTimeout( function() {
-							lessonClass.focus();
-							$("body").removeClass("wait");
-							modalMsg.find("p").removeClass();
-						},720);
+								lessonClass.focus();
+							},900);	
+						} else { lessonClass.focus(); }
 					}
 					else if (data[0].action == "submitLab") {
 						modalMsg.find("#modal-loader").fadeOut(150, function(){
 																modalMsg.find("p")
-																.removeClass().addClass("ok")
+																.addClass("ok")
 																.text(data[0].msg).append("<a href='#' onClick='window.location.reload()'>ανανέωση</a>")
 																.fadeIn(200);
 															}
 														);
 					}
-
 				}
 				else if (data[0].status == 2){
 				
@@ -300,7 +306,7 @@ $(function(){
 					else if (data[0].action == "submitLab") {
 						modalMsg.find("#modal-loader").fadeOut(150, function(){
 																modalMsg.find("p")
-																.removeClass().addClass("error")
+																.addClass("error")
 																.text(data[0].msg)
 																.fadeIn(200);
 															}
@@ -313,13 +319,17 @@ $(function(){
 				if(xhr.status==500){
 					modalMsg.find("#modal-loader").fadeOut(150);
 					setTimeout( function() {
-						modalMsg.find("p").fadeOut(100).removeClass().addClass("error").text(ms).fadeIn(200);
+						modalMsg.find("p").addClass("error").text(ms).fadeIn(200);
 					},400);
 				}
 			}
 		});
 		
 	};
+	
+	var cleanMessages = function() {
+		modalMsg.find("p").fadeOut(100).delay(100).removeClass();
+	}
 	
 	lessonName.change(function() {
 		var hisParent = $(this).parent("li");
@@ -336,6 +346,7 @@ $(function(){
 		} else {
 			lessonToSend = $(this).val();
 		}
+		cleanMessages();
 	});
 	
 	lessonDay.change(function() {
@@ -355,6 +366,7 @@ $(function(){
 			classToSend = null;
 			theRequest(dayToSend, hourToSend);
 		}
+		cleanMessages();
 	});
 	
 	lessonHour.change(function() {
@@ -374,6 +386,7 @@ $(function(){
 			classToSend = null;
 			theRequest(dayToSend, hourToSend);
 		}
+		cleanMessages();
 	});
 
 	lessonClass.change(function() {
@@ -386,21 +399,26 @@ $(function(){
 		} else {
 			classToSend = $(this).val();
 		}
-		
+		cleanMessages();
 	});
-
-	submitLab.click(function() {
+	
+	var submitLabRequest = function() {
 		if ( lessonToSend && dayToSend && hourToSend && classToSend ) {
-			modalMsg.find("p").hide().siblings("img").fadeIn(50);
+			submitLab.unbind("click");
+			modalMsg.find("p").hide().removeClass().siblings("img").fadeIn(50);
 			theRequest(dayToSend, hourToSend, lessonToSend, classToSend);
+			setTimeout( function() {
+				submitLab.bind("click", submitLabRequest);
+			},1500);
 		}
 		else {
 			ms = "Παρακαλώ συμπληρώστε τα στοιχεία του εργαστηρίου";
-			modalMsg.find("p").fadeOut(100).removeClass().addClass("error").text(ms).fadeIn(200);
+			cleanMessages();
+			modalMsg.find("p").addClass("error").text(ms).fadeIn(200);
 		}
-	
 		return false;
-	});
+	}
+	submitLab.bind("click", submitLabRequest);
 
 
 

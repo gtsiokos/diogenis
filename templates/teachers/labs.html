@@ -94,6 +94,7 @@
 						</span>
 					{% endif %}
 				</h4>
+				
 				{% if q2.students %}
 					<table>
 						<thead>
@@ -115,6 +116,10 @@
 						{% endfor %}
 						</tbody>
 					</table>
+					<div class="extras">
+						<p><span class="empty-seats number">{{ q2.empty_seats }}</span><span class="empty-seats">Ελεύθερες Θέσεις</span></p>
+						<a class="export-pdf" href="#">PDF</a>
+					</div>
 				{% else %}
 					<p>Δεν έχει εγγραφεί κανένας σε αυτό το εργαστήριο.</p>
 				{% endif %}

@@ -15,7 +15,7 @@ jQuery(function ($) {
 	var OSX = {
 		container: null,
 		init: function () {
-			$("#sidebar").find("a.button.important").click(function (e) {
+			$("#add-lab").click(function (e) {
 				e.preventDefault();	
 
 				$("#osx-modal-content").modal({

@@ -13,7 +13,7 @@ class Lesson(models.Model):
 class Lab(models.Model):
 	name = models.CharField(max_length=20)
 	day = models.CharField(max_length=10)
-	hour = models.IntegerField(max_length=2, null=True)
+	hour = models.IntegerField(max_length=2)
 
 	class Meta:
 		ordering = ['name', 'day', 'hour']
@@ -25,6 +25,7 @@ class TeacherToLab(models.Model):
 	lesson = models.ForeignKey('Lesson')
 	teacher = models.ForeignKey('Teacher')
 	lab = models.ForeignKey('Lab')
+	max_students = models.IntegerField(max_length=2, null=True, blank=True)
 	
 	class Meta:
 		ordering = ['lesson']

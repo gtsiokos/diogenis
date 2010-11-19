@@ -21,6 +21,28 @@ def user_is_teacher(user):
 	return user.is_authenticated() and user.get_profile().is_teacher
 
 def pdfexport(request):
+	
+	###################[ den douleuoun sto diko sou branch min ta dokimaseis         ]######################################
+	message = []
+	json_data = simplejson.loads(request.raw_post_data)
+	#print json_data;
+	
+	try:
+		lab_name = json_data['pdfRequest'][0]['labName']
+		lab_day = json_data['pdfRequest'][0]['labDay']
+		lab_hour = json_data['pdfRequest'][0]['labHour']
+	except KeyError:
+		pass
+	
+	###################[ opote exoume onoma ergastiriou, hmera kai wra               ]######################################
+	###################[ an xreiazesai kati allo gia na bgaleis to queryset, pes mou ]######################################
+	###################[ akolouthoun paradeigmata                                    ]######################################
+	lab_name = u"UNIX"
+	lab_day = u"Δευτέρα"
+	lab_hour = 12
+	###################[ </edit>                                                     ]######################################
+	
+	
 	selected_lesson =str("ΑΝΑΛΥΣΗ ΚΑΙ ΣΧΕΔΙΑΣΜΟΣ ΠΛΗΡΟΦΟΡΙΑΚΩΝ ΣΥΣΤΗΜΑΤΩΝ")
 #	selected_lesson =str("ΑΣΥΡΜΑΤΕΣ ΕΠΙΚΟΙΝΩΝΙΕΣ")
 #	selected_lesson =str("ΒΑΣΕΙΣ ΔΕΔΟΜΕΝΩΝ ΙΙ")

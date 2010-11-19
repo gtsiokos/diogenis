@@ -60,19 +60,71 @@ $(function(){
 	theBody.ajaxStart(function(){
 		theBody.addClass("wait");
 	});
-	
 	theBody.ajaxComplete(function(){
 		theBody.removeClass("wait");
 	});
+	
+	var splitOldDate = function(oldLabDate) {
+		var date = oldLabDate.split(" ");
+		var day = date[0];
+		var hour = parseInt(date[1], 10);
+		var AmPm = date[2];
+		if (AmPm == "π.μ." || AmPm == "μ.μ." && hour == 12) {
+			hour = hour;
+		} else { hour = hour+12; }
+		
+		return {day:day, hour:hour};
+	}
 	
 	//********************************
 	//Ajax-Transfer Feature
 	//********************************	
 	
 	
-	ajaxTrans = transfer.find("ul.labs-list li");
-	$("div.lab", "#content").find("table td>input").removeAttr("disabled").attr('checked', false);
-	msg = $("#ui-messages p", "#content");
+	var ajaxTrans 		= transfer.find("ul.labs-list li");
+	var msg 			= $("#ui-messages p", "#content");
+	var theLabs 		= $("div.lab", "#content");
+	var pdfLink 		= theLabs.find("div.extras:first a.export-pdf");
+	theLabs.find("table td>input").removeAttr("disabled").attr('checked', false);
+	
+	pdfLink.click(function() {
+		var parentDiv = $(this).parents("div.lab");
+		var labName = parentDiv.find("h4>span.lab-name").text();
+		var labDate = parentDiv.find("h4>span.lab-date").text();
+		
+		var splittedDate = splitOldDate(labDate);
+		
+		labDay = splittedDate.day;
+		labHour = splittedDate.hour;
+		
+		console.log(labName+"-||-"+labDay+"-||-"+labHour);
+		
+		var request = {	pdfRequest: [{ labName: labName, labDay: labDay, labHour: labHour}] };
+			
+		ajaxUrl = '/teachers/'+hashValue+'/export-pdf/';
+		$.ajax({
+			url: ajaxUrl,
+			type: 'POST',
+			contentType: 'application/json; charset=utf-8',
+			data: $.toJSON(request),
+			dataType: 'json',
+			success: function(data) {
+				if ( data[0].status == 2 ) {
+					setTimeout( function() {
+						msg.fadeOut(100).removeClass().addClass("error").text(data[0].msg).fadeIn(200);
+					},300);					
+				}
+			},
+			error: function(xhr, err){
+				ms = "Παρουσιάστηκε σφάλμα, δοκιμάστε ξανά";
+				if(xhr.status==500){
+					msg.fadeOut(100).removeClass().addClass("error").text(ms).fadeIn(200);
+				}
+			}
+		});
+		
+		return false;
+	});
 	
 	ajaxTrans.click(function(){
 		
@@ -80,9 +132,11 @@ $(function(){
 		var parentDiv = $(this).parents("div.lab");
 		
 		
+		var newLabName, newLabDate, newLabDay, newLabHour
+		
 		newLabName = $(this).find("span.name").text();
 		var day = $(this).find("span.day").text();
-		var newLabDate = $(this).find("span.hour").text();
+		newLabDate = $(this).find("span.hour").text();
 		var date = newLabDate.split(" ");
 		var hour = parseInt(date[0], 10);
 		var AmPm = date[1];
@@ -102,17 +156,14 @@ $(function(){
 		}
 		
 		
-		oldLabName = parentDiv.find("h4>span.lab-name").text();
-		var oldLabDate = parentDiv.find("h4>span.lab-date").text();
+		var oldLabName, oldLabDate, oldLabDay, oldLabHour
 		
-		var date = oldLabDate.split(" ");
-		var day = date[0];
-		var hour = parseInt(date[1], 10);
-		var AmPm = date[2];
-		if (AmPm == "π.μ." || AmPm == "μ.μ." && hour == 12) {
-			oldLabHour = hour;
-		} else { oldLabHour = hour+12; }
-		oldLabDay = day;
+		oldLabName = parentDiv.find("h4>span.lab-name").text();
+		oldLabDate = parentDiv.find("h4>span.lab-date").text();
+		
+		var splittedDate = splitOldDate(oldLabDate);
+		oldLabDay = splittedDate.day;
+		oldLabHour = splittedDate.hour;
 		
 		/*
 		console.log(newLabName);
@@ -171,9 +222,9 @@ $(function(){
 				},
 				error: function(xhr, err){
 					ms = "Παρουσιάστηκε σφάλμα, δοκιμάστε ξανά";
-	    				if(xhr.status==500){
-	    					msg.fadeOut(100).removeClass().addClass("error").text(ms).fadeIn(200);
-	    				}
+    				if(xhr.status==500){
+    					msg.fadeOut(100).removeClass().addClass("error").text(ms).fadeIn(200);
+    				}
     			},
     			complete: function() {
     				if(theActive) {
@@ -227,7 +278,6 @@ $(function(){
 						}
 					});
 	maxStudents.val( maxSlider.slider("value") );
-	
 	submitLab.hide();
 	
 	

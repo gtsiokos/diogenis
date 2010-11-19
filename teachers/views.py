@@ -77,7 +77,7 @@ def manage_labs(request, username):
 					lab_time = ("%d μ.μ." % (time-12) if time > 13 else "%d π.μ." % time)
 					if time == 12: lab_time = "%d μ.μ." % time
 					
-					empty_seats = (my_lab.max_students-len(stud) if stud else 0)
+					empty_seats = (my_lab.max_students-len(stud) if stud and my_lab.max_students else 0)
 					
 					data.append({
 								"name": lab.name,
@@ -239,10 +239,33 @@ def add_new_lab(request, hashed_request):
 		return HttpResponse("Atime hax0r, an se vrw tha sou gamisw to kerato...", mimetype="text/plain")
 
 
+@user_passes_test(user_is_teacher, login_url="/login/")
+def export_pdf(request, hashed_request):
 
+	username_hashed = get_hashed_username(request.user.username)
+	
+	if username_hashed == hashed_request:
+		if request.method == "POST" and request.is_ajax():
 
-
-
+			message = []
+			json_data = simplejson.loads(request.raw_post_data)
+			#print json_data;
+			
+			try:
+				lab_name = json_data['pdfRequest'][0]['labName']
+				lab_day = json_data['pdfRequest'][0]['labDay']
+				lab_hour = json_data['pdfRequest'][0]['labHour']
+			except KeyError:
+				msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
+				message.append({ "status": 2, "msg": msg })
+			
+			ok_msg = u"Η εξαγωγή ολοκληρώθηκε"
+			if not message:
+				message.append({ "status": 1, "msg": ok_msg })
+			data = simplejson.dumps(message)
+			return HttpResponse(data, mimetype='application/javascript')
+	else:
+		return HttpResponse("Atime hax0r, an se vrw tha sou gamisw to kerato...", mimetype="text/plain")
 
 
 

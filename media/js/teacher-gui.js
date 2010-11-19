@@ -93,11 +93,10 @@ $(function(){
 		var labDate = parentDiv.find("h4>span.lab-date").text();
 		
 		var splittedDate = splitOldDate(labDate);
+		var labDay = splittedDate.day;
+		var labHour = splittedDate.hour;
 		
-		labDay = splittedDate.day;
-		labHour = splittedDate.hour;
-		
-		console.log(labName+"-||-"+labDay+"-||-"+labHour);
+		//console.log(labName+"-||-"+labDay+"-||-"+labHour);
 		
 		var request = {	pdfRequest: [{ labName: labName, labDay: labDay, labHour: labHour}] };
 			
@@ -162,8 +161,8 @@ $(function(){
 		oldLabDate = parentDiv.find("h4>span.lab-date").text();
 		
 		var splittedDate = splitOldDate(oldLabDate);
-		oldLabDay = splittedDate.day;
-		oldLabHour = splittedDate.hour;
+		var oldLabDay = splittedDate.day;
+		var oldLabHour = splittedDate.hour;
 		
 		/*
 		console.log(newLabName);

@@ -121,6 +121,24 @@ a { text-decoration: none; }
 	border-radius: 7px 0 0 7px;
 }
 
+#sidebar #navigation { width: 230px; overflow: hidden; margin: 50px 0 140px 20px; background: #f32ff3; }
+	
+	#navigation li { float: left; display: block; }
+	#navigation a {
+		width: 230px; float: left;
+		padding: 12px 0 14px 15px;
+		font: normal 14px/1 Verdana, Arial, Helvetica, sans-serif;
+		letter-spacing: 0.04em; word-spacing: 0.08em;
+	}
+	
+	#navigation a:link, #navigation a:visited {
+		background: #FFF1BF; color: #141414;
+	}
+	
+	#navigation a:hover, #navigation a:focus {
+		background: #FCFCFC; color: #141414;
+	}
+
 #content {
 	float: left; width: 680px; min-height: 700px;
 	padding-bottom: 50px;

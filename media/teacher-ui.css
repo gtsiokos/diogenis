@@ -112,8 +112,12 @@ div.logged div.lab {
 	div.lab h4>span:hover.transfer.enabled>span { color: #7b6000; }
 	div.lab h4>span.transfer.disabled {
 		background: #c7c7c7; color: #616161;
-		border: solid 1px #949494;
+		border: solid 1px #949494; border-color: #949494 #949494 #777 #949494;
 		text-shadow: 1px -1px 1px #e0e0e0;
+
+		-moz-box-shadow: 0 0 24px #949494 inset;
+		-webkit-box-shadow: 0 0 24px #949494 inset;
+		box-shadow: 0 0 24px #949494 inset;
 	}
 	div.lab h4>span.enabled.active { background: #e9e9e9; border: solid 1px #aaa; }
 	div.lab h4>span:hover.enabled.active { border: solid 1px #aaa; cursor:default; }

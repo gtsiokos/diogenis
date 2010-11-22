@@ -10,8 +10,8 @@
 <div id="sidebar">
 	<a id="add-lab" class="button important" href="#">Προσθήκη Εργαστηρίου</a>
 	<ul id="navigation">
-		<li><a href="#">Διαχείριση Εργαστηρίων</a></li>
-		<li><a href="#">Αίθουσα Αναμονής</a></li>
+		<li><a class="first {% block manage-labs-active %}{% endblock %}" href="/teachers/{{ user.username }}/">Διαχείριση Εργαστηρίων</a></li>
+		<li><a class="last {% block waiting-room-active %}{% endblock %}" href="#">Αίθουσα Αναμονής</a></li>
 	</ul>
 </div>
 {% endblock %}

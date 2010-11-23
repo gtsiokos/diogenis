@@ -458,7 +458,7 @@ $(function(){
 			theRequest(dayToSend, hourToSend, lessonToSend, classToSend);
 			setTimeout( function() {
 				submitLab.bind("click", submitLabRequest);
-			},1500);
+			},1900);
 		}
 		else {
 			ms = "Παρακαλώ συμπληρώστε τα στοιχεία του εργαστηρίου";

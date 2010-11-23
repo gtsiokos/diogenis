@@ -25,6 +25,7 @@ def manage_labs(request, username):
 	if username == request.user.username:
 		
 		username_hashed = get_hashed_username(request.user.username)
+		pending_students_request = request.path.endswith('pending-students/')
 		
 		q1 = User.objects.get(username=username)
 		q2 = u'%s %s' % (q1.last_name, q1.first_name)
@@ -64,28 +65,46 @@ def manage_labs(request, username):
 				the_labs = total_labs.filter(lab=lab)
 			
 				for a_lab in the_labs:
-					subscriptions = StudentSubscription.objects.filter(teacher_to_lab=my_lab, in_transit=False).order_by('student').select_related()
+					subscriptions = StudentSubscription.objects.filter(teacher_to_lab=my_lab).order_by('student').select_related()
 					stud = []
+					pending_stud = []
 				
 					for sub in subscriptions:
-						stud.append({
-									"first": sub.student.user.first_name,
-									"last": sub.student.user.last_name,
-									"am": sub.student.am
-									})
+						if not sub.in_transit:
+							stud.append({
+										"first": sub.student.user.first_name,
+										"last": sub.student.user.last_name,
+										"am": sub.student.am
+										})
+						elif pending_students_request:
+							pending_stud.append({
+												"first": sub.student.user.first_name,
+												"last": sub.student.user.last_name,
+												"am": sub.student.am
+												})
 				
 					lab_time = ("%d μ.μ." % (time-12) if time > 13 else "%d π.μ." % time)
 					if time == 12: lab_time = "%d μ.μ." % time
 					
-					empty_seats = (my_lab.max_students-len(stud) if stud and my_lab.max_students else 0)
+					empty_seats = ( my_lab.max_students-len(stud) if stud and my_lab.max_students>len(stud) else 0 )
 					
-					data.append({
-								"name": lab.name,
-								"day": my_lab.lab.day,
-								"hour": lab_time,
-								"students": stud,
-								"empty_seats": empty_seats
-								})
+					if pending_students_request:
+						if pending_stud:
+							data.append({
+									"name": lab.name,
+									"day": my_lab.lab.day,
+									"hour": lab_time,
+									"students": pending_stud,
+									"empty_seats": empty_seats
+									})
+					else:
+						data.append({
+									"name": lab.name,
+									"day": my_lab.lab.day,
+									"hour": lab_time,
+									"students": stud,
+									"empty_seats": empty_seats
+									})
 				
 				for s in total_labs:
 					time = s.lab.hour
@@ -106,8 +125,11 @@ def manage_labs(request, username):
 							"labs": data,
 							"labs_list": lab_data,
 							})
-
-		return render_to_response('teachers/labs.html', {'results':results, 'unique_lessons':unique_lessons, 'hash':username_hashed}, context_instance = RequestContext(request))
+		
+		if request.path.endswith('pending-students/'):
+			return render_to_response('teachers/pending_students.html', {'results':results, 'unique_lessons':unique_lessons, 'hash':username_hashed}, context_instance = RequestContext(request))
+		else:
+			return render_to_response('teachers/labs.html', {'results':results, 'unique_lessons':unique_lessons, 'hash':username_hashed}, context_instance = RequestContext(request))
 
 
 @user_passes_test(user_is_teacher, login_url="/login/")
@@ -146,8 +168,8 @@ def submit_student_to_lab(request, hashed_request):
 					the_stud = AuthStudent.objects.get(am=student["am"])
 					check_availability = StudentSubscription.objects.filter(student=the_stud, teacher_to_lab=check_t2l)
 					if not check_availability:
-						StudentSubscription.objects.create(student=the_stud, teacher_to_lab=new_t2l)
 						StudentSubscription.objects.filter(student=the_stud, teacher_to_lab=old_t2l).delete()
+						StudentSubscription.objects.create(student=the_stud, teacher_to_lab=new_t2l)
 					else:
 						msg = u"Κάποιοι σπουδαστές έχουν δηλώσει άλλα εργαστήρια αυτές τις ώρες"
 						message.append({ "status": 3, "msg": msg })

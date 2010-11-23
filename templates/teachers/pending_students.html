@@ -1,6 +1,6 @@
 {% extends "teachers/base.html" %}
 
-{% block manage-labs-active %}active{% endblock %}
+{% block pending-students-active %}active{% endblock %}
 {% block content %}
 
 <div id="content" class="logged">
@@ -73,7 +73,7 @@
 
 	{% if results %}
 		{% for q in results %}
-			{% ifchanged q.name %}<h3>{{ q.name }}</h3>{% endifchanged %}
+			{% if q.labs %}{% ifchanged q.name %}<h3>{{ q.name }}</h3>{% endifchanged %}{% endif %}
 			{% for q2 in q.labs %}
 			<div class="lab">
 				
@@ -128,7 +128,7 @@
 					</div>
 				{% else %}
 					<div class="extras">
-						<p><span class="empty-seats no-seat">Καμία Εγγραφή</span></p>
+						<p><span class="empty-seats no-seat">Καμία επιπλέον αίτηση εγγραφής</span></p>
 					</div>
 				{% endif %}
 			</div>
@@ -148,7 +148,7 @@
 	<script type="text/javascript" src="/media/js/jquery.json-2.2.min.js"></script>
 	
 	<script type="text/javascript" src="/media/js/jquery.scrollTo-1.4.2-min.js"></script>
-	<script type="text/javascript" src="/media/js/teacher-labs-gui.js"></script>
+	<script type="text/javascript" src="/media/js/teacher-pending-gui.js"></script>
 	
 	<script type="text/javascript" src="/media/js/modal/jquery.simplemodal.js"></script>
 	<script type="text/javascript" src="/media/js/modal/osx.js"></script>

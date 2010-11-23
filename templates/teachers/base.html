@@ -11,27 +11,11 @@
 	<a id="add-lab" class="button important" href="#">Προσθήκη Εργαστηρίου</a>
 	<ul id="navigation">
 		<li><a class="first {% block manage-labs-active %}{% endblock %}" href="/teachers/{{ user.username }}/">Διαχείριση Εργαστηρίων</a></li>
-		<li><a class="last {% block waiting-room-active %}{% endblock %}" href="#">Αίθουσα Αναμονής</a></li>
+		<li><a class="last {% block pending-students-active %}{% endblock %}" href="/teachers/{{ user.username }}/pending-students/">Αίθουσα Αναμονής</a></li>
 	</ul>
 </div>
 {% endblock %}
 
 {% block content %}
 	{% block modal_box %}{% endblock %}
-{% endblock %}
-
-{% block extra_js_bottom %}
-	{% spaceless %}
-
-	<script type="text/javascript" src="/media/js/gui.js"></script>
-	<script type="text/javascript" src="/media/js/jquery.json-2.2.min.js"></script>
-	
-	<script type="text/javascript" src="/media/js/jquery.scrollTo-1.4.2-min.js"></script>
-	<script type="text/javascript" src="/media/js/teacher-gui.js"></script>
-	
-	<script type="text/javascript" src="/media/js/modal/jquery.simplemodal.js"></script>
-	<script type="text/javascript" src="/media/js/modal/osx.js"></script>
-	<script type="text/javascript" src="/media/js/jquery-ui-1.8.6.min.js"></script>
-
-	{% endspaceless %}
 {% endblock %}

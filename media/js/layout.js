@@ -1,19 +1,23 @@
 $(function(){
 
-	var highestCol = parseInt($("#content").height(), 10);
+	var highestCol = Math.round($("#content").height());
 	$("#sidebar").height(highestCol+10);
 
-	var theWindow = $(window);
-	var theSidebar = $("#sidebar");
+	
 	var theNavigation = $("#navigation");
 	
-	var setNavigation = function() {
+	if (theNavigation.length > 0) {
 		
-		var a = theSidebar.offset();
-		var bLeft = parseInt(a.left, 10);
-		theNavigation.css({ top: 170, left: bLeft });
+		var theWindow = $(window);
+		var theSidebar = $("#sidebar");
+		var setNavigation = function() {
 		
-	};
-	theWindow.resize(setNavigation);
-	setNavigation();
+			var a = theSidebar.offset();
+			var bLeft = Math.round(a.left);
+			theNavigation.css({ top: 170, left: bLeft });
+		
+		};
+		theWindow.resize(setNavigation);
+		setNavigation();
+	}
 });

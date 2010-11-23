@@ -219,7 +219,7 @@ def add_new_lab(request, hashed_request):
 						q2 = u'%s %s' % (q1.last_name, q1.first_name)
 						new_teacher = Teacher.objects.get(name=q2)
 						
-						TeacherToLab.objects.create(lesson=new_lesson, teacher=new_teacher, lab=new_lab, max_students=max_students)
+						#TeacherToLab.objects.create(lesson=new_lesson, teacher=new_teacher, lab=new_lab, max_students=max_students)
 					except:
 						msg = u"Παρουσιάστηκε σφάλμα κατά την αποθήκευση των δεδομένων"
 						message.append({ "status": 2, "action": action, "msg": msg })

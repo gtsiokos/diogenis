@@ -23,7 +23,7 @@ jQuery(function ($) {
 					containerId: 'osx-container',
 					closeHTML: null,
 					minHeight: 80,
-					opacity: 75, 
+					opacity: 70, 
 					position: ['0'],
 					overlayClose: true,
 					onOpen: OSX.open,

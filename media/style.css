@@ -8,7 +8,7 @@
 
 */
 
-body { background: #FFFFE0; }
+body { background: #f4f4d6; }
 body.wait { cursor: wait !important; }
 a { text-decoration: none; }
 
@@ -17,11 +17,9 @@ a { text-decoration: none; }
 
 #container1 {
 	position: fixed; top: 0; left: 0; z-index: 5; background: #141414;
-	border-bottom: solid 1px #949494;
+	border-bottom: solid 3px #FFF1BF;
 	
-	-moz-box-shadow: 0 1px 2px #141414;
-	-webkit-box-shadow: 0 1px 2px #141414;
-	box-shadow: 0 1px 2px #141414;
+	-moz-box-shadow: 0 1px 3px #333, 0 0 10px #949494; -webkit-box-shadow: 0 1px 3px #333, 0 0 10px #949494; box-shadow: 0 1px 3px #333, 0 0 10px #949494;
 }
 #container2 { margin-top: 62px; }
 
@@ -112,7 +110,7 @@ a { text-decoration: none; }
 }
 
 #sidebar {
-	float: left; width: 296px; overflow: hidden;
+	float: left; width: 297px; overflow: hidden;
 	padding: 40px 0 0 0;
 	background: #e9e9e9; border: solid 1px #d0d0d0;
 	
@@ -121,15 +119,12 @@ a { text-decoration: none; }
 	border-radius: 7px 0 0 7px;
 }
 
-#sidebar #navigation { 	width: 400px; overflow: hidden; position: relative; left: -1px;
-						margin: 50px 0 330px 0; padding: 0 0 25px 0;
-						background: #f1f1f1;
-						border: solid 1px #aaa; border-right: 0; border-left: 0;
-						
-						-moz-box-shadow: 0 0 6px #ccc;
-						-webkit-box-shadow: 0 0 6px #ccc;
-						box-shadow: 0 0 6px #ccc;
-						}
+#sidebar #navigation { 
+	width: 300px; overflow: hidden; position: fixed; z-index: 3;
+	padding: 0 0 25px 0;
+	background: #FAFAFA;
+	border: solid 1px #aaa; border-right: 0;
+}
 	
 	#navigation li { float: left; margin: 10px 11px 0 36px; }
 	#navigation li:first-child { margin-top: 25px }
@@ -161,7 +156,7 @@ a { text-decoration: none; }
 	}
 
 #content {
-	float: left; width: 680px; min-height: 700px;
+	float: left; width: 680px; min-height: 700px; position: relative; z-index: 4;
 	padding-bottom: 50px;
 	background: #fafafa; border: solid 1px #E6DB55; border-left: 0;
 	

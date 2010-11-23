@@ -27,8 +27,9 @@ div.logged #ui-messages {
 	}
 	
 	#ui-messages p.ok {
-	background: #D3F8D4; color: #333333;
-	border: solid 1px #7ed082;
+		padding: 10px 12px 12px 47px;
+		background: #D3F8D4 url('./img/ok_icon.png') 6px 44% no-repeat; color: #333333;
+		border: solid 1px #7ed082;
 	}
 	
 		#ui-messages p.ok a {
@@ -42,18 +43,20 @@ div.logged #ui-messages {
 			border-radius: 5px;
 		}
 		#ui-messages p.ok a:link, #ui-messages p.ok a:visited { 	background: #7ed082; color: #fff;
-																		border: solid 1px #359139; text-shadow: 1px 1px 1px #235F26; }
-		#ui-messages p.ok a:hover, #ui-messages p.ok a:focus { 	background: #333; color: #FCFCFC;
-																		border: solid 1px #141414; text-shadow: 1px 1px 1px #141414; }
+														border: solid 1px #359139; text-shadow: 1px 1px 1px #235F26; }
+		#ui-messages p.ok a:hover, #ui-messages p.ok a:focus { 	background: #359139; color: #FCFCFC;
+														border: solid 1px #359139; text-shadow: 1px 1px 1px #141414; }
 	
 	#ui-messages p.error{
-	background: #FFEBE8; color: #333333;
-	border: solid 1px #CC0000;		
+		padding: 10px 12px 12px 47px;
+		background: #FFEBE8 url('./img/error_icon.png') 6px 44% no-repeat; color: #333333;
+		border: solid 1px #CC0000;		
 	}
 	
 	#ui-messages p.warning{
-	background: #FFFFE0; color: #333333;
-	border: solid 1px #E6DB55;		
+		padding: 10px 12px 12px 47px;
+		background: #FFFFE0 url('./img/warning_icon.png') 6px 44% no-repeat; color: #333333;
+		border: solid 1px #E6DB55;		
 	}
 				
 div.logged h3 {

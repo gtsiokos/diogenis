@@ -31,7 +31,7 @@ def manage_labs(request, username):
 		q2 = u'%s %s' % (q1.last_name, q1.first_name)
 		q2 = Teacher.objects.get(name=q2)
 		results = []
-		my_labs = TeacherToLab.objects.filter(teacher=q2).order_by('lesson')
+		my_labs = TeacherToLab.objects.filter(teacher=q2, lab__hour__gt=1).order_by('lesson')
 		
 		#####################################################################
 		# Ola ta onomata mathimatwn pou mporei na epileksei gia dimiourgia
@@ -52,81 +52,79 @@ def manage_labs(request, username):
 		#####################################################################		
 		for my_lab in my_labs:
 			time =  my_lab.lab.hour
+			lesson = my_lab.lesson
+			lab = my_lab.lab
+		
+			data = []
+			lab_data = []
 			
-			if time != 1:
-				lesson = my_lab.lesson
-				lab = my_lab.lab
+			total_labs = TeacherToLab.objects.filter(lesson=lesson, teacher=q2, lab__hour__gt=1)
+			total_labs_count = total_labs.count()
+			the_labs = total_labs.filter(lab=lab)
+		
+			for a_lab in the_labs:
+				subscriptions = StudentSubscription.objects.filter(teacher_to_lab=my_lab).order_by('student').select_related()
+				stud = []
+				pending_stud = []
 			
-				data = []
-				lab_data = []
-				total_labs = TeacherToLab.objects.filter(lesson=lesson, teacher=q2)
-			
-				total_labs_count = total_labs.count()
-				the_labs = total_labs.filter(lab=lab)
-			
-				for a_lab in the_labs:
-					subscriptions = StudentSubscription.objects.filter(teacher_to_lab=my_lab).order_by('student').select_related()
-					stud = []
-					pending_stud = []
-				
-					for sub in subscriptions:
-						if not sub.in_transit:
-							stud.append({
+				for sub in subscriptions:
+					if not sub.in_transit:
+						stud.append({
+									"first": sub.student.user.first_name,
+									"last": sub.student.user.last_name,
+									"am": sub.student.am
+									})
+					elif pending_students_request:
+						pending_stud.append({
 										"first": sub.student.user.first_name,
 										"last": sub.student.user.last_name,
 										"am": sub.student.am
 										})
-						elif pending_students_request:
-							pending_stud.append({
-												"first": sub.student.user.first_name,
-												"last": sub.student.user.last_name,
-												"am": sub.student.am
-												})
+			
+				lab_time = ("%d μ.μ." % (time-12) if time > 13 else "%d π.μ." % time)
+				if time == 12: lab_time = "%d μ.μ." % time
 				
-					lab_time = ("%d μ.μ." % (time-12) if time > 13 else "%d π.μ." % time)
-					if time == 12: lab_time = "%d μ.μ." % time
-					
-					empty_seats = ( my_lab.max_students-len(stud) if stud and my_lab.max_students>len(stud) else 0 )
-					
-					if pending_students_request:
-						if pending_stud:
-							data.append({
-									"name": lab.name,
-									"day": my_lab.lab.day,
-									"hour": lab_time,
-									"students": pending_stud,
-									"empty_seats": empty_seats
-									})
-					else:
+				empty_seats = ( my_lab.max_students-len(stud) if stud and my_lab.max_students>len(stud) else 0 )
+				
+				if pending_students_request:
+					if pending_stud:
 						data.append({
-									"name": lab.name,
-									"day": my_lab.lab.day,
-									"hour": lab_time,
-									"students": stud,
-									"empty_seats": empty_seats
-									})
+								"name": lab.name,
+								"day": my_lab.lab.day,
+								"hour": lab_time,
+								"students": pending_stud,
+								"empty_seats": empty_seats
+								})
+				else:
+					data.append({
+								"name": lab.name,
+								"day": my_lab.lab.day,
+								"hour": lab_time,
+								"students": stud,
+								"empty_seats": empty_seats
+								})
+			
+			for s in total_labs:
+				time = s.lab.hour
 				
-				for s in total_labs:
-					time = s.lab.hour
-					if time != 1:
-						lab_time = ("%d μ.μ." % (time-12) if time > 13 else "%d π.μ." % time)
-						if time == 12: lab_time = "%d μ.μ." % time
-						stripped_day = s.lab.day[:3]
-					
-						lab_data.append({
-									"name": s.lab.name,
-									"day": stripped_day,
-									"hour": lab_time
-									})
-				
-				results.append({
-							"name": lesson.name,
-							"labs_count": total_labs_count,
-							"labs": data,
-							"labs_list": lab_data,
+				lab_time = ("%d μ.μ." % (time-12) if time > 13 else "%d π.μ." % time)
+				if time == 12: lab_time = "%d μ.μ." % time
+				stripped_day = s.lab.day[:3]
+			
+				lab_data.append({
+							"name": s.lab.name,
+							"day": stripped_day,
+							"hour": lab_time
 							})
-		
-		if request.path.endswith('pending-students/'):
+			
+			results.append({
+						"name": lesson.name,
+						"labs_count": total_labs_count,
+						"labs": data,
+						"labs_list": lab_data,
+						})
+	
+		if pending_students_request:
 			return render_to_response('teachers/pending_students.html', {'results':results, 'unique_lessons':unique_lessons, 'hash':username_hashed}, context_instance = RequestContext(request))
 		else:
 			return render_to_response('teachers/labs.html', {'results':results, 'unique_lessons':unique_lessons, 'hash':username_hashed}, context_instance = RequestContext(request))
@@ -241,7 +239,7 @@ def add_new_lab(request, hashed_request):
 						q2 = u'%s %s' % (q1.last_name, q1.first_name)
 						new_teacher = Teacher.objects.get(name=q2)
 						
-						#TeacherToLab.objects.create(lesson=new_lesson, teacher=new_teacher, lab=new_lab, max_students=max_students)
+						TeacherToLab.objects.create(lesson=new_lesson, teacher=new_teacher, lab=new_lab, max_students=max_students)
 					except:
 						msg = u"Παρουσιάστηκε σφάλμα κατά την αποθήκευση των δεδομένων"
 						message.append({ "status": 2, "action": action, "msg": msg })

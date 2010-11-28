@@ -16,47 +16,33 @@ from labs.models import *
 
 import pdfcreator
 import os
+import datetime
 
 def user_is_teacher(user):
 	return user.is_authenticated() and user.get_profile().is_teacher
 
 def pdfexport(request):
-	
+
 	###################[ den douleuoun sto diko sou branch min ta dokimaseis         ]######################################
 	message = []
-	json_data = simplejson.loads(request.raw_post_data)
+#	json_data = simplejson.loads(request.raw_post_data)
 	#print json_data;
-	
-	try:
-		lab_name = json_data['pdfRequest'][0]['labName']
-		lab_day = json_data['pdfRequest'][0]['labDay']
-		lab_hour = json_data['pdfRequest'][0]['labHour']
-	except KeyError:
-		pass
-	
-	###################[ opote exoume onoma ergastiriou, hmera kai wra               ]######################################
-	###################[ an xreiazesai kati allo gia na bgaleis to queryset, pes mou ]######################################
-	###################[ akolouthoun paradeigmata                                    ]######################################
-	lab_name = u"UNIX"
-	lab_day = u"Δευτέρα"
-	lab_hour = 12
-	###################[ </edit>                                                     ]######################################
-	
-	
-	selected_lesson =str("ΑΝΑΛΥΣΗ ΚΑΙ ΣΧΕΔΙΑΣΜΟΣ ΠΛΗΡΟΦΟΡΙΑΚΩΝ ΣΥΣΤΗΜΑΤΩΝ")
-#	selected_lesson =str("ΑΣΥΡΜΑΤΕΣ ΕΠΙΚΟΙΝΩΝΙΕΣ")
-#	selected_lesson =str("ΒΑΣΕΙΣ ΔΕΔΟΜΕΝΩΝ ΙΙ")
-	selected_lesson = unicode(selected_lesson,"utf-8")
+	lab_name = u'UNIX'
+	lab_day = u'Δευτέρα'
+	lab_hour = 17
+	labtriplet = [lab_name, lab_day, lab_hour]
 	username = request.user.username
 	username = User.objects.get(username=username)
 	username = u'%s %s' % (username.last_name, username.first_name)
-	tempname="teachers/temp.pdf"
+	a=datetime.datetime.now()
+	tempname = str('teachers/%s.pdf') % (a)
+	tempname = unicode(tempname,"utf-8")
 	response = HttpResponse(mimetype='application/pdf')
 	response['Content-Disposition'] = 'filename=%s' % (tempname)
-	pdfcreator.list_reader(username,selected_lesson,response)
+	pdfcreator.pdfexporter(labtriplet,response)
 	return response
 	os.remove("temp.pdf")
-	
+
 #	return render_to_response('teachers/pdftest.html',)
 #	return HttpResponse(response, mimetype='application/pdf')
 
@@ -69,36 +55,36 @@ def manage_labs(request, username):
 		results = []
 		tmp = "random string"
 		my_labs = TeacherToLab.objects.filter(teacher=q2).order_by('lesson')
-		
+
 		#the right way to setup a variable for greek||utf-8 text.
 #		selected_lesson =str("ΒΑΣΕΙΣ ΔΕΔΟΜΕΝΩΝ ΙΙ")
 #		selected_lesson = unicode(selected_lesson,"utf-8")
 #		pdfexport(q2,selected_lesson)
-	
+
 		for my_lab in my_labs:
 			time =  my_lab.lab.hour
-		
+
 			if time != 1:
 				lesson = my_lab.lesson
 				lab = my_lab.lab
-			
+
 				data = []
 				lab_data = []
 				total_labs = TeacherToLab.objects.filter(lesson=lesson, teacher=q2)
-			
+
 				total_labs_count = total_labs.count()
 				the_labs = total_labs.filter(lab=lab)
-			
+
 				for a_lab in the_labs:
 					subscriptions = StudentSubscription.objects.filter(teacher_to_lab=my_lab, in_transit=False).order_by('student').select_related()
 					stud = []
-				
+
 					for sub in subscriptions:
 						stud.append({	"first": sub.student.user.first_name,
 									"last": sub.student.user.last_name,
 									"am": sub.student.am
 									})
-				
+
 					lab_time = ("%d μ.μ." % (time-12) if time > 13 else "%d π.μ." % time)
 
 					data.append({	"name": lab.name,
@@ -106,21 +92,21 @@ def manage_labs(request, username):
 								"hour": lab_time,
 								"students": stud
 								})
-				
+
 				for s in total_labs:
 					time = s.lab.hour
 					lab_time = ("%d μ.μ." % (time-12) if time > 13 else "%d π.μ." % time)
 
 					stripped_day = s.lab.day[:3]
-					
+
 
 					lab_data.append({
 								"name": s.lab.name,
 								"day": stripped_day,
 								"hour": lab_time
 								})
-					
-							
+
+
 				if tmp == lesson.name:
 					results.append({
 								"labs_count": total_labs_count,
@@ -135,17 +121,17 @@ def manage_labs(request, username):
 								"labs_list": lab_data,
 								})
 					tmp = lesson.name
-				
+
 		return render_to_response('teachers/labs.html', {'results': results}, context_instance = RequestContext(request))
-		
+
 @user_passes_test(user_is_teacher, login_url="/login/")	
 def submit_labs(request):
 	if request.method == "POST":
 		if request.is_ajax():
-			
+
 			message = []
 			json_data = simplejson.loads(request.raw_post_data)
-			
+
 			try:
 				new_name = json_data['lnew'][0]['newName']
 				new_hour = json_data['lnew'][0]['newHour']
@@ -156,15 +142,15 @@ def submit_labs(request):
 			except KeyError:
 				msg = u"Υπήρχε σφάλμα κατά την μεταφορά του μηνύματος"
 				message.append({ "status": 2, "msg": msg })
-			
+
 			check_lab = Lab.objects.filter(day=new_day, hour=new_hour)
 			check_t2l = TeacherToLab.objects.filter(lab=check_lab)
 			new_lab = Lab.objects.filter(name=new_name, day=new_day, hour=new_hour)
 			new_t2l = TeacherToLab.objects.get(lab=new_lab)
 			old_lab = Lab.objects.filter(name=old_name, day=old_day, hour=old_hour)
 			old_t2l = TeacherToLab.objects.filter(lab=old_lab)
-			
-			
+
+
 			if json_data['stud']:
 				for student in json_data['stud']:
 					check_availability = []
@@ -179,41 +165,9 @@ def submit_labs(request):
 			else:
 				msg = u"Δεν έχετε επιλέξει κάποιον σπουδαστή"
 				message.append({ "status": 3, "msg": msg })
-					
+
 			ok_msg = u"Η μεταφορά στο εργαστήριο %s ολοκληρώθηκε" % new_name
 			if not message:
 				message.append({ "status": 1, "msg": ok_msg })
 			data = simplejson.dumps(message)
 			return HttpResponse(data, mimetype='application/javascript')
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-

@@ -3,6 +3,9 @@
 #most workable and usefull Ver:2
 # -*- coding: utf8 -*-
 
+import os
+import datetime
+
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 
@@ -14,7 +17,8 @@ from django.contrib.auth.models import User
 from accounts.models import *
 from labs.models import *
 
-from teachers.helpers import *
+from teachers.helpers import get_hashed_username, pdf_exporter
+
 
 def user_is_teacher(user):
 	return user.is_authenticated() and user.get_profile().is_teacher
@@ -100,6 +104,7 @@ def manage_labs(request, username):
 								"name": lab.name,
 								"day": my_lab.lab.day,
 								"hour": lab_time,
+								"hour_raw": time,
 								"students": stud,
 								"empty_seats": empty_seats
 								})
@@ -260,30 +265,28 @@ def add_new_lab(request, hashed_request):
 
 
 @user_passes_test(user_is_teacher, login_url="/login/")
-def export_pdf(request, hashed_request):
+def export_pdf(request, hashed_request, class_name, day, hour):
 
 	username_hashed = get_hashed_username(request.user.username)
 	
 	if username_hashed == hashed_request:
-		if request.method == "POST" and request.is_ajax():
+		if request.method == "GET":
 
-			message = []
-			json_data = simplejson.loads(request.raw_post_data)
-			#print json_data;
+			labtriplet = [class_name, day, hour]
 			
-			try:
-				lab_name = json_data['pdfRequest'][0]['labName']
-				lab_day = json_data['pdfRequest'][0]['labDay']
-				lab_hour = json_data['pdfRequest'][0]['labHour']
-			except KeyError:
-				msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
-				message.append({ "status": 2, "msg": msg })
+			username = request.user.username
+			username = User.objects.get(username=username)
+			username = u'%s %s' % (username.last_name, username.first_name)
 			
-			ok_msg = u"Η εξαγωγή ολοκληρώθηκε"
-			if not message:
-				message.append({ "status": 1, "msg": ok_msg })
-			data = simplejson.dumps(message)
-			return HttpResponse(data, mimetype='application/javascript')
+			a=datetime.datetime.now()
+			tempname = str('teachers/%s.pdf') % (a)
+			tempname = unicode(tempname,"utf-8")
+			
+			response = HttpResponse(mimetype='application/pdf')
+			response['Content-Disposition'] = 'attachment; filename=%s' % (tempname)
+			pdf_exporter(labtriplet,response)
+			return response
+			os.remove("temp.pdf")
 	else:
 		return HttpResponse("Atime hax0r, an se vrw tha sou gamisw to kerato...", mimetype="text/plain")
 

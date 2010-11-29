@@ -124,7 +124,7 @@
 						{% if q2.empty_seats == 0 %}
 						<p><span class="empty-seats no-seat">Συμπληρώθηκε</span></p>
 						{% endif %}
-						<a class="export-pdf" href="#">PDF</a>
+						<a class="export-pdf" href="/teachers/{{hash}}/export-pdf/{{ q2.name }}/{{ q2.day }}/{{ q2.hour_raw }}/">Εξαγωγή PDF</a>
 					</div>
 				{% else %}
 					<div class="extras">

@@ -239,8 +239,8 @@ div.logged div.lab {
 				-webkit-border-radius: 7px;
 				border-radius: 7px;
 				-moz-box-shadow: 0 1px 5px #505050 inset, 0 1px 1px #fff;
-				-webkit-box-shadow: 0 0 5px #505050 inset, 0 1px 1px #fff;
-				box-shadow: 0 0 5px #505050 inset, 0 1px 1px #fff;
+				-webkit-box-shadow: 0 1px 5px #505050 inset, 0 1px 1px #fff;
+				box-shadow: 0 1px 5px #505050 inset, 0 1px 1px #fff;
 			}
 			div.extras p span.empty-seats {
 				float: left;
@@ -261,6 +261,20 @@ div.logged div.lab {
 				text-shadow: 1px 1px 1px #505050;
 			}
 			
-			div.extras a {
-				position: absolute; bottom: 5px; right: 5px;
+			div.extras a.export-pdf {
+				display: block; position: absolute; bottom: 7px; right: 7px;
+				padding: 4px 6px 5px 22px;
+				font: normal 11px Verdana, Arial, Helvetica, sans-serif;
+				border: solid 1px #AF080B;
+				background: #DC0A09 url('./img/acrobat_icon_16x16.png') 2px 3px no-repeat; color: #fcfcfc;
+				text-shadow: 0 1px 1px #505050;
+				
+				-moz-border-radius: 4px;
+				-webkit-border-radius: 4px;
+				border-radius: 4px;
+				-moz-box-shadow: 0 0 7px #505050 inset, 0 1px 1px #fff;
+				-webkit-box-shadow: 0 0 7px #505050 inset, 0 1px 1px #fff;
+				box-shadow: 0 0 7px #505050 inset, 0 1px 1px #fff;
 			}
+			
+			div.extras a.export-pdf:active { border-color: #141414; }

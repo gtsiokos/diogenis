@@ -5,19 +5,23 @@
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
+
 from django.template import RequestContext
+from django.contrib.auth.decorators import user_passes_test
 import e10
 
 from django.contrib.auth.models import User
-
 from accounts.models import *
 from labs.models import *
 
+def user_is_superuser(user):
+	return user.is_superuser
 
-def manage_db(request):
-	return render_to_response('labs/manage_db.html', {}, context_instance = RequestContext(request))
 
-def save_db(request):
+@user_passes_test(user_is_superuser, login_url="/login/")
+def control_panel(request):
+
+	message = []
 	if request.method == "POST":
 
 		Teacher.objects.all().delete()
@@ -58,21 +62,19 @@ def save_db(request):
 					b.save()
 					c = TeacherToLab(teacher=b, lesson=labname, lab=empty_lab)
 					c.save()
-#					teacher = Teacher(teachname=k)
-#					teacher.save()
-#					teacher.labs.add(labname)
-		msg = 'Η μεταφορά του αρχείου Excel ολοκληρώθηκε.'
-	else:
-		raise Http404
-	return render_to_response('labs/manage_db.html', {'msg': msg}, context_instance = RequestContext(request))
-	
-def fill_labs(request):
-	try:
-		e10.fill_labs()
-		msg='Ο πίνακας Labs συμπληρώθηκε.'
-	except:
-		msg='Παρουσιάστηκε Σφάλμα.'
-	return render_to_response('labs/manage_db.html', {'msg': msg}, context_instance = RequestContext(request))
+		
+		try:
+			e10.fill_labs()
+		except:
+			msg= u'Παρουσιάστηκε Σφάλμα'
+			message.append({ "status": 2, "msg": msg })
+			
+		ok_msg = u"Η μεταφορά του αρχείου Excel ολοκληρώθηκε"
+		if not message:
+			message.append({ "status": 1, "msg": ok_msg })
+#	else:
+#		raise Http404
+	return render_to_response('system/cpanel.html', {'message': message}, context_instance = RequestContext(request))
 
 
 

@@ -1,8 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div id="content">
+<div id="content" class="not-logged">
 	<h2>Login</h2>
-	<h3>Πρέπει να κάνετε login ως καθηγητής για να δείτε αυτή τη σελίδα.</h3>
+	<form method="POST" action="/login/">
+		<label for="username">Username</label>
+		<input type="text" name="username" id="username">
+		<label for="password">Password</label>
+		<input type="text" name="password" id="password">
+		<label class="remember" for="remember">Μείνε Συνδεμένος</label>
+		<input type="checkbox" name="remember" id="remember" class="remember" value="true">
+		<input class="button important" type="submit" value="Είσοδος">
+	</form>
 </div>
 {% endblock content %}

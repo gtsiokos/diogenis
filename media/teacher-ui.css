@@ -8,60 +8,10 @@
 
 */
 
-div.logged #ui-messages {
-	float: left; width: 648px;
-	margin: 35px 16px 22px 16px;
-}
-	
-	#ui-messages p {
-		display: block; width: 500px; position: relative;
-		margin: 0 auto; padding: 10px 12px 12px 12px;
-		font: normal 14px Verdana, Arial, Helvetica, sans-serif;
-		background: #e9e9e9; color: #949494;
-		border: solid 1px #aaa;
-		text-shadow: 1px -1px 0 #fff;
-		
-		-moz-border-radius: 7px;
-		-webkit-border-radius: 7px;
-		border-radius: 7px;
-	}
-	
-	#ui-messages p.ok {
-		padding: 10px 12px 12px 47px;
-		background: #D3F8D4 url('./img/ok_icon.png') 6px 44% no-repeat; color: #333333;
-		border: solid 1px #7ed082;
-	}
-	
-		#ui-messages p.ok a {
-			position: absolute; top: 6px; right: 7px;
-			padding: 5px 7px 6px 7px;
-			font: normal 12px 'Droid Sans', Verdana;
-			letter-spacing: 0.08em; text-align: center; text-shadow: none;
-		
-			-moz-border-radius: 5px;
-			-webkit-border-radius: 5px;
-			border-radius: 5px;
-		}
-		#ui-messages p.ok a:link, #ui-messages p.ok a:visited { 	background: #7ed082; color: #fff;
-														border: solid 1px #359139; text-shadow: 1px 1px 1px #235F26; }
-		#ui-messages p.ok a:hover, #ui-messages p.ok a:focus { 	background: #359139; color: #FCFCFC;
-														border: solid 1px #359139; text-shadow: 1px 1px 1px #141414; }
-	
-	#ui-messages p.error{
-		padding: 10px 12px 12px 47px;
-		background: #FFEBE8 url('./img/error_icon.png') 6px 44% no-repeat; color: #333333;
-		border: solid 1px #CC0000;		
-	}
-	
-	#ui-messages p.warning{
-		padding: 10px 12px 12px 47px;
-		background: #FFFFE0 url('./img/warning_icon.png') 6px 44% no-repeat; color: #333333;
-		border: solid 1px #E6DB55;		
-	}
 				
 div.logged h3 {
 	float: left;
-	margin: 16px 0 10px 16px;
+	margin: 16px 0 10px 19px;
 	font: bold 18px/1.1 Verdana, Arial, Helvetica, sans-serif;
 	color: #cfcfcf;
 	text-shadow: 1px -1px 0 #fff;
@@ -69,7 +19,7 @@ div.logged h3 {
 
 div.logged div.lab {
 	float: left; width: 640px;
-	margin: 16px 0 25px 16px;
+	margin: 16px 0 25px 19px;
 }
 				
 	div.lab h4 {
@@ -232,15 +182,15 @@ div.logged div.lab {
 				letter-spacing: 0.05em; word-spacing: 0.08em;
 				border: solid 1px #696969;
 				border-color: #505050 #696969 #696969 #696969;
-				background: #949494; color: #fcfcfc;
+				background: #adadad; color: #fcfcfc;
 				text-shadow: 1px 1px 1px #696969;
 
 				-moz-border-radius: 7px;
 				-webkit-border-radius: 7px;
 				border-radius: 7px;
-				-moz-box-shadow: 0 1px 5px #505050 inset, 0 1px 1px #fff;
-				-webkit-box-shadow: 0 1px 5px #505050 inset, 0 1px 1px #fff;
-				box-shadow: 0 1px 5px #505050 inset, 0 1px 1px #fff;
+				-moz-box-shadow: 0 1px 5px #696969 inset, 0 1px 1px #fff;
+				-webkit-box-shadow: 0 1px 5px #696969 inset, 0 1px 1px #fff;
+				box-shadow: 0 1px 5px #696969 inset, 0 1px 1px #fff;
 			}
 			div.extras p span.empty-seats {
 				float: left;
@@ -263,10 +213,10 @@ div.logged div.lab {
 			
 			div.extras a.export-pdf {
 				display: block; position: absolute; bottom: 7px; right: 7px;
-				padding: 4px 6px 5px 22px;
+				padding: 4px 6px 5px 24px;
 				font: normal 11px Verdana, Arial, Helvetica, sans-serif;
-				border: solid 1px #AF080B;
-				background: #DC0A09 url('./img/acrobat_icon_16x16.png') 2px 3px no-repeat; color: #fcfcfc;
+				border: solid 1px #696969;
+				background: #adadad url('./img/acrobat_icon_16x16.png') 4px 3px no-repeat; color: #fcfcfc;
 				text-shadow: 0 1px 1px #505050;
 				
 				-moz-border-radius: 4px;
@@ -276,5 +226,15 @@ div.logged div.lab {
 				-webkit-box-shadow: 0 0 7px #505050 inset, 0 1px 1px #fff;
 				box-shadow: 0 0 7px #505050 inset, 0 1px 1px #fff;
 			}
+			div.extras a.export-pdf:hover,
+			div.extras a.export-pdf:focus		{
+										border: solid 1px #AF080B;
+										background: #DC0A09 url('./img/acrobat_icon_16x16.png') 4px 3px no-repeat;
+										
+										-moz-box-shadow: 0 0 7px #505050 inset, 0 1px 1px #fff;
+										-webkit-box-shadow: 0 0 7px #505050 inset, 0 1px 1px #fff;
+										box-shadow: 0 0 7px #505050 inset, 0 1px 1px #fff;
+										}
+			div.extras a.export-pdf:active 	{ border-color: #141414; }
 			
-			div.extras a.export-pdf:active { border-color: #141414; }
+			

@@ -35,7 +35,7 @@ def manage_labs(request, username):
 		q2 = u'%s %s' % (q1.last_name, q1.first_name)
 		q2 = Teacher.objects.get(name=q2)
 		results = []
-		my_labs = TeacherToLab.objects.filter(teacher=q2, lab__hour__gt=1).order_by('lesson')
+		my_labs = TeacherToLab.objects.filter(teacher=q2).order_by('lesson')
 		
 		#####################################################################
 		# Ola ta onomata mathimatwn pou mporei na epileksei gia dimiourgia
@@ -54,6 +54,7 @@ def manage_labs(request, username):
 		# Ola ta onomata mathimatwn, ergastiriwn, oi wres twn ergastiriwn
 		# kai oi eggegrammenoi foitites gia to template [teachers/labs.html] 
 		#####################################################################		
+		my_labs = my_labs.filter(lab__hour__gt=1)
 		for my_lab in my_labs:
 			time =  my_lab.lab.hour
 			lesson = my_lab.lesson

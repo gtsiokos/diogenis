@@ -5,7 +5,11 @@
 
 <div id="content" class="logged">
 	<div id="ui-messages">
+		{% if results %}
 		<p>Κονσόλα Μηνυμάτων</p>
+		{% else %}
+		<p class="warning">Δεν έχετε προσθέσει τα εργαστήρια σας στον Διογένη</p>
+		{% endif %}
 	</div>
 	{% block modal_box %}
 		<div id="osx-modal-content">
@@ -135,7 +139,9 @@
 			{% endfor %}
 		{% endfor %}
 	{% else %}
-		<p>Δεν έχετε προσθέσει τα εργαστήρια σας στο Διογένη.</p>
+		{% comment %}
+		<p>Δεν έχετε προσθέσει τα εργαστήρια σας στον Διογένη.</p>
+		{% endcomment %}
 	{% endif %}
 </div>
 

@@ -1,0 +1,35 @@
+{% extends "system/base.html" %}
+
+{% block cpanel-active %}active{% endblock %}
+{% block content %}
+
+<div id="content" class="logged">
+	<div id="ui-messages">
+		{% if message %}
+			{% if message.status == 1 %}
+				<p class="ok">{{ message.msg }}</p>
+			{% endif %}
+			{% if message.status == 2 %}
+				<p class="error">{{ message.msg }}</p>
+			{% endif %}
+			{% if message.status == 3 %}
+				<p class="warning">{{ message.msg }}</p>
+			{% endif %}
+		{% else %}
+			<p>Κονσόλα Μηνυμάτων</p>
+		{% endif %}
+	</div>
+	<form method="POST" action="/system/admin/">
+		<input id="send" type="submit" value="Upload">
+	</form>
+</div>
+
+{% endblock content %}
+
+{% block extra_js_bottom %}
+	{% spaceless %}
+
+	<script type="text/javascript" src="/media/js/gui.js"></script>
+	
+	{% endspaceless %}
+{% endblock %}

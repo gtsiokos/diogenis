@@ -24,6 +24,8 @@ def login(request):
 			user = auth.authenticate(username=usr, password=pwd)
 			if user is not None and user.is_active:
 				auth.login(request, user)
+				if user.is_superuser:
+					return HttpResponseRedirect('/system/admin/')
 				if remember==False:
 					request.session.set_expiry(0)
 				if user.get_profile().is_teacher:
@@ -31,10 +33,10 @@ def login(request):
 				else:
 					return HttpResponseRedirect('/students/'+user.username+'/')
 			else:
-				return render_to_response('index.html', {'msg': 'Δεν ανοίκεις στο μαγικό Teilar, φύγε όσο είναι καιρός'}, context_instance = RequestContext(request))
+				return render_to_response('index.html', {'message':'Δεν ανοίκεις στο μαγικό Teilar, φύγε όσο είναι καιρός'}, context_instance = RequestContext(request))
 			
 	return render_to_response('login.html', {}, context_instance = RequestContext(request))
 
 def logout(request):
 	auth.logout(request)
-	return render_to_response('index.html', {}, context_instance = RequestContext(request))
+	return HttpResponseRedirect('/')

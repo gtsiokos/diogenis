@@ -4,5 +4,5 @@ from diogenis.labs.views import *
 
 
 urlpatterns = patterns('',
-
+(r'^admin/$', control_panel),
 )

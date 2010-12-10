@@ -59,7 +59,9 @@ def manage_labs(request, username):
 			time =  my_lab.lab.hour
 			lesson = my_lab.lesson
 			lab = my_lab.lab
-		
+			import os
+			w = os.path.join(os.path.abspath(__file__),'..', 'media', 'ANATHESEIS.xls')
+			print os.getcwd()
 			data = []
 			lab_data = []
 			

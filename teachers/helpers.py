@@ -4,15 +4,16 @@
 # -*- coding: utf8 -*-
 
 import hashlib
-
-from reportlab.lib.pagesizes import letter
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.lib.units import inch
-from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-
 from labs.models import *
+try:
+	from reportlab.lib.pagesizes import letter
+	from reportlab.lib.styles import getSampleStyleSheet
+	from reportlab.lib.units import inch
+	from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer
+	from reportlab.pdfbase import pdfmetrics
+	from reportlab.pdfbase.ttfonts import TTFont
+except:
+	pass
 
 def get_hashed_username(username):
 	uname_hashed = hashlib.sha256(username)

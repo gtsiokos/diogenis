@@ -14,6 +14,9 @@ from django.contrib.auth.models import User
 from accounts.models import *
 from labs.models import *
 
+from labs.helpers import handle_uploaded_pdf
+
+
 def user_is_superuser(user):
 	return user.is_superuser
 
@@ -23,7 +26,6 @@ def control_panel(request):
 
 	message = []
 	if request.method == "POST":
-
 		Teacher.objects.all().delete()
 		Lesson.objects.all().delete()
 		TeacherToLab.objects.all().delete()
@@ -35,10 +37,14 @@ def control_panel(request):
 		splitname=''
 		labname=''
 		teachname=''
-		temp=e10.xls_rdr()
 		
-		empty_lab = Lab(name='', day='', hour=1)
-		empty_lab.save()
+		try:
+			temp=e10.xls_rdr()
+			empty_lab = Lab(name='', day='', hour=1)
+			empty_lab.save()
+		except:
+			msg= u'Παρουσιάστηκε Σφάλμα'
+			message.append({ "status": 2, "msg": msg })
 
 		for k in temp:
 			if k.startswith('-'):
@@ -75,6 +81,4 @@ def control_panel(request):
 #	else:
 #		raise Http404
 	return render_to_response('system/cpanel.html', {'message': message}, context_instance = RequestContext(request))
-
-
 

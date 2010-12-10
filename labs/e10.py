@@ -4,30 +4,29 @@
 # -*- coding: utf8 -*-
 
 def fill_labs():
-
 	from labs.models import *
-	
 	imeres = [u'Δευτέρα',u'Τρίτη',u'Τετάρτη',u'Πέμπτη',u'Παρασκευή']
 	onomata_aithouson = [u'ΕΣΕ',u'ΕΡΓ1',u'ΕΡΓ2',u'ΕΡΓ3',u'UNIX',u'NT',u'Τ1',u'Τ2',]
 	
 	ores_enarksis = []
 	for i in range(8,13,2):
 		ores_enarksis.append(i)
-  	i=0
+	i=0
 	for i in range(15,20,2):
 		ores_enarksis.append(i)
 
 	i=j=k=''
 	for i in onomata_aithouson:
-	  for j in  imeres:
-	    for k in ores_enarksis:
-		 tmpobj = Lab(name=i,day=j,hour=k)
-		 tmpobj.save()
+		for j in  imeres:
+			for k in ores_enarksis:
+				tmpobj = Lab(name=i,day=j,hour=k)
+				tmpobj.save()
 
 
-#provalei swsta ola ta onomata MONO twn ergastiriakwn kathigitwn kai katw apo kathe omada kathigitwn ena diaxwristiko keno
 def xls_rdr():
-	
+	'''
+	Provalei swsta ola ta onomata MONO twn ergastiriakwn kathigitwn kai katw apo kathe omada kathigitwn ena diaxwristiko keno.
+	'''
 	import re
 	import xlrd
 	import shutil
@@ -53,10 +52,8 @@ def xls_rdr():
 	pos=0
 	c=0
 	
-	
-	wb = xlrd.open_workbook('/Users/Lomar/Desktop/diogenis/media/ANATHESEIS.xls')
+	wb = xlrd.open_workbook('/Users/Lomar/Desktop/diogenis/media/ANATHESEIS.xls')#/home/fusion/diogenis/media/ANATHESEIS.xls')
 	sh = wb.sheet_by_index(0)
-	
 	
 	for rownum in range(sh.nrows):
 		b=sh.row_values(rowx=rownum, start_colx=0, end_colx=None)
@@ -73,12 +70,8 @@ def xls_rdr():
 		lessons.append(les)
 		les=''
 	
-	
 	#for k in lessons:
 	#	print k
-	
-	
-	
 	for rownum in range(sh.nrows):
 		b=sh.row_values(rowx=rownum, start_colx=0, end_colx=None)
 		for el in b:
@@ -117,3 +110,4 @@ def xls_rdr():
 				pass
 			
 	return temp
+

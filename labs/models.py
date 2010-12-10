@@ -1,5 +1,11 @@
 from django.db import models
+from django import forms
+
 from accounts.models import *
+
+class UploadPdf(forms.Form):
+    name = forms.CharField(max_length=50)
+    file  = forms.FileField()
 
 class Lesson(models.Model):
 	name = models.CharField(max_length=40)

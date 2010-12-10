@@ -8,7 +8,7 @@
 
 */
 
-body { background: #f4f4d6 url('./img/background.png') top left repeat; }
+body { background: #f4f4d6 url('./img/background.png') top left repeat; font-family: Verdana, Arial, Helvetica, sans-serif; }
 body.wait { cursor: wait !important; }
 a { text-decoration: none; }
 
@@ -173,18 +173,15 @@ a { text-decoration: none; }
 	padding-bottom: 50px;
 	
 	
-	-moz-border-radius: 7px;
-	-webkit-border-radius: 7px;
-	border-radius: 7px;
 }
 div.not-logged {
 	width: 978px; min-height: 200px;
 	background: #fafafa; background: rgba(250, 250, 250, 0.7);
 	border: solid 1px #E6DB55;
 	
-	-moz-border-radius: 0 7px 7px 0;
-	-webkit-border-radius: 0 7px 7px 0;
-	border-radius: 0 7px 7px 0;
+	-moz-border-radius: 7px;
+	-webkit-border-radius: 7px;
+	border-radius: 7px;
 
 }	
 div.logged {
@@ -211,19 +208,47 @@ div.logged {
 	//Index Promo
 	//^*****************************/
 	
-	#promo { overflow:hidden; margin: 20px 0 50px 0; }
-	#promo>li:first-child	{ margin: 0; }
-	#promo>li 				{
-							display: block; float: left; width: 260px; height: 260px;
-							margin: 0 0 0 85px;
-							background: #e9e9e9;
-							border: solid 5px rgba(100,100,100,0.1);
+	#promo 						{ overflow:hidden; margin: 13px 0 40px 0; }
+	#promo>li:first-child		{ margin: 0; }
+	#promo>li 					{
+								display: inline; float: left;
+								margin: 0 0 0 73px;
+								border: solid 8px #dedede; border: solid 8px rgba(0,0,0,0.1);
 							
-							-moz-border-radius: 15px;
-							-webkit-border-radius: 15px;
-							border-radius: 15px;
-							}
-	
+								-moz-border-radius: 14px;
+								-webkit-border-radius: 14px;
+								border-radius: 14px;
+								}
+	#promo>li:hover 			{ border-color: #bbb; border-color: rgba(0,0,0,0.25); }
+	#promo>li:hover div			{ border-color: #949494; }
+	#promo>li:hover em			{ color: #5690C7; }
+	#promo>li div				{
+								width: 260px; height: 83px; position: relative; /*#### to ypsos eksartatai apo to padding-top, ola mazi prepei na einai 260px ####*/
+								padding: 177px 0 0 0;
+								background: #f3f3f3;
+								border: solid 1px #bbb;
+							
+								-moz-border-radius: 6px;
+								-webkit-border-radius: 6px;
+								border-radius: 6px;
+								-moz-box-shadow: 0 0 5px #fff inset;
+								-webkit-box-shadow: 0 0 5px #fff inset;
+								box-shadow: 0 0 5px #fff inset;
+								
+								}
+	#promo>li img				{ display: block; position: absolute; top: 27px; margin: 0 0 0 64px; }
+	#promo>li:first-child img 	{ margin-left: 52px; }
+	#promo>li p					{	
+								font: bold 15px/1 'Droid Sans', Verdana;
+								color: #949494;
+								text-align: center; text-shadow: 1px 1px 1px #fcfcfc;
+								}
+	#promo>li em				{	
+								display: block; margin: 0 0 11px 0;
+								font: bold 25px/1 'Droid Sans', Verdana;
+								color: #555;
+								text-shadow: 1px 1px 0 #fff;
+								}
 	
 	/********************************^
 	//Message Console

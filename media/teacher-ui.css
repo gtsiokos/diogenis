@@ -47,7 +47,7 @@ div.logged div.lab {
 	div.lab h4>span {
 		display: block; float: left; width: 186px;
 		padding: 10px 0 11px 38px;
-		font: bold 14px/1 'Droid Sans', Verdana;
+		font: normal 14px/1 'Droid Sans Bold', Verdana;
 		background: #5690C7; color: #fcfcfc;
 		border: solid 1px #2e5d8a; border-right: solid 1px #96badc;
 	}
@@ -205,7 +205,7 @@ div.logged div.lab {
 			div.extras p span.number {
 				float: left;
 				padding: 3px 6px 2px 8px;
-				font: bold 14px 'Droid Sans', Verdana;
+				font: normal 14px 'Droid Sans Bold', Verdana;
 				letter-spacing: 0;
 				border: 0; border-right: solid 1px #696969;
 				text-shadow: 1px 1px 1px #505050;

@@ -8,6 +8,22 @@
 
 */
 
+@font-face {
+	font-family: 'Droid Sans';
+	src: url('./font/droidsans.eot');
+	src: local('☺'), url('./font/droidsans.woff') format('woff'), url('./font/droidsans.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Droid Sans Bold';
+	src: url('./font/droidsans-bold.eot');
+	src: local('☺'), url('./font/droidsans-bold.woff') format('woff'), url('./font/droidsans-bold.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
 body { background: #f4f4d6 url('./img/background.png') top left repeat; font-family: Verdana, Arial, Helvetica, sans-serif; }
 body.wait { cursor: wait !important; }
 a { text-decoration: none; }
@@ -197,7 +213,7 @@ div.logged {
 	div.logged h2 {
 		float: left; display: inline;
 		margin: 16px 0 18px 19px; padding: 11px 14px 10px 14px;
-		font: bold 25px/1 'Droid Sans', Verdana;
+		font: normal 25px/1 'Droid Sans', Verdana;
 		letter-spacing: 0.04em; word-spacing: 0.08em;
 		color: #5690c7; background: #fcfcfc;
 		border: solid 1px #e0e0e0;
@@ -239,13 +255,13 @@ div.logged {
 	#promo>li img				{ display: block; position: absolute; top: 27px; margin: 0 0 0 64px; }
 	#promo>li:first-child img 	{ margin-left: 52px; }
 	#promo>li p					{	
-								font: bold 15px/1 'Droid Sans', Verdana;
+								font: normal 15px/1 'Droid Sans Bold', Verdana;
 								color: #949494;
 								text-align: center; text-shadow: 1px 1px 1px #fcfcfc;
 								}
 	#promo>li em				{	
 								display: block; margin: 0 0 11px 0;
-								font: bold 25px/1 'Droid Sans', Verdana;
+								font: normal 25px/1 'Droid Sans', Verdana;
 								color: #555;
 								text-shadow: 1px 1px 0 #fff;
 								}
@@ -309,10 +325,10 @@ div.logged {
 	//^*****************************/	
 
 
-	.button { display: inline-block; font: normal 14px/1 'Droid Sans', Verdana; text-align: center; }
+	.button { display: inline-block; font: normal 13px/1 'Droid Sans Bold', Verdana; text-align: center; }
 
 		.important {
-			padding: 9px 9px 10px 9px;
+			padding: 9px 9px 10px 10px;
 			background: #5690C7;
 			color: #FCFCFC;
 			word-spacing: 0.03em; letter-spacing: 0.04em;

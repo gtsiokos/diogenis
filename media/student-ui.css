@@ -16,7 +16,8 @@ div.logged dl.labs {
 	dl.labs dt {
 		float: left; display: block; width: 628px;
 		padding: 12px 0 12px 12px;
-		font: bold 14px/1 'Droid Sans', Verdana;
+		font: normal 14px/1 'Droid Sans Bold', Verdana;
+		word-spacing: 0.15em;
 		background: #a5a5a5; color: #fcfcfc;
 		border: solid 1px #949494; border-right: solid 1px #949494;
 	}

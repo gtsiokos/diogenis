@@ -94,7 +94,7 @@ def addDataToLDAP(credentials):
 	try:
 		results = l.search_s(settings.SEARCH_DN, ldap.SCOPE_SUBTREE, 'uid=*', ['uidNumber'])
 		uids = []
-    	for item in results:
+		for item in results:
 			uids.append(int(item[1]['uidNumber'][0]))
 			attrs['uidNumber'] = [str(max(uids) + 1)]
 	except:

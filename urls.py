@@ -7,6 +7,7 @@ admin.autodiscover()
 from diogenis.views import *
 from diogenis.labs.views import *
 from diogenis.students.views import *
+from diogenis.signup.views import *
 
 urlpatterns = patterns('',
     (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT }),
@@ -16,6 +17,7 @@ urlpatterns = patterns('',
     (r'^teachers/', include('diogenis.teachers.urls')),
     (r'^students/', include('diogenis.students.urls')),
     (r'^system/', include('diogenis.labs.urls')),
+	(r'^signup/', signup),
     (r'^login/$', login),
     (r'^logout/$', logout),
     

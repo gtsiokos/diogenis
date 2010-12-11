@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-#coding: UTF-8
-#most workable and usefull Ver:2
 # -*- coding: utf8 -*-
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404

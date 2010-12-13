@@ -32,17 +32,13 @@ a { text-decoration: none; }
 #header, #main	{ width: 980px; margin: 0 auto; }
 
 #container1 {
-	position: fixed; top: 0; left: 0; z-index: 5; background: #141414;
-	border-bottom: solid 3px #FFF1BF;
+	height: 47px; position: fixed; top: 0; left: 0; z-index: 5; background: #141414 url('./img/header_bg.png') top left repeat-x;
 	
 	-moz-box-shadow: 0 1px 3px #333, 0 0 10px #949494; -webkit-box-shadow: 0 1px 3px #333, 0 0 10px #949494; box-shadow: 0 1px 3px #333, 0 0 10px #949494;
 }
 #container2 { margin-top: 62px; }
 
-#header {
-	height: 44px;
-	background: #141414;
-}
+#header { height: 43px; }
 
 	#header h1 {
 		float: left;		
@@ -58,7 +54,7 @@ a { text-decoration: none; }
 		
 
 		#login a.options-panel:link, #login a.options-panel:visited  {
-			min-width: 50px; height: 31px; display: block; float: right;
+			min-width: 50px; height: 30px; display: block; float: right;
 			padding: 13px 13px 0 13px;
 			font: normal 14px/1 Verdana, Arial, Helvetica, sans-serif; text-align: center; letter-spacing: 0.03em; word-spacing: 0.05em;
 			color: #949494;
@@ -73,7 +69,7 @@ a { text-decoration: none; }
 		}
 		
 		#login div.panel {
-			width: 220px; position: absolute; top: 44px; right: 0; float: left; display: block;
+			width: 220px; position: absolute; top: 43px; right: 0; float: left; display: block;
 			background: #474747; background: rgba(71, 71, 71, 0.7);
 			
 			-moz-border-radius: 0 0 4px 4px;
@@ -328,10 +324,10 @@ div.logged {
 	.button { display: inline-block; font: normal 13px/1 'Droid Sans Bold', Verdana; text-align: center; }
 
 		.important {
-			padding: 9px 9px 10px 10px;
+			padding: 11px 9px 12px 10px;
 			background: #5690C7;
 			color: #FCFCFC;
-			word-spacing: 0.03em; letter-spacing: 0.04em;
+			word-spacing: 0.2em; /*letter-spacing: 0.04em;*/
 			border: solid 1px #3e7fbd;
 			text-shadow: #214363 0 1px 1px;
 			

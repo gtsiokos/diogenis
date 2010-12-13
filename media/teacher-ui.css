@@ -13,7 +13,7 @@ div.logged h3 {
 	float: left;
 	margin: 16px 0 10px 19px;
 	font: bold 18px/1.1 Verdana, Arial, Helvetica, sans-serif;
-	color: #cfcfcf;
+	color: #c1c1c1;
 	text-shadow: 1px -1px 0 #fff;
 }
 
@@ -48,8 +48,9 @@ div.logged div.lab {
 		display: block; float: left; width: 186px;
 		padding: 10px 0 11px 38px;
 		font: normal 14px/1 'Droid Sans Bold', Verdana;
-		background: #5690C7; color: #fcfcfc;
+		background: #5690C7 url("./img/labs_info_bg.png") top left repeat-x; color: #fcfcfc;
 		border: solid 1px #2e5d8a; border-right: solid 1px #96badc;
+		text-shadow: 1px 1px 1px #2E5D8A;
 	}
 	
 	div.lab h4>span.transfer {
@@ -59,7 +60,7 @@ div.logged div.lab {
 		letter-spacing: 0.05em; word-spacing: 0.07em;
 		background: #FFF1BF; color: #ae8800;
 		border: solid 1px #d0a300;
-		text-align: center;
+		text-align: center; text-shadow: none;
 	}
 	div.lab h4>span:hover.transfer.enabled { border: solid 1px #ae8800; cursor: pointer; }
 	div.lab h4>span:hover.transfer.enabled>span { color: #7b6000; }

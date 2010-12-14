@@ -56,14 +56,14 @@ div.logged div.lab {
 	div.lab h4>span.transfer {
 		position: relative; width: 160px; height: 15px;
 		padding: 10px 13px 10px 13px;
-		font: normal 14px/1 'Droid Sans', Verdana;
-		letter-spacing: 0.05em; word-spacing: 0.07em;
-		background: #FFF1BF; color: #ae8800;
+		font: normal 13px/1 Verdana, Arial, Helvetica, sans-serif;
+		letter-spacing: 0.00em; word-spacing: 0.05em;
+		background: #FFF1BF url("./img/transfer_labs_bg.png") right 0px no-repeat; color: #ae8800;
 		border: solid 1px #d0a300;
 		text-align: center; text-shadow: none;
 	}
-	div.lab h4>span:hover.transfer.enabled { border: solid 1px #ae8800; cursor: pointer; }
-	div.lab h4>span:hover.transfer.enabled>span { color: #7b6000; }
+	div.lab h4>span:hover.transfer.enabled { background: #FFF1BF url("./img/transfer_labs_bg.png") right -50px no-repeat; border: solid 1px #ae8800; cursor: pointer; }
+	div.lab h4>span:hover.transfer.enabled>span { color: #7b6000; text-shadow: 1px 1px 1px #fcfcfc; }
 	div.lab h4>span.transfer.disabled {
 		background: #c7c7c7; color: #616161;
 		border: solid 1px #949494; border-color: #949494 #949494 #777 #949494;
@@ -73,16 +73,16 @@ div.logged div.lab {
 		-webkit-box-shadow: 0 0 24px #949494 inset;
 		box-shadow: 0 0 24px #949494 inset;
 	}
-	div.lab h4>span.enabled.active { background: #e9e9e9; border: solid 1px #aaa; }
-	div.lab h4>span:hover.enabled.active { border: solid 1px #aaa; cursor:default; }
-	div.lab h4>span.enabled.active>span { color: #949494; text-shadow: 1px -1px 1px #fcfcfc; }
-	div.lab h4>span:hover.enabled.active>span { color: #949494; text-shadow: 1px -1px 1px #fcfcfc; }
+	div.lab h4>span.enabled.active 					{ background: #e9e9e9; border: solid 1px #949494; }
+	div.lab h4>span:hover.enabled.active 			{ background: #e9e9e9; border: solid 1px #949494; cursor:default; }
+	div.lab h4>span.enabled.active>span 			{ color: #949494; text-shadow: 1px -1px 1px #fcfcfc; }
+	div.lab h4>span:hover.enabled.active>span 		{ color: #949494; text-shadow: 1px -1px 1px #fcfcfc; }
 	
 	div.lab ul.labs-list {
 		position: absolute; display: none; width: 166px; top: 35px; left: -1px; z-index: 5000;
 		padding: 10px 10px 12px 10px;
 		background: #e9e9e9;
-		border: solid 1px #aaa; border-top: 0;
+		border: solid 1px #949494; border-top: 0; border-bottom: solid 1px #666;
 		
 		-moz-border-radius: 0 0 7px 7px;
 		-webkit-border-radius: 0 0 7px 7px;

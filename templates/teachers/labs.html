@@ -86,7 +86,7 @@
 					<span class="lab-date">{{ q2.day }} {{ q2.hour }}</span>
 					{% if q.labs_count > 1 and q2.students %}
 						<span class="transfer enabled">
-							<span>Μετακίνηση σε V</span>
+							<span>Μετακίνηση</span>
 							<ul class="labs-list">
 								{% for s in q.labs_list %}
 									<li><span class="name">{{ s.name }}</span> &ndash; <span class="day">{{ s.day }}</span> &ndash; <span class="hour">{{ s.hour }}</span></li>
@@ -95,7 +95,7 @@
 						</span>
 					{% else %}
 						<span class="transfer disabled">
-							Μετακίνηση σε V
+							Μετακίνηση
 						</span>
 					{% endif %}
 				</h4>

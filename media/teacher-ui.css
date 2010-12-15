@@ -73,8 +73,8 @@ div.logged div.lab {
 		-webkit-box-shadow: 0 0 24px #949494 inset;
 		box-shadow: 0 0 24px #949494 inset;
 	}
-	div.lab h4>span.enabled.active 					{ background: #e9e9e9; border: solid 1px #949494; }
-	div.lab h4>span:hover.enabled.active 			{ background: #e9e9e9; border: solid 1px #949494; cursor:default; }
+	div.lab h4>span.enabled.active 					{ background: #e9e9e9 url("./img/transfer_labs_bg.png") right -100px no-repeat; border: solid 1px #949494; }
+	div.lab h4>span:hover.enabled.active 			{ background: #e9e9e9 url("./img/transfer_labs_bg.png") right -100px no-repeat; border: solid 1px #949494; cursor:default; }
 	div.lab h4>span.enabled.active>span 			{ color: #949494; text-shadow: 1px -1px 1px #fcfcfc; }
 	div.lab h4>span:hover.enabled.active>span 		{ color: #949494; text-shadow: 1px -1px 1px #fcfcfc; }
 	

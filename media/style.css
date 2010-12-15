@@ -169,6 +169,8 @@ a { text-decoration: none; }
 			background-color: #141414; color: #fcfcfc;
 			border: solid 1px #141414;
 			text-shadow: 1px -1px 1px #000;
+			
+			-moz-box-shadow: 0 0 3px #fcfcfc inset; -webkit-box-shadow: 0 0 3px #fcfcfc inset; box-shadow: 0 0 3px #fcfcfc inset;
 		}
 
 		#navigation a.active, #navigation a.active:hover, #navigation a.active:focus {

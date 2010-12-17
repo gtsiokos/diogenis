@@ -11,6 +11,8 @@ from django.contrib.auth.models import User
 from accounts.models import *
 from labs.models import *
 
+from teachers.helpers import get_hashed_username
+
 def user_is_student(user):
 	return user.is_authenticated() and not user.get_profile().is_teacher
 
@@ -32,29 +34,39 @@ def excel_api(request):
 @user_passes_test(user_is_student, login_url="/login/")
 def display_labs(request, username):
 	result = []
-	if username == request.user.username:
-		q1 = User.objects.get(username=username)
-		q2 = AuthStudent()
-		for i in AuthStudent.objects.all():
-			if i.user.username == q1.username:
-				q2 = i
-		res1 = StudentSubscription.objects.filter(student=q2)
-		q3 = u'%s %s' % (q1.last_name, q1.first_name)
-		res2 = TeacherToLab()
-		for j in TeacherToLab.objects.all():
-			for i in res1:
-				if i.teacher_to_lab==j:
-					res2=j
-					result.append ({
-								"lesson_name":res2.lesson.name,
-								"lab_name":res2.lab.name,
-								"lab_day":res2.lab.day,
-								"lab_hour":res2.lab.hour,
-								"teacher":res2.teacher.name,
-								"s_name":q3
-								})
-	return render_to_response('students/labs.html', {'results': result}, context_instance = RequestContext(request))
+	username_hashed = get_hashed_username(request.user.username)
 	
+	#import pdb; pdb.set_trace()
+	if username == request.user.username:
+		q1 = User.objects.get(username=username).get_profile()
+		
+		unique_lessons = []
+		my_lessons = StudentToLesson.objects.filter(student=q1)
+		for l in my_lessons:
+			unique_lessons.append({"name":l.lesson.name})
+		#q2 = AuthStudent()
+		#for i in AuthStudent.objects.all():
+		#	if i.user.username == q1.username:
+		#		q2 = i
+		#res1 = StudentSubscription.objects.filter(student=q2)
+		#q3 = u'%s %s' % (q1.last_name, q1.first_name)
+		#res2 = TeacherToLab()
+		#for j in TeacherToLab.objects.all():
+		#	for i in res1:
+		#		if i.teacher_to_lab==j:
+		#			res2=j
+		subscriptions = StudentSubscription.objects.filter(student=q1).select_related()
+		for subscription in subscriptions:
+			result.append ({
+							"lesson_name":subscription.teacher_to_lab.lesson.name,
+							"lab_name":subscription.teacher_to_lab.lab.name,
+							"lab_day":subscription.teacher_to_lab.lab.day,
+							"lab_hour":subscription.teacher_to_lab.lab.hour,
+							"teacher":subscription.teacher_to_lab.teacher.name,
+							})
+		return render_to_response('students/labs.html', {'results': result, 'unique_lessons':unique_lessons, 'hash':username_hashed}, context_instance = RequestContext(request))
+	else:
+		raise Http404	
 @user_passes_test(user_is_student, login_url="/login/")
 def add_new_lab(request, username):
 	if request.method == "POST":

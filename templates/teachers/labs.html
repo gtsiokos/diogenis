@@ -11,70 +11,7 @@
 		<p class="warning">Δεν έχετε προσθέσει τα εργαστήρια σας στον Διογένη</p>
 		{% endif %}
 	</div>
-	{% block modal_box %}
-		<div id="osx-modal-content">
-			<div id="osx-modal-title">Προσθήκη Εργαστηρίου</div>
-			<div class="close"><a href="#" class="simplemodal-close">x</a></div>
-			<div id="osx-modal-data">
-				<ol id="lab-registration">
-					<li id="select-lesson" class="focused">
-						<h3>1</h3>
-						<label for="lesson-name">Επιλέξτε Μάθημα</label>
-						<select class="lesson-name" name="lesson-name">
-							<option value="">Όνομα Μαθήματος</option>
-							{% for r in unique_lessons %}
-								<option value="{{ r.name }}">{{ r.name }}</option>
-							{% endfor %}
-						</select>
-					</li>
-					<li id="select-lab">
-						<h3>2</h3>
-						<label for="lesson-day">Επιλέξτε Ημέρα</label>
-						<select class="lesson-day" name="lesson-day">
-							<option value="">Ημέρα</option>
-							<option value="Δευτέρα">Δευτέρα</option>
-							<option value="Τρίτη">Τρίτη</option>
-							<option value="Τετάρτη">Τετάρτη</option>
-							<option value="Πέμπτη">Πέμπτη</option>
-							<option value="Παρασκευή">Παρασκευή</option>
-						</select>
-						<span class="ux-text" >και</span>
-						<label for="lesson-hour">Επιλέξτε Ώρα</label>
-						<select class="lesson-hour" name="lesson-hour">
-							<option value="">Ώρα Μαθήματος</option>
-							<option value="8">8 π.μ.</option>
-							<option value="10">10 π.μ.</option>
-							<option value="12">12 μ.μ.</option>
-							<option value="15">3 μ.μ</option>
-							<option value="17">5 μ.μ</option>
-							<option value="19">7 μ.μ</option>
-						</select>
-					</li>
-					<li id="select-class">
-						<h3>3</h3>
-						<label for="lesson-class">Επιλέξτε Αίθουσα</label>
-						<select class="lesson-class" name="lesson-class">
-							<option value="">Επιλέξτε Αίθουσα</option>
-						</select>
-						<label class="students-num" for="max-students">Αριθμός Φοιτητών:</label>
-						<input id="max-students" name="max-students" type="text" readonly="readonly" />
-						<div id="slider-max-students"></div>
-					</li>
-				</ol>
-				
-				
-				<div id="modal-messages">
-					<img id="modal-loader" src="/media/img/loader.gif" alt="" />
-					<p>Badoo</p>
-				</div>
-				<ul class="modal-controls">
-					<li><button class="simplemodal-close">Ακύρωση</button></li>
-					<li><a id="submit-lab" class="button important" href="#">Αποθήκευση</a><li>
-				</ul>
-			</div>
-		</div>
-	{% endblock %}
-
+	{{ block.super }}
 	{% if results %}
 		{% for q in results %}
 			{% ifchanged q.name %}<h3>{{ q.name }}</h3>{% endifchanged %}
@@ -148,17 +85,7 @@
 {% endblock content %}
 
 {% block extra_js_bottom %}
-	{% spaceless %}
-
-	<script type="text/javascript" src="/media/js/gui.js"></script>
-	<script type="text/javascript" src="/media/js/jquery.json-2.2.min.js"></script>
-	
-	<script type="text/javascript" src="/media/js/jquery.scrollTo-1.4.2-min.js"></script>
+	{{ block.super }}
 	<script type="text/javascript" src="/media/js/teacher-labs-gui.js"></script>
-	
-	<script type="text/javascript" src="/media/js/modal/jquery.simplemodal.js"></script>
-	<script type="text/javascript" src="/media/js/modal/osx.js"></script>
-	<script type="text/javascript" src="/media/js/jquery-ui-1.8.6.min.js"></script>
-
-	{% endspaceless %}
 {% endblock %}
+

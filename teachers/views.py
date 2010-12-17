@@ -19,7 +19,6 @@ from labs.models import *
 
 from teachers.helpers import get_hashed_username, pdf_exporter
 
-
 def user_is_teacher(user):
 	return user.is_authenticated() and user.get_profile().is_teacher
 
@@ -136,6 +135,8 @@ def manage_labs(request, username):
 			return render_to_response('teachers/pending_students.html', {'results':results, 'unique_lessons':unique_lessons, 'hash':username_hashed}, context_instance = RequestContext(request))
 		else:
 			return render_to_response('teachers/labs.html', {'results':results, 'unique_lessons':unique_lessons, 'hash':username_hashed}, context_instance = RequestContext(request))
+	else:
+		raise Http404
 
 
 @user_passes_test(user_is_teacher, login_url="/login/")

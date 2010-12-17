@@ -179,8 +179,8 @@ a { text-decoration: none; }
 			text-shadow: none;
 		}
 		
-		#navigation a.first { background-image: url('./img/black_board_icon.png'); }
-		#navigation a.last { background-image: url('./img/drawer_icon.png'); }
+		#navigation a.black_board { background-image: url('./img/black_board_icon.png'); }
+		#navigation a.drawer { background-image: url('./img/drawer_icon.png'); }
 
 #content {
 	display:block; float: left; position: relative; z-index: 4;

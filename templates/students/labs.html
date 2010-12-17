@@ -3,7 +3,7 @@
 {% block content %}
 
 <div id="content" class="logged">
-	<h2>ΤΑ ΕΡΓΑΣΤΗΡΙΑ ΜΟΥ - {{ results.0.s_name }} </h2>
+	{{ block.super }}
 	<dl class="labs">
 	{% for labt in results %}
 		<dt> {{ labt.lesson_name }} </dt>

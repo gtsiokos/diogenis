@@ -241,11 +241,11 @@ $(function(){
 					});
 	maxStudents.val( maxSlider.slider("value") );
 	submitLab.hide();
-	
+	var unfocusSteps = function() { labList.find("li.focused").removeClass("focused"); };
 	
 	labList.find("li>h3").click(function() {
 		if ( $(this).parent("li").hasClass("isset") && !$(this).parent("li").hasClass("disabled") ){
-			labList.find("li.focused").removeClass("focused");
+			unfocusSteps();
 			$(this).parent("li").addClass("focused").find("select").first().focus();
 		}
 		return false;
@@ -269,20 +269,23 @@ $(function(){
 			dataType: 'json',
 			success: function(data) {
 				if (data[0].status == 1){
-
+					var strHtml;
+					
 					if (data[0].action == "getClass") {
 						lessonClass.children().not(":first-child").remove();
 						var len = data[0].classes.length;
 						for(var i=0; i<len; i++){
-							var str = "<option value='"+data[0].classes[i].name+"'>"+data[0].classes[i].name+"</option>";
-							lessonClass.append(str);
+							strHtml += "<option value='"+data[0].classes[i].name+"'>"+data[0].classes[i].name+"</option>";
 						}
+						lessonClass.append(strHtml);
+						
 						var parentClass = lessonClass.parent("li")
 						var parentMeridiam = lessonDay.parent("li")
 					
 						parentClass.removeClass("disabled");
 						lessonClass.removeAttr("disabled");
 						
+						unfocusSteps();
 						if ( !parentClass.hasClass("isset") ) {
 							parentClass.addClass("focused").addClass("isset");
 							parentMeridiam.removeClass("focused");
@@ -298,7 +301,7 @@ $(function(){
 							setTimeout( function() {
 								lessonClass.focus();
 							},900);	
-						} else { lessonClass.focus(); }
+						} else { parentClass.addClass("focused"); lessonClass.focus(); }
 					}
 					else if (data[0].action == "submitLab") {
 						modalMsg.find("#modal-loader").fadeOut(150, function(){
@@ -347,7 +350,7 @@ $(function(){
 		var hisParent = $(this).parent("li");
 		if ( !hisParent.hasClass("isset") ){
 		
-			hisParent.removeClass("focused");
+			unfocusSteps();
 			lessonToSend = $(this).val();
 			
 			lessonDay.parent("li").removeClass("disabled").addClass("focused").addClass("isset");

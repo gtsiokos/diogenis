@@ -19,8 +19,8 @@ $(function(){
 		theBody.removeClass("wait");
 	});
 	
-	var splitOldDate = function(oldLabDate) {
-		var date = oldLabDate.split(" ");
+	var splitDate = function(date) {
+		var date = date.split(" ");
 		var day = date[0];
 		var hour = parseInt(date[1], 10);
 		var AmPm = date[2];
@@ -43,14 +43,15 @@ $(function(){
 	var modalMsg 		= $("#modal-messages");
 	var submitLab 		= $("#submit-lab");
 	
-	lessonTeacher.attr("disabled", "disabled").parent("li").addClass("disabled").hide();
+	lessonTeacher.attr("disabled", "disabled").parent("li").addClass("disabled");
 	lessonClass.attr("disabled", "disabled").parent("li").addClass("disabled").hide();
 	modalMsg.find("#modal-loader").hide().siblings("p").hide();
 	submitLab.hide();
-	
+	var unfocusSteps = function() { labList.find("li.focused").removeClass("focused"); };
+
 	labList.find("li>h3").click(function() {
 		if ( $(this).parent("li").hasClass("isset") && !$(this).parent("li").hasClass("disabled") ){
-			labList.find("li.focused").removeClass("focused");
+			unfocusSteps();
 			$(this).parent("li").addClass("focused").find("select").first().focus();
 		}
 		return false;
@@ -60,17 +61,21 @@ $(function(){
 	var theRequest = function(lessonToSend, teacherToSend, classToSend) {
 		
 		if (lessonToSend && teacherToSend && classToSend){
-		
+			var classInfo 	= classToSend.split(" ");
+			var classDate 	= splitDate(classToSend);
+			var className 	= classInfo[3];
+			var classDay 	= classDate.day;
+			var classHour 	= classDate.hour;
+			var request = { action:"submitLab", lesson:lessonToSend, teacher:teacherToSend, cname:className, cday:classDay, chour:classHour };
 		}
 		else if (lessonToSend && teacherToSend){
-		
+			var request = { action:"getClasses", lesson:lessonToSend, teacher:teacherToSend };
 		}
 		else if (lessonToSend){
-			var request = { action: "getTeachers", lesson: lessonToSend };
+			var request = { action:"getTeachers", lesson:lessonToSend };
 		}
 		
 		ajaxUrl = '/students/'+hashValue+'/add-new-lab/';
-		
 		$.ajax({
 			url: ajaxUrl,
 			type: 'POST',
@@ -79,164 +84,49 @@ $(function(){
 			dataType: 'json',
 			success: function(data) {
 				if (data[0].status == 1){
-
+					var strHtml
+					
 					if (data[0].action == "getTeachers") {
 						lessonTeacher.children().not(":first-child").remove();
+						lessonClass.attr("disabled", "disabled").parent("li")
+																	.removeClass("isset").hide().end()
+																	.children().not(":first-child").remove();
 						var len = data[0].teachers.length;
 						for(var i=0; i<len; i++){
-							var str = "<option value='"+data[0].teachers[i].name+"'>"+data[0].teachers[i].name+"</option>";
-							lessonTeacher.append(str);
+							strHtml += "<option value='"+data[0].teachers[i].name+"'>"+data[0].teachers[i].name+"</option>";
 						}
-						var parentClass = lessonTeacher.parent("li")
+						lessonTeacher.append(strHtml);
 						
+						var parentClass = lessonTeacher.parent("li");
 						parentClass.removeClass("disabled");
 						
+						unfocusSteps();
 						if ( !parentClass.hasClass("isset") ) {
 							parentClass.addClass("focused").addClass("isset");
-							
-							var boxHeight = parentClass.height();
-							parentClass.children().hide();
-							parentClass.height(30).fadeIn(350,
-												function(){
-													$(this).animate({height: boxHeight}, 350).children().delay(500).fadeIn(350);
-												});
-							submitLab.fadeIn(350);
+							lessonTeacher.removeAttr("disabled");
 							
 							setTimeout( function() {
 								lessonTeacher.focus();
 							},900);	
-						} else { lessonTeacher.focus(); }
+						} else { parentClass.addClass("focused"); lessonTeacher.focus(); }
 					}
-					else if (data[0].action == "submitLab") {
-						modalMsg.find("#modal-loader").fadeOut(150, function(){
-																modalMsg.find("p")
-																.addClass("ok")
-																.text(data[0].msg).append("<a href='#' onClick='window.location.reload()'>ανανέωση</a>")
-																.fadeIn(200);
-															}
-														);
-					}
-				}
-				else if (data[0].status == 2){
-				
-					if (data[0].action == "getClass") {
-						modalMsg.find("p").addClass("error").text(data[0].msg).fadeIn(200);
-					}
-					else if (data[0].action == "submitLab") {
-						modalMsg.find("#modal-loader").fadeOut(150, function(){
-																modalMsg.find("p")
-																.addClass("error")
-																.text(data[0].msg)
-																.fadeIn(200);
-															}
-														);
-					}
-				}
-			},
-			error: function(xhr, err){
-				ms = "Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων";
-				if(xhr.status==500){
-					modalMsg.find("#modal-loader").fadeOut(150);
-					setTimeout( function() {
-						modalMsg.find("p").addClass("error").text(ms).fadeIn(200);
-					},400);
-				}
-			}
-		});
-		
-		
-	};
-	
-	var cleanMessages = function() {
-		modalMsg.find("p").fadeOut(100).delay(100).removeClass();
-	}
-	
-	lessonName.change(function() {
-		var hisParent = $(this).parent("li");
-		if ( !hisParent.hasClass("isset") ){
-		
-			hisParent.removeClass("focused");
-			lessonToSend = $(this).val();
-			
-			lessonTeacher.parent("li").removeClass("disabled").addClass("focused").addClass("isset").show();
-			lessonTeacher.removeAttr("disabled").focus();
-			
-			hisParent.addClass("isset");	
-		} else {
-			lessonToSend = $(this).val();
-		}
-		theRequest(lessonToSend);
-		
-		cleanMessages();
-	});
-	
-	/*
-	var labList 		= $("#lab-registration");
-	var lessonName 		= $("#select-lesson select[name='lesson-name']");
-	var lessonDay 		= $("#select-lab select[name='lesson-day']");
-	var lessonHour 		= $("#select-lab select[name='lesson-hour']");
-	var lessonClass 	= $("#select-class select[name='lesson-class']");
-	var maxSlider 		= $("#slider-max-students");
-	var maxStudents 	= $("#max-students")
-	var modalMsg 		= $("#modal-messages");
-	var submitLab 		= $("#submit-lab");
-	
-	lessonDay.attr("disabled", "disabled").parent("li").addClass("disabled");
-	lessonHour.attr("disabled", "disabled");
-	lessonClass.attr("disabled", "disabled").parent("li").addClass("disabled").hide();
-	modalMsg.find("#modal-loader").hide().siblings("p").hide();
-	maxSlider.slider({ 	range: "min", min: 5, max: 40, value: 20,
-						slide: function( event, ui ) {
-							maxStudents.val(ui.value);
-						}
-					});
-	maxStudents.val( maxSlider.slider("value") );
-	submitLab.hide();
-	
-	
-	labList.find("li>h3").click(function() {
-		if ( $(this).parent("li").hasClass("isset") && !$(this).parent("li").hasClass("disabled") ){
-			labList.find("li.focused").removeClass("focused");
-			$(this).parent("li").addClass("focused").find("select").first().focus();
-		}
-		return false;
-	});
-	
-	
-	var lessonToSend, dayToSend, hourToSend, classToSend;
-	var theRequest = function(dayToSend, hourToSend, lessonToSend, classToSend) {
-		
-		var maxToSend = maxSlider.slider("value");
-		
-		if (classToSend) { var request = { newLesson: [{ action: "submitLab", newName: lessonToSend, newDay: dayToSend, newHour: hourToSend, newClass: classToSend, maxStudents: maxToSend}] }; }
-		else { var request = { newLesson: [{ action: "getClass", newDay: dayToSend, newHour: hourToSend}] }; }
-		ajaxUrl = '/teachers/'+hashValue+'/add-new-lab/';
-		
-		$.ajax({
-			url: ajaxUrl,
-			type: 'POST',
-			contentType: 'application/json; charset=utf-8',
-			data: $.toJSON(request),
-			dataType: 'json',
-			success: function(data) {
-				if (data[0].status == 1){
-
-					if (data[0].action == "getClass") {
+					else if (data[0].action == "getClasses") {
 						lessonClass.children().not(":first-child").remove();
 						var len = data[0].classes.length;
 						for(var i=0; i<len; i++){
-							var str = "<option value='"+data[0].classes[i].name+"'>"+data[0].classes[i].name+"</option>";
-							lessonClass.append(str);
+							var str 	= data[0].classes[i].day+" - "+data[0].classes[i].hour+" - "+data[0].classes[i].name;
+							var strVal 	= data[0].classes[i].day+" "+data[0].classes[i].hour+" "+data[0].classes[i].name;
+							strHtml += "<option value='"+strVal+"'>"+str+"</option>";
 						}
-						var parentClass = lessonClass.parent("li")
-						var parentMeridiam = lessonDay.parent("li")
-					
-						parentClass.removeClass("disabled");
-						lessonClass.removeAttr("disabled");
+						lessonClass.append(strHtml);
 						
+						var parentClass = lessonClass.parent("li");
+						parentClass.removeClass("disabled");
+						
+						unfocusSteps();
 						if ( !parentClass.hasClass("isset") ) {
 							parentClass.addClass("focused").addClass("isset");
-							parentMeridiam.removeClass("focused");
+							lessonClass.removeAttr("disabled");
 							
 							var boxHeight = parentClass.height();
 							parentClass.children().hide();
@@ -248,8 +138,8 @@ $(function(){
 							
 							setTimeout( function() {
 								lessonClass.focus();
-							},900);	
-						} else { lessonClass.focus(); }
+							},900);
+						} else { parentClass.addClass("focused"); lessonClass.focus(); }
 					}
 					else if (data[0].action == "submitLab") {
 						modalMsg.find("#modal-loader").fadeOut(150, function(){
@@ -263,7 +153,13 @@ $(function(){
 				}
 				else if (data[0].status == 2){
 				
-					if (data[0].action == "getClass") {
+					if (data[0].action == "getTeachers") {
+						modalMsg.find("p").addClass("error").text(data[0].msg).fadeIn(200);
+					}
+					else if (data[0].action == "getClasses") {
+						lessonClass.attr("disabled", "disabled").children().not(":first-child").remove();
+						submitLab.hide();
+						lessonClass.parent("li").hide().removeClass("isset").removeClass("focused").addClass("disabled");
 						modalMsg.find("p").addClass("error").text(data[0].msg).fadeIn(200);
 					}
 					else if (data[0].action == "submitLab") {
@@ -288,6 +184,7 @@ $(function(){
 			}
 		});
 		
+		
 	};
 	
 	var cleanMessages = function() {
@@ -297,68 +194,36 @@ $(function(){
 	lessonName.change(function() {
 		var hisParent = $(this).parent("li");
 		if ( !hisParent.hasClass("isset") ){
-		
-			hisParent.removeClass("focused");
 			lessonToSend = $(this).val();
-			
-			lessonDay.parent("li").removeClass("disabled").addClass("focused").addClass("isset");
-			lessonDay.removeAttr("disabled").focus();
-			lessonHour.removeAttr("disabled");
-			
 			hisParent.addClass("isset");	
 		} else {
 			lessonToSend = $(this).val();
 		}
+		theRequest(lessonToSend);
+		
 		cleanMessages();
 	});
 	
-	lessonDay.change(function() {
+	lessonTeacher.change(function() {
 		var hisParent = $(this).parent("li");
 		if ( !hisParent.hasClass("isset") ){
-		
-			dayToSend = $(this).val();
-			
-			if( !hisParent.hasClass("isset" ) ) {
-				hisParent.addClass("isset");
-			}
-			
+			teacherToSend = $(this).val();
+			hisParent.addClass("isset");	
 		} else {
-			dayToSend = $(this).val();
+			teacherToSend = $(this).val();
 		}
-		if( dayToSend && hourToSend ){
+		if( lessonToSend && teacherToSend ){
 			classToSend = null;
-			theRequest(dayToSend, hourToSend);
+			theRequest(lessonToSend, teacherToSend);
 		}
 		cleanMessages();
 	});
 	
-	lessonHour.change(function() {
-		var hisParent = $(this).parent("li");
-		if ( !hisParent.hasClass("isset") ){
-		
-			hourToSend = $(this).attr("value");
-			
-			if( !hisParent.hasClass("isset" ) ) {
-				hisParent.addClass("isset");
-			}
-			
-		} else {
-			hourToSend = $(this).attr("value");
-		}
-		if( dayToSend && hourToSend ){
-			classToSend = null;
-			theRequest(dayToSend, hourToSend);
-		}
-		cleanMessages();
-	});
-
 	lessonClass.change(function() {
 		var hisParent = $(this).parent("li");
 		if ( !hisParent.hasClass("isset") ){
-		
 			classToSend = $(this).val();
 			hisParent.addClass("isset");
-		
 		} else {
 			classToSend = $(this).val();
 		}
@@ -366,10 +231,10 @@ $(function(){
 	});
 	
 	var submitLabRequest = function() {
-		if ( lessonToSend && dayToSend && hourToSend && classToSend ) {
+		if ( lessonToSend && teacherToSend && classToSend ) {
 			submitLab.unbind("click");
 			modalMsg.find("p").hide().removeClass().siblings("img").fadeIn(50);
-			theRequest(dayToSend, hourToSend, lessonToSend, classToSend);
+			theRequest(lessonToSend, teacherToSend, classToSend);
 			setTimeout( function() {
 				submitLab.bind("click", submitLabRequest);
 			},1900);
@@ -382,12 +247,7 @@ $(function(){
 		return false;
 	}
 	submitLab.bind("click", submitLabRequest);
-	*/
-
-
-
-
-
+	
 
 
 

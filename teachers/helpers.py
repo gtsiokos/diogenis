@@ -19,6 +19,10 @@ def get_hashed_username(username):
 	uname_hashed = hashlib.sha256(username)
 	return uname_hashed.hexdigest()
 
+def humanize_time(time):
+	t = ("%d μ.μ." % (time-12) if time > 13 else "%d π.μ." % time)
+	if time == 12: t = "%d μ.μ." % time
+	return t
 
 def normalize_locale(text):
 	normalizedText = ''

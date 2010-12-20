@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from accounts.models import *
 from labs.models import *
 
-from teachers.helpers import get_hashed_username
+from teachers.helpers import get_hashed_username, humanize_time
 
 def user_is_student(user):
 	return user.is_authenticated() and not user.get_profile().is_teacher
@@ -80,7 +80,6 @@ def add_new_lab(request, hashed_request):
 	
 			try:
 				action = json_data['action']
-				lesson = json_data['lesson']
 			except KeyError:
 				msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
 				message.append({ "status": 2, "msg": msg })
@@ -91,7 +90,6 @@ def add_new_lab(request, hashed_request):
 				except KeyError:
 					msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
 					message.append({ "status": 2, "msg": msg })
-					
 				available_teachers = TeacherToLab.objects.filter(lesson__name__contains=lesson).order_by('teacher__name').select_related()
 				teachers_list = []
 				teachers_names = []
@@ -106,8 +104,42 @@ def add_new_lab(request, hashed_request):
 				#for b in my_teachers_names:
 				#	teachers_names.append({ "name": b })
 				message.append({ "status": 1, "action": action, "teachers": teachers_names })
-				
-				
+			
+			if action == "getClasses":
+				try:
+					lesson = json_data['lesson']
+					teacher = json_data['teacher']
+				except KeyError:
+					msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
+					message.append({ "status": 2, "msg": msg })
+				available_labs = TeacherToLab.objects.filter(lesson__name__contains=lesson, teacher__name__contains=teacher, lab__hour__gt=1).order_by('lab__day', 'lab__hour').select_related()
+				if available_labs:
+					classes_list = []
+					for l in available_labs:
+						class_time = humanize_time(l.lab.hour)
+						classes_list.append({"name":l.lab.name,"day":l.lab.day,"hour":class_time})
+					
+					message.append({ "status": 1, "action": action, "classes": classes_list })
+				else:
+					msg = u"Ο καθηγητής που επιλέξατε δεν έχει δημοσιεύσει τα εργαστήρια του στον Διογένη"
+					message.append({ "status": 2, "action": action, "msg": msg })
+			if action == "submitLab":
+				try:
+					lesson = json_data['lesson']
+					teacher = json_data['teacher']
+					class_name = json_data['cname']
+					class_day = json_data['cday']
+					class_hour = json_data['chour']
+				except KeyError:
+					msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
+					message.append({ "status": 2, "msg": msg })
+					
+				msg = u"Η εγγραφή σας στο εργαστήριο %s ολοκληρώθηκε" % class_name
+				message.append({ "status": 1, "action": action, "msg": msg })
+			
+			error_msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
+			if not message:
+				message.append({ "status": 2, "msg": error_msg })
 			data = simplejson.dumps(message)
 			return HttpResponse(data, mimetype='application/javascript')
 	else:

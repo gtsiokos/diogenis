@@ -17,7 +17,7 @@ from django.contrib.auth.models import User
 from accounts.models import *
 from labs.models import *
 
-from teachers.helpers import get_hashed_username, pdf_exporter
+from teachers.helpers import get_hashed_username, humanize_time, pdf_exporter
 
 def user_is_teacher(user):
 	return user.is_authenticated() and user.get_profile().is_teacher
@@ -85,10 +85,7 @@ def manage_labs(request, username):
 										"last": sub.student.user.last_name,
 										"am": sub.student.am
 										})
-			
-				lab_time = ("%d μ.μ." % (time-12) if time > 13 else "%d π.μ." % time)
-				if time == 12: lab_time = "%d μ.μ." % time
-				
+				lab_time = humanize_time(time)
 				empty_seats = ( my_lab.max_students-len(stud) if stud and my_lab.max_students>len(stud) else 0 )
 				
 				if pending_students_request:
@@ -112,9 +109,7 @@ def manage_labs(request, username):
 			
 			for s in total_labs:
 				time = s.lab.hour
-				
-				lab_time = ("%d μ.μ." % (time-12) if time > 13 else "%d π.μ." % time)
-				if time == 12: lab_time = "%d μ.μ." % time
+				lab_time = humanize_time(time)
 				stripped_day = s.lab.day[:3]
 			
 				lab_data.append({

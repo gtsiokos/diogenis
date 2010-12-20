@@ -34,20 +34,19 @@ def manage_labs(request, username):
 		q2 = u'%s %s' % (q1.last_name, q1.first_name)
 		q2 = Teacher.objects.get(name=q2)
 		results = []
-		my_labs = TeacherToLab.objects.filter(teacher=q2).order_by('lesson')
+		my_labs = TeacherToLab.objects.filter(teacher=q2).order_by('lesson__name').select_related()
 		
 		#####################################################################
-		# Ola ta onomata mathimatwn pou mporei na epileksei gia dimiourgia
-		# neou ergastiriou o kathigitis. 
+		# To unique_lessons periexei ola ta onomata mathimatwn pou mporei
+		# na epileksei o kathigitis gia dimiourgia neou ergastiriou se
+		# alphabitiki seira.
 		#####################################################################
-		I = []
 		unique_lessons = []
-		for a in my_labs:
-			I.append(a.lesson.name)
-		my_unique_lessons = set(I)
-		for b in my_unique_lessons:
-			unique_lessons.append({"name": b})
-		
+		labs_list = []
+		for my_lab in my_labs:
+			if my_lab.lesson.name not in labs_list:
+				labs_list.append(my_lab.lesson.name)
+				unique_lessons.append({"name": my_lab.lesson.name})
 			
 		#####################################################################
 		# Ola ta onomata mathimatwn, ergastiriwn, oi wres twn ergastiriwn
@@ -141,7 +140,6 @@ def manage_labs(request, username):
 
 @user_passes_test(user_is_teacher, login_url="/login/")
 def submit_student_to_lab(request, hashed_request):
-	
 	username_hashed = get_hashed_username(request.user.username)
 	
 	if username_hashed == hashed_request:
@@ -195,7 +193,6 @@ def submit_student_to_lab(request, hashed_request):
 
 @user_passes_test(user_is_teacher, login_url="/login/")
 def add_new_lab(request, hashed_request):
-
 	username_hashed = get_hashed_username(request.user.username)
 	
 	if username_hashed == hashed_request:
@@ -270,7 +267,6 @@ def add_new_lab(request, hashed_request):
 
 @user_passes_test(user_is_teacher, login_url="/login/")
 def export_pdf(request, hashed_request, class_name, day, hour):
-
 	username_hashed = get_hashed_username(request.user.username)
 	
 	if username_hashed == hashed_request:

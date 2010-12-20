@@ -96,7 +96,7 @@ div.logged div.lab {
 			margin-bottom: 10px; padding: 7px 0 7px 0;
 			background: #cfcfcf; color: #141414;
 			border: solid 1px #bebebe;
-			font: normal 13px/1 'Droid Sans', Verdana;
+			font: normal 11px/1 Verdana, Arial, Helvetica, sans-serif;
 			text-shadow: 0 1px 1px #fcfcfc;
 			
 			-moz-border-radius: 3px;

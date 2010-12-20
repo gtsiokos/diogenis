@@ -66,14 +66,51 @@ def display_labs(request, username):
 							})
 		return render_to_response('students/labs.html', {'results': result, 'unique_lessons':unique_lessons, 'hash':username_hashed}, context_instance = RequestContext(request))
 	else:
-		raise Http404	
+		raise Http404
+
+
 @user_passes_test(user_is_student, login_url="/login/")
-def add_new_lab(request, username):
-	if request.method == "POST":
-		if request.is_ajax():
-			
+def add_new_lab(request, hashed_request):
+	username_hashed = get_hashed_username(request.user.username)
+	
+	if username_hashed == hashed_request:
+		if request.method == "POST" and request.is_ajax():
 			message = []
 			json_data = simplejson.loads(request.raw_post_data)
-			
+	
+			try:
+				action = json_data['action']
+				lesson = json_data['lesson']
+			except KeyError:
+				msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
+				message.append({ "status": 2, "msg": msg })
+				
+			if action == "getTeachers":
+				try:
+					lesson = json_data['lesson']
+				except KeyError:
+					msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
+					message.append({ "status": 2, "msg": msg })
+					
+				available_teachers = TeacherToLab.objects.filter(lesson__name__contains=lesson).order_by('teacher__name').select_related()
+				teachers_list = []
+				teachers_names = []
+				for t in available_teachers:
+					if t.teacher.name not in teachers_list:
+						teachers_list.append(t.teacher.name)
+						teachers_names.append({"name":t.teacher.name})
+				#I = []
+				#for a in available_teachers:
+				#	I.append(a.teacher.name)
+				#my_teachers_names = set(I)
+				#for b in my_teachers_names:
+				#	teachers_names.append({ "name": b })
+				message.append({ "status": 1, "action": action, "teachers": teachers_names })
+				
+				
 			data = simplejson.dumps(message)
 			return HttpResponse(data, mimetype='application/javascript')
+	else:
+		return HttpResponse("Atime hax0r, an se vrw tha sou gamisw to kerato...", mimetype="text/plain")
+			
+			

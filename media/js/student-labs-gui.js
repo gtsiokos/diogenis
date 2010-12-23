@@ -57,8 +57,8 @@ $(function(){
 		return false;
 	});
 	
-	var lessonToSend, teacherToSend, classToSend;
-	var theRequest = function(lessonToSend, teacherToSend, classToSend) {
+	var lessonToSend, teacherToSend, classToSend, submitRequest;
+	var theRequest = function(lessonToSend, teacherToSend, classToSend, submitRequest) {
 		
 		if (lessonToSend && teacherToSend && classToSend){
 			var classInfo 	= classToSend.split(" ");
@@ -66,7 +66,10 @@ $(function(){
 			var className 	= classInfo[3];
 			var classDay 	= classDate.day;
 			var classHour 	= classDate.hour;
-			var request = { action:"submitLab", lesson:lessonToSend, teacher:teacherToSend, cname:className, cday:classDay, chour:classHour };
+			if ( submitRequest===0 ) {
+				var request = { action:"checkAvailability", lesson:lessonToSend, teacher:teacherToSend, cname:className, cday:classDay, chour:classHour };
+			}
+			else { var request = { action:"submitLab", lesson:lessonToSend, teacher:teacherToSend, cname:className, cday:classDay, chour:classHour }; }
 		}
 		else if (lessonToSend && teacherToSend){
 			var request = { action:"getClasses", lesson:lessonToSend, teacher:teacherToSend };
@@ -134,12 +137,14 @@ $(function(){
 												function(){
 													$(this).animate({height: boxHeight}, 350).children().delay(500).fadeIn(350);
 												});
-							submitLab.fadeIn(350);
 							
 							setTimeout( function() {
 								lessonClass.focus();
 							},900);
 						} else { parentClass.addClass("focused"); lessonClass.focus(); }
+					}
+					else if (data[0].action == "checkAvailability") {
+						submitLab.text("Υποβολή").fadeIn(350);
 					}
 					else if (data[0].action == "submitLab") {
 						modalMsg.find("#modal-loader").fadeOut(150, function(){
@@ -149,6 +154,12 @@ $(function(){
 																.fadeIn(200);
 															}
 														);
+					}
+				}
+				else if (data[0].status == 3){
+					if (data[0].action == "checkAvailability") {
+						modalMsg.find("p").addClass("warning").text(data[0].msg).fadeIn(200);
+						submitLab.text("Υποβολή Αιτήματος").fadeIn(350);
 					}
 				}
 				else if (data[0].status == 2){
@@ -199,8 +210,11 @@ $(function(){
 		} else {
 			lessonToSend = $(this).val();
 		}
-		theRequest(lessonToSend);
+		if( lessonToSend ){
+			theRequest(lessonToSend);
+		}
 		
+		submitLab.hide();
 		cleanMessages();
 	});
 	
@@ -227,6 +241,9 @@ $(function(){
 		} else {
 			classToSend = $(this).val();
 		}
+		if( lessonToSend && teacherToSend && classToSend ){
+			theRequest(lessonToSend, teacherToSend, classToSend, 0);
+		}
 		cleanMessages();
 	});
 	
@@ -234,7 +251,7 @@ $(function(){
 		if ( lessonToSend && teacherToSend && classToSend ) {
 			submitLab.unbind("click");
 			modalMsg.find("p").hide().removeClass().siblings("img").fadeIn(50);
-			theRequest(lessonToSend, teacherToSend, classToSend);
+			theRequest(lessonToSend, teacherToSend, classToSend, 1);
 			setTimeout( function() {
 				submitLab.bind("click", submitLabRequest);
 			},1900);

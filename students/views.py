@@ -123,7 +123,8 @@ def add_new_lab(request, hashed_request):
 				else:
 					msg = u"Ο καθηγητής που επιλέξατε δεν έχει δημοσιεύσει τα εργαστήρια του στον Διογένη"
 					message.append({ "status": 2, "action": action, "msg": msg })
-			if action == "submitLab":
+			
+			if action == "checkAvailability" or action == "submitLab":
 				try:
 					lesson = json_data['lesson']
 					teacher = json_data['teacher']
@@ -133,7 +134,25 @@ def add_new_lab(request, hashed_request):
 				except KeyError:
 					msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
 					message.append({ "status": 2, "msg": msg })
-					
+				
+				try:
+					unique_class = TeacherToLab.objects.get(lesson__name__contains=lesson, teacher__name__contains=teacher, lab__name__contains=class_name, lab__day__contains=class_day, lab__hour=class_hour)
+				except:
+					msg = u"Το εργαστήριο που ζητήσατε δεν βρέθηκε"
+					message.append({ "status": 2, "action": action, "msg": msg })
+				students_count = StudentSubscription.objects.filter(teacher_to_lab=unique_class).count()
+				available_seats = unique_class.max_students - students_count
+				lab_available = (True if available_seats > 0 else False)	
+			
+			if action == "checkAvailability":
+				
+				if lab_available:
+					message.append({ "status": 1, "action": action })
+				else:
+					msg = u"To εργαστήριο %s δεν έχει ελεύθερες θέσεις. Θέλετε να υποβάλεται αίτημα στον καθηγητή για την έγκριση της εγγραφή σας?" % class_name
+					message.append({ "status": 3, "action": action, "msg": msg })
+			
+			if action == "submitLab":
 				msg = u"Η εγγραφή σας στο εργαστήριο %s ολοκληρώθηκε" % class_name
 				message.append({ "status": 1, "action": action, "msg": msg })
 			

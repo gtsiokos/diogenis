@@ -107,7 +107,7 @@
 	
 	#modal-messages p.warning{
 		padding: 10px 12px 12px 47px;
-		background: #FFFFE0 url('./img/warning_icon.png') 6px 44%s no-repeat; color: #333;
+		background: #FFFFE0 url('./img/warning_icon.png') 6px 44% no-repeat; color: #333;
 		border: solid 1px #E6DB55;		
 	}
 

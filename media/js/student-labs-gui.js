@@ -85,6 +85,9 @@ $(function(){
 			contentType: 'application/json; charset=utf-8',
 			data: $.toJSON(request),
 			dataType: 'json',
+			beforeSend: function() {
+				if (request.action == "submitLab") { modalMsg.find("#modal-loader").show(); }
+			},
 			success: function(data) {
 				if (data[0].status == 1){
 					var strHtml

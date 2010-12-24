@@ -84,15 +84,12 @@ $(function(){
 	var ajaxTrans 		= transfer.find("ul.labs-list li");
 	var msg 			= $("#ui-messages p", "#content");
 	var theLabs 		= $("div.lab", "#content");
-	
 	theLabs.find("table td>input").removeAttr("disabled").attr('checked', false);
-	
 	
 	ajaxTrans.click(function(){
 		
 		var ms;
 		var parentDiv = $(this).parents("div.lab");
-		
 		
 		var newLabName, newLabDate, newLabDay, newLabHour
 		
@@ -267,6 +264,9 @@ $(function(){
 			contentType: 'application/json; charset=utf-8',
 			data: $.toJSON(request),
 			dataType: 'json',
+			beforeSend: function() {
+				if (request.newLesson[0].action == "submitLab") { modalMsg.find("#modal-loader").show(); }
+			},
 			success: function(data) {
 				if (data[0].status == 1){
 					var strHtml;

@@ -84,52 +84,12 @@ $(function(){
 	var ajaxTrans 		= transfer.find("ul.labs-list li");
 	var msg 			= $("#ui-messages p", "#content");
 	var theLabs 		= $("div.lab", "#content");
-	var pdfLink 		= theLabs.find("div.extras:first a.export-pdf");
 	theLabs.find("table td>input").removeAttr("disabled").attr('checked', false);
-	
-	pdfLink.click(function() {
-		var parentDiv = $(this).parents("div.lab");
-		var labName = parentDiv.find("h4>span.lab-name").text();
-		var labDate = parentDiv.find("h4>span.lab-date").text();
 		
-		var splittedDate = splitOldDate(labDate);
-		var labDay = splittedDate.day;
-		var labHour = splittedDate.hour;
-		
-		//console.log(labName+"-||-"+labDay+"-||-"+labHour);
-		
-		var request = {	pdfRequest: [{ labName: labName, labDay: labDay, labHour: labHour}] };
-			
-		ajaxUrl = '/teachers/'+hashValue+'/export-pdf/';
-		$.ajax({
-			url: ajaxUrl,
-			type: 'POST',
-			contentType: 'application/json; charset=utf-8',
-			data: $.toJSON(request),
-			dataType: 'json',
-			success: function(data) {
-				if ( data[0].status == 2 ) {
-					setTimeout( function() {
-						msg.fadeOut(100).removeClass().addClass("error").text(data[0].msg).fadeIn(200);
-					},300);					
-				}
-			},
-			error: function(xhr, err){
-				ms = "Παρουσιάστηκε σφάλμα, δοκιμάστε ξανά";
-				if(xhr.status==500){
-					msg.fadeOut(100).removeClass().addClass("error").text(ms).fadeIn(200);
-				}
-			}
-		});
-		
-		return false;
-	});
-	
 	ajaxTrans.click(function(){
 		
 		var ms;
 		var parentDiv = $(this).parents("div.lab");
-		
 		
 		var newLabName, newLabDate, newLabDay, newLabHour
 		
@@ -303,6 +263,9 @@ $(function(){
 			contentType: 'application/json; charset=utf-8',
 			data: $.toJSON(request),
 			dataType: 'json',
+			beforeSend: function() {
+				if (request.newLesson[0].action == "submitLab") { modalMsg.find("#modal-loader").show(); }
+			},
 			success: function(data) {
 				if (data[0].status == 1){
 

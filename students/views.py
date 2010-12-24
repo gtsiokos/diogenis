@@ -41,7 +41,7 @@ def display_labs(request, username):
 		q1 = User.objects.get(username=username).get_profile()
 		
 		unique_lessons = []
-		my_lessons = StudentToLesson.objects.filter(student=q1)
+		my_lessons = StudentToLesson.objects.filter(student=q1).order_by('lesson__name')
 		for l in my_lessons:
 			unique_lessons.append({"name":l.lesson.name})
 		#q2 = AuthStudent()
@@ -145,7 +145,6 @@ def add_new_lab(request, hashed_request):
 				lab_available = (True if available_seats > 0 else False)	
 			
 			if action == "checkAvailability":
-				
 				if lab_available:
 					message.append({ "status": 1, "action": action })
 				else:
@@ -153,8 +152,19 @@ def add_new_lab(request, hashed_request):
 					message.append({ "status": 3, "action": action, "msg": msg })
 			
 			if action == "submitLab":
-				msg = u"Η εγγραφή σας στο εργαστήριο %s ολοκληρώθηκε" % class_name
-				message.append({ "status": 1, "action": action, "msg": msg })
+				the_student = AuthStudent.objects.get(user=request.user)
+				try:
+					already_subscribed = StudentSubscription.objects.get(student=the_student, teacher_to_lab__lesson__name=lesson)
+					msg = u"Έχετε ήδη εγγραφεί στο συγκεκριμένο μάθημα"
+					message.append({ "status": 2, "action": action, "msg": msg })
+				except:
+					if lab_available:
+						StudentSubscription.objects.create(student=the_student, teacher_to_lab=unique_class)
+						msg = u"Η εγγραφή σας στο εργαστήριο %s ολοκληρώθηκε" % class_name
+					else:
+						StudentSubscription.objects.create(student=the_student, teacher_to_lab=unique_class, in_transit=True)
+						msg = u"Στείλαμε το αίτημα σας στον καθηγητή"
+					message.append({ "status": 1, "action": action, "msg": msg })
 			
 			error_msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
 			if not message:

@@ -34,8 +34,8 @@ $(function(){
 		};
 		
 		currentLab.click(function(e){
-			if(e) e.stopPropagation();
-			if(e) e.preventDefault();
+			if(e){ e.stopPropagation(); }
+			if(e){ e.preventDefault(); }
 			showList();
 		});
 	});
@@ -56,6 +56,7 @@ $(function(){
 	//********************************		
 	
 	var theBody = $("body:first");
+	var request;
 	
 	theBody.ajaxStart(function(){
 		theBody.addClass("wait");
@@ -74,7 +75,7 @@ $(function(){
 		} else { hour = hour+12; }
 		
 		return {day:day, hour:hour};
-	}
+	};
 	
 	//********************************
 	//Ajax-Transfer Feature
@@ -91,7 +92,7 @@ $(function(){
 		var ms;
 		var parentDiv = $(this).parents("div.lab");
 		
-		var newLabName, newLabDate, newLabDay, newLabHour
+		var newLabName, newLabDate, newLabDay, newLabHour;
 		
 		newLabName = $(this).find("span.name").text();
 		var day = $(this).find("span.day").text();
@@ -115,14 +116,14 @@ $(function(){
 		}
 		
 		
-		var oldLabName, oldLabDate, oldLabDay, oldLabHour
+		var oldLabName, oldLabDate, oldLabDay, oldLabHour;
 		
 		oldLabName = parentDiv.find("h4>span.lab-name").text();
 		oldLabDate = parentDiv.find("h4>span.lab-date").text();
 		
 		var splittedDate = splitOldDate(oldLabDate);
-		var oldLabDay = splittedDate.day;
-		var oldLabHour = splittedDate.hour;
+		oldLabDay = splittedDate.day;
+		oldLabHour = splittedDate.hour;
 		
 		/*
 		console.log(newLabName);
@@ -139,7 +140,7 @@ $(function(){
 		errorMsg = "Προέκυψε σφάλμα στην σύνδεση";
 		amToSend = [];
 		students = theActive.parents("div.lab").find("table tr:not(.disabled) td>input:checked");
-		var i=0;
+		i=0;
 		students.each(function(){
 			amToSend[i] = { am: $(this).val() };
 			i++;
@@ -147,9 +148,10 @@ $(function(){
 		
 		if (amToSend[0]) {
 			
-			var request = {	lnew: [ { newName: newLabName, newDay: newLabDay, newHour: newLabHour} ],
-							lold: [ {oldName: oldLabName, oldDay: oldLabDay, oldHour: oldLabHour} ],
-							stud: amToSend
+			request = 	{
+						lnew: [ { newName: newLabName, newDay: newLabDay, newHour: newLabHour} ],
+						lold: [ {oldName: oldLabName, oldDay: oldLabDay, oldHour: oldLabHour} ],
+						stud: amToSend
 						};
 			
 			ajaxUrl = '/teachers/'+hashValue+'/submit-student-to-lab/';
@@ -222,7 +224,7 @@ $(function(){
 	var lessonHour 		= $("#select-lab select[name='lesson-hour']");
 	var lessonClass 	= $("#select-class select[name='lesson-class']");
 	var maxSlider 		= $("#slider-max-students");
-	var maxStudents 	= $("#max-students")
+	var maxStudents 	= $("#max-students");
 	var modalMsg 		= $("#modal-messages");
 	var submitLab 		= $("#submit-lab");
 	
@@ -253,8 +255,8 @@ $(function(){
 		
 		var maxToSend = maxSlider.slider("value");
 		
-		if (classToSend) { var request = { newLesson: [{ action: "submitLab", newName: lessonToSend, newDay: dayToSend, newHour: hourToSend, newClass: classToSend, maxStudents: maxToSend}] }; }
-		else { var request = { newLesson: [{ action: "getClass", newDay: dayToSend, newHour: hourToSend}] }; }
+		if (classToSend) { request = { newLesson: [{ action: "submitLab", newName: lessonToSend, newDay: dayToSend, newHour: hourToSend, newClass: classToSend, maxStudents: maxToSend}] }; }
+		else { request = { newLesson: [{ action: "getClass", newDay: dayToSend, newHour: hourToSend}] }; }
 		ajaxUrl = '/teachers/'+hashValue+'/add-new-lab/';
 		
 		$.ajax({
@@ -276,8 +278,8 @@ $(function(){
 							var str = "<option value='"+data[0].classes[i].name+"'>"+data[0].classes[i].name+"</option>";
 							lessonClass.append(str);
 						}
-						var parentClass = lessonClass.parent("li")
-						var parentMeridiam = lessonDay.parent("li")
+						var parentClass = lessonClass.parent("li");
+						var parentMeridiam = lessonDay.parent("li");
 					
 						parentClass.removeClass("disabled");
 						lessonClass.removeAttr("disabled");
@@ -340,7 +342,7 @@ $(function(){
 	
 	var cleanMessages = function() {
 		modalMsg.find("p").fadeOut(100).delay(100).removeClass();
-	}
+	};
 	
 	lessonName.change(function() {
 		var hisParent = $(this).parent("li");
@@ -428,7 +430,7 @@ $(function(){
 			modalMsg.find("p").addClass("error").text(ms).fadeIn(200);
 		}
 		return false;
-	}
+	};
 	submitLab.bind("click", submitLabRequest);
 
 

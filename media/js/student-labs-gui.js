@@ -29,7 +29,7 @@ $(function(){
 		} else { hour = hour+12; }
 		
 		return {day:day, hour:hour};
-	}
+	};
 	
 	
 	//********************************
@@ -90,7 +90,7 @@ $(function(){
 			},
 			success: function(data) {
 				if (data[0].status == 1){
-					var strHtml
+					var strHtml;
 					
 					if (data[0].action == "getTeachers") {
 						lessonTeacher.children().not(":first-child").remove();
@@ -203,7 +203,7 @@ $(function(){
 	
 	var cleanMessages = function() {
 		modalMsg.find("p").fadeOut(100).delay(100).removeClass();
-	}
+	};
 	
 	lessonName.change(function() {
 		var hisParent = $(this).parent("li");
@@ -265,7 +265,7 @@ $(function(){
 			modalMsg.find("p").addClass("error").text(ms).fadeIn(200);
 		}
 		return false;
-	}
+	};
 	submitLab.bind("click", submitLabRequest);
 	
 

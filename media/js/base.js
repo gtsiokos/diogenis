@@ -32,8 +32,8 @@ $(function(){
 			if ( loginDiv.hasClass("active") ){
 				hidePanel();
 			} else {
-				if(e) e.stopPropagation();
-				if(e) e.preventDefault();
+				if(e){ e.stopPropagation(); }
+				if(e){ e.preventDefault(); }
 				showPanel();
 			}
 		});

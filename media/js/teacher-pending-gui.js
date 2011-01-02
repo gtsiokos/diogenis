@@ -1,12 +1,6 @@
 $(function(){
 
 	//********************************
-	//Find Login Hash
-	//********************************	
-	
-	var hashValue = $("input[type='hidden']", "#login").val();
-	
-	//********************************
 	//Focus-Out Feature
 	//********************************	
 	
@@ -49,8 +43,6 @@ $(function(){
 		}
 	});
 	
-	
-	
 	//********************************
 	//Global Ajax Behaviour
 	//********************************		
@@ -64,18 +56,6 @@ $(function(){
 	theBody.ajaxComplete(function(){
 		theBody.removeClass("wait");
 	});
-	
-	var splitOldDate = function(oldLabDate) {
-		var date = oldLabDate.split(" ");
-		var day = date[0];
-		var hour = parseInt(date[1], 10);
-		var AmPm = date[2];
-		if (AmPm == "π.μ." || AmPm == "μ.μ." && hour == 12) {
-			hour = hour;
-		} else { hour = hour+12; }
-		
-		return {day:day, hour:hour};
-	};
 	
 	//********************************
 	//Ajax-Transfer Feature
@@ -121,7 +101,7 @@ $(function(){
 		oldLabName = parentDiv.find("h4>span.lab-name").text();
 		oldLabDate = parentDiv.find("h4>span.lab-date").text();
 		
-		var splittedDate = splitOldDate(oldLabDate);
+		var splittedDate = Helpers.splitDate(oldLabDate);
 		oldLabDay = splittedDate.day;
 		oldLabHour = splittedDate.hour;
 		
@@ -154,7 +134,7 @@ $(function(){
 						stud: amToSend
 						};
 			
-			ajaxUrl = '/teachers/'+hashValue+'/submit-student-to-lab/';
+			ajaxUrl = '/teachers/'+Helpers.getHash()+'/submit-student-to-lab/';
 			$.ajax({
 				url: ajaxUrl,
 				type: 'POST',
@@ -257,7 +237,7 @@ $(function(){
 		
 		if (classToSend) { request = { newLesson: [{ action: "submitLab", newName: lessonToSend, newDay: dayToSend, newHour: hourToSend, newClass: classToSend, maxStudents: maxToSend}] }; }
 		else { request = { newLesson: [{ action: "getClass", newDay: dayToSend, newHour: hourToSend}] }; }
-		ajaxUrl = '/teachers/'+hashValue+'/add-new-lab/';
+		ajaxUrl = '/teachers/'+Helpers.getHash()+'/add-new-lab/';
 		
 		$.ajax({
 			url: ajaxUrl,

@@ -1,12 +1,6 @@
 $(function(){
 
 	//********************************
-	//Find Login Hash
-	//********************************	
-	
-	var hashValue = $("input[type='hidden']", "#login").val();
-	
-	//********************************
 	//Global Ajax Behaviour
 	//********************************		
 	
@@ -18,19 +12,6 @@ $(function(){
 	theBody.ajaxComplete(function(){
 		theBody.removeClass("wait");
 	});
-	
-	var splitDate = function(date) {
-		var date = date.split(" ");
-		var day = date[0];
-		var hour = parseInt(date[1], 10);
-		var AmPm = date[2];
-		if (AmPm == "π.μ." || AmPm == "μ.μ." && hour == 12) {
-			hour = hour;
-		} else { hour = hour+12; }
-		
-		return {day:day, hour:hour};
-	};
-	
 	
 	//********************************
 	//Ajax-Register-Lab Feature
@@ -62,7 +43,7 @@ $(function(){
 		
 		if (lessonToSend && teacherToSend && classToSend){
 			var classInfo 	= classToSend.split(" ");
-			var classDate 	= splitDate(classToSend);
+			var classDate 	= Helpers.splitDate(classToSend);
 			var className 	= classInfo[3];
 			var classDay 	= classDate.day;
 			var classHour 	= classDate.hour;
@@ -78,7 +59,7 @@ $(function(){
 			var request = { action:"getTeachers", lesson:lessonToSend };
 		}
 		
-		ajaxUrl = '/students/'+hashValue+'/add-new-lab/';
+		ajaxUrl = '/students/'+Helpers.getHash()+'/add-new-lab/';
 		$.ajax({
 			url: ajaxUrl,
 			type: 'POST',

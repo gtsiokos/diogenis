@@ -152,6 +152,7 @@
 	//^*****************************/
 	
 	#lab-registration #select-class select.lesson-class{ margin-bottom: 25px; }
+	#lab-registration #select-class select.lesson-class.no-slider{ margin-bottom: 0; }
 	#lab-registration #select-class label.students-num {
 		position: static;
 		margin: 0 0 0 79px;

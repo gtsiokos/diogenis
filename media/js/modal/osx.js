@@ -42,7 +42,8 @@ jQuery(function ($) {
 					$("div.close", self.container).show();
 					$("#osx-modal-data", self.container).show();
 					
-					if($.browser.msie){
+					if(!window.getComputedStyle){
+						// IE <= 8 doesn't support "getComputedStyle" property
 						var conPosition = ($(window).width()/2 - d.container.width()/2);
 						d.container.show().offset({ top: -(d.container.height() + 20), left: conPosition }).animate({ top: 0 }, 500 );
 					}

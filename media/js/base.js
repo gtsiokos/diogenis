@@ -4,7 +4,7 @@ $(function(){
 	//Focus-Out Feauture for Options Panel
 	//********************************	
 	
-	oPanel = $("#login");
+	var oPanel = $("#login");
 	oPanel.find('div.panel').hide();
 	
 	var theActive, isActive;

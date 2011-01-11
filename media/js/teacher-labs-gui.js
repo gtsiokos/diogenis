@@ -205,6 +205,5 @@ $(function(){
 		return false;
 	});
 
-	debugger;
 });
 

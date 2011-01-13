@@ -1,11 +1,26 @@
 # -*- coding: utf-8 -*-
 import os
-from BeautifulSoup import BeautifulSoup
+
+try:
+	from BeautifulSoup import BeautifulSoup
+except:
+	pass
+	
 import httplib
-import pycurl
+
+try:
+	import pycurl
+except:
+	pass
+	
 import StringIO
 import urllib
-from diogenis.signup.forms import *
+
+try:
+	from diogenis.signup.forms import *
+except:
+	pass
+	
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 

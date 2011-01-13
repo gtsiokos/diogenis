@@ -19,9 +19,17 @@
 			<p>Κονσόλα Μηνυμάτων</p>
 		{% endif %}
 	</div>
+<!--
 	<form method="POST" action="/system/admin/">
 		<input id="send" type="submit" value="Upload">
 	</form>
+-->
+
+<form action="/system/admin/" method="POST">
+{{ form.as_p }}
+<input type="submit" value="Submit" />
+</form>
+
 </div>
 
 {% endblock content %}
@@ -33,3 +41,4 @@
 	
 	{% endspaceless %}
 {% endblock %}
+

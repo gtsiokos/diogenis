@@ -24,6 +24,8 @@ def fill_labs():
 
 
 def xls_rdr():
+	xls_final_pathname = '%s/ANATHESEIS.xls' % (settings.MEDIA_ROOT)
+	
 	'''
 	Provalei swsta ola ta onomata MONO twn ergastiriakwn kathigitwn kai katw apo kathe omada kathigitwn ena diaxwristiko keno.
 	'''
@@ -52,7 +54,7 @@ def xls_rdr():
 	pos=0
 	c=0
 	
-	wb = xlrd.open_workbook('/Users/Lomar/Desktop/diogenis/media/ANATHESEIS.xls')#/home/fusion/diogenis/media/ANATHESEIS.xls')
+	wb = xlrd.open_workbook(xls_final_pathname)
 	sh = wb.sheet_by_index(0)
 	
 	for rownum in range(sh.nrows):

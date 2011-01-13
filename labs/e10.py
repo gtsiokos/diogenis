@@ -5,6 +5,7 @@
 
 def fill_labs():
 	from labs.models import *
+	
 	imeres = [u'Δευτέρα',u'Τρίτη',u'Τετάρτη',u'Πέμπτη',u'Παρασκευή']
 	onomata_aithouson = [u'ΕΣΕ',u'ΕΡΓ1',u'ΕΡΓ2',u'ΕΡΓ3',u'UNIX',u'NT',u'Τ1',u'Τ2',]
 	
@@ -24,8 +25,6 @@ def fill_labs():
 
 
 def xls_rdr():
-	xls_final_pathname = '%s/ANATHESEIS.xls' % (settings.MEDIA_ROOT)
-	
 	'''
 	Provalei swsta ola ta onomata MONO twn ergastiriakwn kathigitwn kai katw apo kathe omada kathigitwn ena diaxwristiko keno.
 	'''
@@ -33,7 +32,10 @@ def xls_rdr():
 	import xlrd
 	import shutil
 	import os,sys
+	import settings
 	from django.utils.encoding import smart_str, smart_unicode
+	
+	xls_final_pathname = '%s/ANATHESEIS.xls' % (settings.MEDIA_ROOT)
 	
 	teachers=[]
 	labcells=[]

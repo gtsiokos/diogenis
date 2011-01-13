@@ -57,9 +57,6 @@ def manage_labs(request, username):
 			time =  my_lab.lab.hour
 			lesson = my_lab.lesson
 			lab = my_lab.lab
-			import os
-			w = os.path.join(os.path.abspath(__file__),'..', 'media', 'ANATHESEIS.xls')
-			print os.getcwd()
 			data = []
 			lab_data = []
 			
@@ -124,11 +121,10 @@ def manage_labs(request, username):
 						"labs": data,
 						"labs_list": lab_data,
 						})
-	
-		if pending_students_request:
-			return render_to_response('teachers/pending_students.html', {'results':results, 'unique_lessons':unique_lessons, 'hash':username_hashed}, context_instance = RequestContext(request))
-		else:
-			return render_to_response('teachers/labs.html', {'results':results, 'unique_lessons':unique_lessons, 'hash':username_hashed}, context_instance = RequestContext(request))
+		
+		context = {'results':results, 'unique_lessons':unique_lessons, 'hash':username_hashed}
+		template_to_render = ('teachers/pending_students.html' if pending_students_request else 'teachers/labs.html')
+		return render_to_response(template_to_render, context, context_instance = RequestContext(request))
 	else:
 		raise Http404
 

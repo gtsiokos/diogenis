@@ -24,12 +24,10 @@
 		<input id="send" type="submit" value="Upload">
 	</form>
 -->
-
-<form action="/system/admin/" method="POST">
-{{ form.as_p }}
-<input type="submit" value="Submit" />
-</form>
-
+	<form action="/system/admin/" enctype="multipart/form-data" method="POST">
+		{{ form.as_p }}
+		<input type="submit" value="Upload" />
+	</form>
 </div>
 
 {% endblock content %}

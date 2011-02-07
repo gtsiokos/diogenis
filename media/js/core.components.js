@@ -1,6 +1,7 @@
 
-var Helpers = {
-	hash:null,
+X$('Helpers',
+{
+	hash: undefined,
 	
 	getHash: 		function(){
 						var h = this.hash || $("input[type='hidden']", "#login").val();
@@ -19,5 +20,5 @@ var Helpers = {
 
 						return {day:day, hour:hour};
 					}
-};
+});
 

@@ -4,7 +4,7 @@ $(function(){
 	//Focus-Out Feature
 	//********************************	
 	
-	transfer = $("div.lab span.transfer.enabled", "#content");
+	var transfer = $("div.lab span.transfer.enabled", "#content");
 	
 	var theActive, isActive;
 	
@@ -18,7 +18,7 @@ $(function(){
 	transfer.find("ul.labs-list").each(function(){
 		
 		var list = $(this);
-		currentLab = $(this).parent();
+		var currentLab = $(this).parent();
 		
 		var showList = function(){
 			hideList();
@@ -48,7 +48,6 @@ $(function(){
 	//********************************		
 	
 	var theBody = $("body:first");
-	var request;
 	
 	theBody.ajaxStart(function(){
 		theBody.addClass("wait");
@@ -56,12 +55,6 @@ $(function(){
 	theBody.ajaxComplete(function(){
 		theBody.removeClass("wait");
 	});
-	
-	//********************************
-	//Ajax-Register-Lab Feature
-	//********************************
-	
-	TeacherRegister.init();
 	
 	//********************************
 	//Ajax-Transfer Feature
@@ -106,7 +99,7 @@ $(function(){
 		oldLabName = parentDiv.find("h4>span.lab-name").text();
 		oldLabDate = parentDiv.find("h4>span.lab-date").text();
 		
-		var splittedDate = Helpers.splitDate(oldLabDate);
+		var splittedDate = X$('Helpers').splitDate(oldLabDate);
 		oldLabDay = splittedDate.day;
 		oldLabHour = splittedDate.hour;
 		
@@ -133,13 +126,13 @@ $(function(){
 		
 		if (amToSend[0]) {
 			
-			request = 	{
-						lnew: [ { newName: newLabName, newDay: newLabDay, newHour: newLabHour} ],
-						lold: [ {oldName: oldLabName, oldDay: oldLabDay, oldHour: oldLabHour} ],
-						stud: amToSend
-						};
+			var request =	{
+							lnew: [ { newName: newLabName, newDay: newLabDay, newHour: newLabHour} ],
+							lold: [ {oldName: oldLabName, oldDay: oldLabDay, oldHour: oldLabHour} ],
+							stud: amToSend
+							};
 			
-			var ajaxUrl = '/teachers/'+Helpers.getHash()+'/submit-student-to-lab/';
+			var ajaxUrl = '/teachers/'+X$('Helpers').getHash()+'/submit-student-to-lab/';
 			$.ajax({
 				url: ajaxUrl,
 				type: 'POST',

@@ -12,13 +12,6 @@ $(function(){
 	theBody.ajaxComplete(function(){
 		theBody.removeClass("wait");
 	});
-	
-	//********************************
-	//Ajax-Register-Lab Feature
-	//********************************
-	
-	StudentRegister.init();
-
 
 });
 

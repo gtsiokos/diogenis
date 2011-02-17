@@ -102,11 +102,21 @@ def checkStudentCredentials(username, password):
 def addDataToLDAP(credentials, l):
 	attrs = {}
 	attrs['objectClass'] = ['person', 'top', 'teilarStudent', 'posixAccount']
-	attrs['uid'] =  [credentials['username']]
+	attrs['uid'] =  [str(credentials['username'])]
 	attrs['sn'] = [credentials['last_name']]
 	attrs['cn'] = [credentials['first_name']]
-	attrs['userPassword'] = [credentials['password']]
-	attrs['labs'] = credentials['labs']
+	attrs['userPassword'] = [str(credentials['password'])]
+	attrs['gidNumber'] =['1']
+	attrs['homeDirectory'] = [str('/home/%s' % (credentials['username']))]
+	'''
+	if credentials['labs']:
+		attrs['labs'] = []
+		for item in credentials['labs']:
+			attrs['labs'].append(','.join(item))
+	'''
+	attrs['semester'] = [credentials['semester']]
+	attrs['introductionYear'] = [credentials['introduction_year']]
+	attrs['registrationNumber'] = [credentials['registration_number']]
 	try:
 		results = l.search_s(settings.SEARCH_DN, ldap.SCOPE_SUBTREE, 'uid=*', ['uidNumber'])
 		uids = []
@@ -128,14 +138,18 @@ def addDataToLDAP(credentials, l):
 		init_attrs2['ou'] = ['teilarStudents']
 		ldif2 = modlist.addModlist(init_attrs2)
 		l.add_s('ou=teilarStudents,dc=teilar,dc=gr', ldif2)
-
 	ldif = modlist.addModlist(attrs)
-	l.add_s('uid=%s,ou=teilarStudents,dc=teilar,dc=gr' % (credentials['username']), ldif)
+	print ldif
+	try:
+		l.add_s('uid=%s,ou=teilarStudents,dc=teilar,dc=gr' % (credentials['username']), ldif)
+	except Exception as error:
+		print 'ERROR: %s\n' % str(error)
+	print ldif
 	l.unbind_s()
 
 def signup(request):
 	credentials = 0
-	msg = 'default'
+	msg = ''
 	if request.method == 'POST':
 		form = StudentSignupForm(request.POST)
 		if form.is_valid():

@@ -91,7 +91,7 @@ INSTALLED_APPS = (
 )
 
 AUTHENTICATION_BACKENDS = (
-	'diogenis.ldap_groups.accounts.backends.ActiveDirectoryGroupMembershipSSLBackend',
+#	'diogenis.ldap_groups.accounts.backends.ActiveDirectoryGroupMembershipSSLBackend',
 	'django.contrib.auth.backends.ModelBackend',
 )
 

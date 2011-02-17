@@ -108,12 +108,8 @@ def addDataToLDAP(credentials, l):
 	attrs['userPassword'] = [str(credentials['password'])]
 	attrs['gidNumber'] =['1']
 	attrs['homeDirectory'] = [str('/home/%s' % (credentials['username']))]
-	'''
 	if credentials['labs']:
-		attrs['labs'] = []
-		for item in credentials['labs']:
-			attrs['labs'].append(','.join(item))
-	'''
+		attrs['labs'] = credentials['labs']
 	attrs['semester'] = [credentials['semester']]
 	attrs['introductionYear'] = [credentials['introduction_year']]
 	attrs['registrationNumber'] = [credentials['registration_number']]

@@ -15,6 +15,10 @@ except:
 	
 import StringIO
 import urllib
+import settings
+import ldap
+import ldap.modlist as modlist
+
 
 try:
 	from diogenis.signup.forms import *
@@ -25,7 +29,6 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 def checkStudentCredentials(username, password):
-	fail = 0
 	conn = pycurl.Curl()
 	b = StringIO.StringIO()
 	try:
@@ -86,18 +89,17 @@ def checkStudentCredentials(username, password):
 		tempspan = soup1.findAll('span', 'underline')
 		for i in xrange(len(tempspan)):
 			lab = str(tempspan[i].contents[0]).strip()
-			if lab.endswith('(Ε)'):
+			if lab.endswith('(Ε)'):#(u'\xce\x95')
 				declaration.append(lab)
 			k += 7
 		credentials['labs'] = declaration
-
 		credentials['username'] = username
 		credentials['password'] = password
 		return credentials
 	except:
 		return 0
 
-def addDataToLDAP(credentials):
+def addDataToLDAP(credentials, l):
 	attrs = {}
 	attrs['objectClass'] = ['person', 'top', 'teilarStudent', 'posixAccount']
 	attrs['uid'] =  [credentials['username']]
@@ -105,7 +107,6 @@ def addDataToLDAP(credentials):
 	attrs['cn'] = [credentials['first_name']]
 	attrs['userPassword'] = [credentials['password']]
 	attrs['labs'] = credentials['labs']
-	
 	try:
 		results = l.search_s(settings.SEARCH_DN, ldap.SCOPE_SUBTREE, 'uid=*', ['uidNumber'])
 		uids = []
@@ -127,14 +128,14 @@ def addDataToLDAP(credentials):
 		init_attrs2['ou'] = ['teilarStudents']
 		ldif2 = modlist.addModlist(init_attrs2)
 		l.add_s('ou=teilarStudents,dc=teilar,dc=gr', ldif2)
-	
+
 	ldif = modlist.addModlist(attrs)
 	l.add_s('uid=%s,ou=teilarStudents,dc=teilar,dc=gr' % (credentials['username']), ldif)
 	l.unbind_s()
 
 def signup(request):
 	credentials = 0
-	msg = ''
+	msg = 'default'
 	if request.method == 'POST':
 		form = StudentSignupForm(request.POST)
 		if form.is_valid():
@@ -146,9 +147,10 @@ def signup(request):
 					try:
 						check_user = l.search_s(settings.SEARCH_DN, ldap.SCOPE_SUBTREE, 'uid=%s' % (credentials['username']))
 					except:
-						msg = "Ο χρήστης υπάρχει ήδη"
+						addDataToLDAP(credentials, l)
+					if check_user:
+						msg = "Ο χρήστης υπάρχει ήδη."
 						raise
-					addDataToLDAP(credentials)
 				else:
 					msg = "Παρουσιάστηκε σφάλμα στο διόνυσο"
 					raise

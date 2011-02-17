@@ -15,6 +15,8 @@ AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 
 MANAGERS = ADMINS
 
+from local_settings import *
+
 DATABASE_ENGINE = 'django.db.backends.sqlite3'           									# 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = os.path.join(os.path.dirname(__file__), 'diogenis.db')		# Or path to database file if using sqlite3.
 DATABASE_USER = ''             # Not used with sqlite3.
@@ -88,4 +90,20 @@ INSTALLED_APPS = (
     'diogenis.teachers', 'diogenis.students',
 )
 
+AUTHENTICATION_BACKENDS = (
+	'diogenis.ldap_groups.accounts.backends.ActiveDirectoryGroupMembershipSSLBackend',
+	'django.contrib.auth.backends.ModelBackend',
+)
 
+# Needed for the decorator
+LOGIN_URL = '/'
+
+# Needed for the custom user profile
+AUTH_PROFILE_MODULE = 'user.LdapProfile'
+
+# LDAP
+LDAP_SERVER = 'localhost'
+LDAP_PORT = 389
+LDAP_URL = 'ldap://%s:%s' % (LDAP_SERVER, LDAP_PORT)
+SEARCH_DN = 'ou=teilarStudents,dc=teilar,dc=gr'
+SEARCH_FIELDS = ['*']

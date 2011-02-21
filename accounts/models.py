@@ -17,15 +17,16 @@ class AuthTeacher(UserProfile):
 	def __unicode__(self):
 		return u'%s %s' % (self.user.last_name, self.user.first_name)
 
-
 class AuthStudent(UserProfile):
-	am = models.CharField(max_length=7)
-	introduction_year = models.CharField(max_length = 5)
-	registration_number = models.CharField(max_length = 8)
+	am = models.CharField(max_length=15)
+	introduction_year = models.CharField(max_length = 15)
 	semester = models.CharField(max_length = 2)
+
 	class Meta:
 		ordering = ['am']
-
 	
 	def __unicode__(self):
 		return u'%s %s' % (self.user.last_name, self.user.first_name)
+
+
+

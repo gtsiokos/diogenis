@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from diogenis.ldap_groups.models import LDAPGroup
-from diogenis.accounts.models import UserProfile
+from diogenis.accounts.models import *
+from diogenis.labs.models import *
 from django.conf import settings
 from django.contrib.auth.models import User, Group
-from diogenis.labs.models import Lesson
 import ldap
 import ldap.filter
 
@@ -110,23 +110,12 @@ class ActiveDirectoryGroupMembershipSSLBackend(BaseGroupMembershipBackend):
 				result = l.search_s(settings.SEARCH_DN, ldap.SCOPE_SUBTREE, "(uid=%s)" % (username), ['*'])[0][1]
 
 				first_name = result['cn'][0]
-
 				last_name = result['sn'][0]
-
-				username = result['username'][0]
-
+				username = result['uid'][0]
 				introduction_year = result['introductionYear'][0]
-
-				registration_number = result['registrationNumber'][0]
-
+				am = result['registrationNumber'][0]
 				semester = result['semester'][0]
 				mail = '%s@emptymail.com' % (username)
-
-				'''if result.has_key('labs'):
-					labs = ','.join(result['labs'])
-				else:
-					labs = None'''
-
 				l.unbind_s()
 
 				user = User(
@@ -141,16 +130,11 @@ class ActiveDirectoryGroupMembershipSSLBackend(BaseGroupMembershipBackend):
 			user.is_superuser = False
 			user.set_password(password)
 			user.save()
-			
-			userprofile = UserProfile(
+
+			authStudentProfile = AuthStudent(
 				user = user,
 				is_teacher = False,
-			)
-			userprofile.save()
-			
-			authStudentProfile = AuthStudent(
-				UserProfile = userprofile,
-				am = registration_number,
+				am = am,
 				introduction_year = introduction_year,
 				semester = semester,
 			)
@@ -160,7 +144,7 @@ class ActiveDirectoryGroupMembershipSSLBackend(BaseGroupMembershipBackend):
 				for lab in result['labs']:
 					studentLessons = StudentToLesson(
 						student = authStudentProfile,
-						lesson = Lessons.objects.get(name = lab),
+						lesson = Lesson.objects.get(name = lab),
 					)
 					studentLessons.save()
 		return user

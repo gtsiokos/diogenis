@@ -20,7 +20,9 @@ class AuthTeacher(UserProfile):
 
 class AuthStudent(UserProfile):
 	am = models.CharField(max_length=7)
-	
+	introduction_year = models.CharField(max_length = 5)
+	registration_number = models.CharField(max_length = 8)
+	semester = models.CharField(max_length = 2)
 	class Meta:
 		ordering = ['am']
 

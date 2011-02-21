@@ -1,0 +1,23 @@
+LDAP_SERVER = 'ldap.example.com'
+# If using non-SSL use these
+#LDAP_PORT = 389
+#LDAP_URL = 'ldap://%s:%s' % (LDAP_SERVER, LDAP_PORT)
+# If using SSL use these:
+# LDAP_PORT = 636
+# LDAP_URL = 'ldaps://%s:%s' % (LDAP_SERVER, LDAP_PORT)
+LDAP_PORT = 389
+LDAP_URL = 'ldap://%s:%s' % (LDAP_SERVER, LDAP_PORT)
+SEARCH_DN = 'dc=your,dc=company,dc=search,dc=base'
+# NT4_DOMAIN is used with Active Directory only, comment out for eDirectory
+NT4_DOMAIN = 'EXAMPLE'
+# sAMAccountName is usd with Active Directory
+SEARCH_FIELDS = ['mail','givenName','sn','sAMAccountName','memberOf', 'cn']
+# Use the following for eDirectory
+#SEARCH_FIELDS = ['mail', 'givenName', 'sn', 'groupMembership', 'cn']
+#CERT_FILE = '/path/to/your/cert.txt'
+# BIND_USER and BIND_PASSWORD are used if your LDAP requires
+# authentication in order to search, leave blank for anonymous bind, e.g.:
+# BIND_USER = ''
+# BIND_PASSWORD = ''
+BIND_USER = 'ldap_search_user'
+BIND_PASSWORD = 'sample_password'

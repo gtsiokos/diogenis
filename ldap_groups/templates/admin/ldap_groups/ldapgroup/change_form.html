@@ -1,0 +1,41 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_modify adminmedia %}
+{% block content %}{{ block.super }}
+<div>
+<form action="{% url ldap_search %}" method="post" id="ldap_search_form">
+<label for="req_cn_input">Search for LDAP CN:</label>
+<input type="text" id="req_cn_input" size="40" name="req_cn">
+<input value="Search LDAP" class="default" name="_search_ldap" id="search_ldap_submit" type="submit">
+</form>
+<p class="help">Search for an LDAP OU CN, then click the CN result to add it to
+the Org Unit box above.</p>
+</div>
+<div id="ldap_search_results"><ul id="ldap_results_list"></ul></div>
+{% block ldap_scripts %}
+<script type="text/javascript" src="/site_media/js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="/site_media/js/jquery.livequery.js"></script>
+<script type="text/javascript">
+$(document).ready(function()  {
+    //console.log("Starting");
+    $("#search_ldap_submit").livequery('click', function(event){
+        var ldap_search_data = $("#ldap_search_form").serialize();
+        //console.log(ldap_search_data);
+        $.post('{% url ldap_search %}', ldap_search_data,
+            function(data){
+                //console.log(data);
+                arr = $.map(eval(data), function(n, i){
+                    return '<li><a class="cn_link" href="#">' + n + '</a></li>'
+                    });
+                $("#ldap_results_list").html(arr.join(""));
+                    
+            });
+        return false;
+    });
+    $("a.cn_link").livequery('click', function(event){
+        //console.log($(this).text());
+        $("#id_org_unit").text($(this).text());
+    });
+});
+</script>
+{% endblock %} 
+{% endblock %}

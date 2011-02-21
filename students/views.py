@@ -172,6 +172,7 @@ def add_new_lab(request, hashed_request):
 			data = simplejson.dumps(message)
 			return HttpResponse(data, mimetype='application/javascript')
 	else:
+		#sxolio pou prepei na allaksei
 		return HttpResponse("Atime hax0r, an se vrw tha sou gamisw to kerato...", mimetype="text/plain")
 			
 			

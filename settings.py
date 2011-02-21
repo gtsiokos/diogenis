@@ -1,6 +1,7 @@
 # Django settings for diogenis project.
 
 import os.path
+from local_settings import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -14,8 +15,6 @@ AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 #SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 MANAGERS = ADMINS
-
-from local_settings import *
 
 DATABASE_ENGINE = 'django.db.backends.sqlite3'           									# 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = os.path.join(os.path.dirname(__file__), 'diogenis.db')		# Or path to database file if using sqlite3.
@@ -88,10 +87,12 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'diogenis.accounts', 'diogenis.labs',
     'diogenis.teachers', 'diogenis.students',
+# MY ADDITIONS FOR LDAP 
+    'diogenis.ldap_groups',# 'diogenis.LDAPGroup', 'diogenis.LDAPGroupAdmin',
 )
 
 AUTHENTICATION_BACKENDS = (
-#	'diogenis.ldap_groups.accounts.backends.ActiveDirectoryGroupMembershipSSLBackend',
+	'diogenis.ldap_groups.accounts.backends.ActiveDirectoryGroupMembershipSSLBackend',
 	'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -99,7 +100,13 @@ AUTHENTICATION_BACKENDS = (
 LOGIN_URL = '/'
 
 # Needed for the custom user profile
-AUTH_PROFILE_MODULE = 'user.LdapProfile'
+								##			WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! 
+								##			WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! 
+								##			WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! 
+								##			WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! 
+								##			WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! 
+								## UPARXEI H IDIA METAVLHTH STHN ARXH TOU ARXEIOU ME TIMH TO PATH TOU PALIOY APP 'accounts' TOU DIOGENH.
+#AUTH_PROFILE_MODULE = 'user.LdapProfile'
 
 # LDAP
 LDAP_SERVER = 'localhost'

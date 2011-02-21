@@ -1,0 +1,138 @@
+DJANGO-LDAP-GROUPS
+==================
+Site: http://code.google.com/p/django-ldap-groups/
+Primary Author: T. Peter Herndon tpherndon@gmail.com
+
+
+What it is
+==========
+Django-ldap-groups is a reusable application for the Django web framework.
+
+What it does
+============
+The django-ldap-groups app provides two pluggable authentication
+backends for Django that allow web app users to authenticate against
+an LDAP server, one backend for Active Directory and another for Novell 
+eDirectory.  I suspect the eDirectory backend will work with minimal 
+modifications for most other LDAP servers.
+
+In addition, the app provides a model that allows site
+administrators to map LDAP organizational units (OUs) to Django groups.  These
+maps provide a way to assign a user authenticated via LDAP to particular Django
+groups in order to acquire the permissions set on these groups.
+
+With the combination of the authentication backends, which both authenticate 
+users and create them if they do not already exist in the Django database, and 
+the LDAP OU mappings, django-ldap-groups provides a single application that 
+gives site administrators the means to handle both authentication and 
+authorization based on the structures already in place in LDAP.
+
+Where it comes from
+===================
+This app was inspired by a number of snippets on Django Snippets, though 
+primarily on http://www.djangosnippets.org/snippets/901/ by "mary".  Her AD 
+authN backend was what I modified to what you see here.  From there, I expanded
+to allow eDirectory to work with it, and added the LDAPGroup mapping and admin
+modifications.
+
+Prerequisites
+=============
+python-ldap:  http://www.python-ldap.org/
+Python-ldap has a number of dependencies itself, including OpenLDAP client
+libraries, OpenSSL and optionally SASL.
+
+Django: http://djangoproject.com/
+This app is known to work with v1.1, but will not work with 1.0.  Specifically, 
+I'm using get_urls methods on the admin.py which don't exist in 1.0.
+
+An LDAP server.  The app has been developed and tested against both Active 
+Directory and Novell eDirectory in live environments.  As per above, the 
+eDirectory authentication backend is reasonably generic, and will likely work 
+with most other LDAP server implementations with little or no modifications 
+necessary.  However, it has NOT been tested with any other servers, so there are
+no guarantees.
+
+jQuery 1.3.2:  http://jquery.com/
+liveQuery: http://github.com/brandonaaron/livequery/tree/master
+In addition, the admin change_form.html uses and requires both jQuery and the
+liveQuery jQuery plugin.  If you put your Javascripts elsewhere, you will need 
+to edit the script src attribute in the included admin.py to point to
+your specific location.  My default is "/site_media/js/", edit as needed.
+
+Installation
+============
+To install django-ldap-groups, make it available on your PYTHONPATH, either via
+"setup.py install" (with root privileges as needed), "pip install 
+django-ldap-groups", "easy_install django-ldap-groups" or download, unpack and 
+link.
+
+You will also need to add several settings to your site's settings.py.  Included
+in the app is a settings.py.template with all the necessary settings. The 
+NT4_DOMAIN setting is used specifically with Active Directory, so please comment
+it out if you are not using AD.  Likewise, there are two different sets of
+SEARCH_FIELDS settings, one of which is AD-specific, and the other is more 
+generic.  Depending on your LDAP schema, you may need to adjust this list and 
+the corresponding code.  If your LDAP server allows anonymous bind for searches,
+leave BIND_USER and BIND_PASSWORD active but set to ''.  
+
+The CERT_FILE setting is necessary for using LDAPS, SSL-encrypted LDAP, and 
+should point to a local copy of the trusted root certificate for the certificate
+authority that issued your LDAP server's SSL certificate.  To clarify that last
+sentence for those of you whose heads just splorted, your LDAP server has an SSL
+certificate.  Somewhere, sometime, that certificate was issued by a "Certificate
+Authority".  For a commercial certificate, that CA was likely Verisign, Thawte, 
+or similar.  For an internal-only certificate, that CA was likely the very same 
+AD you are querying. Either way, the CA has a root certificate that is trusted 
+(by you, among others) to sign certificates.  A copy of the root certificate, in
+base64 (PEM) encoded form, needs to reside somewhere your Django app can find
+it, and the CERT_FILE setting needs to point to it.  That is, if you want to use
+LDAPS, which may or may not be a requirement for your shop.
+
+Add 'ldap_groups' to your project's "INSTALLED_APPS" settings, and run syncdb to
+install the LDAPGroup model.
+
+You must also add the following line to your site's urls.py, though where you
+place the ldap_groups URLs is up to you:
+(r'^<wherever-you-want>/', include('ldap_groups.urls')),
+
+Finally, in order to enable authentication, you need to add your choice of
+'ldap_groups.accounts.backends.ActiveDirectoryGroupMembershipSSLBackend' or 
+'ldap_groups.accounts.backends.eDirectoryGroupMembershipSSLBackend' to a tuple
+of AUTHENTICATION_BACKENDS, as documented at 
+http://docs.djangoproject.com/en/dev/topics/auth/#specifying-authentication-backends
+I strongly recommend your final string in AUTHENTICATION_BACKENDS be 
+'django.contrib.auth.backends.ModelBackend', or your admin user will not be able
+to log in to the application.  Once you have created at least one LDAPGroup that
+has make_superuser = True, you could get away with removing that line, but then
+you won't be able to log in at all if your LDAP server fails.
+
+Usage
+=====
+Once you have installed django-ldap-groups, and run syncdb, log in to the admin
+app as a superuser, go to Auth -> Groups and create a group or two, and assign
+permissions to the group.  Next, go to Ldap_groups -> Ldap group and create an
+LDAPGroup mapping.  The easy way to do this is to type in the "Search for LDAP
+CN" field a fragment of the OU you want to assign to a particular Django group, 
+and click the Search LDAP button.  Assuming you've configured everything 
+properly, a list of OUs that match the text you typed will be displayed below.
+Click the proper OU, and the OU's DN should populate the Org Unit textarea. 
+Next, choose which Django groups to assign, and set the flags for "make_staff"
+and "make_superuser" to meet your needs.  Finally, save the model.
+
+At this point, any user who logs in to your application and authenticates via
+LDAP, if the user belongs to the OU you chose in the mapping above, that user
+will automatically be created as a django.contrib.auth.models.User in the Django
+database, and they will automatically be assigned to whichever groups you 
+specified above.  In addition, if you set make_staff or make_superuser to True,
+that user will automatically be set to staff, superuser, or both.
+
+One note:  I designed the logic so that if *any* LDAPGroup that a user's OU
+memberships match has make_staff or make_superuser set to True, then the user 
+will be marked is_staff or is_superuser.  The site administrator (that would be
+you, by the way) is responsible for making sure that their users fall into the
+proper groups and inherit the proper permissions.
+
+Err, another note:  This application does not handle per-object permissions, but
+it should not interfere with e.g. Jannis Leidel's excellent django-authority 
+(http://bitbucket.org/jezdez/django-authority), and the two should work together
+quite well.

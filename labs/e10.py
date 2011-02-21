@@ -3,8 +3,9 @@
 #most workable and usefull Ver:2
 # -*- coding: utf8 -*-
 
+from diogenis.labs.models import *
+
 def fill_labs():
-	from labs.models import *
 	
 	imeres = [u'Δευτέρα',u'Τρίτη',u'Τετάρτη',u'Πέμπτη',u'Παρασκευή']
 	onomata_aithouson = [u'ΕΣΕ',u'ΕΡΓ1',u'ΕΡΓ2',u'ΕΡΓ3',u'UNIX',u'NT',u'Τ1',u'Τ2',]
@@ -34,8 +35,9 @@ def xls_rdr():
 	import shutil
 	import os,sys
 	from django.utils.encoding import smart_str, smart_unicode
+	import settings
 	
-	xls_final_pathname = '/Users/Lomar/Desktop/diogenis/media/ANATHESEIS.xls'
+	xls_final_pathname = '%s/ANATHESEIS.xls' % (settings.MEDIA_ROOT)
 	teachers=[]
 	labcells=[]
 	lessons=[]

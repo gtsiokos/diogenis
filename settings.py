@@ -1,7 +1,11 @@
 # Django settings for diogenis project.
 
 import os.path
-from local_settings import *
+
+try:
+	from local_settings import *
+except:
+	pass
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -91,10 +95,14 @@ INSTALLED_APPS = (
     'diogenis.ldap_groups',# 'diogenis.LDAPGroup', 'diogenis.LDAPGroupAdmin',
 )
 
-AUTHENTICATION_BACKENDS = (
-	'diogenis.ldap_groups.accounts.backends.ActiveDirectoryGroupMembershipSSLBackend',
-	'django.contrib.auth.backends.ModelBackend',
-)
+try:
+	import ldap
+	AUTHENTICATION_BACKENDS = (
+		'diogenis.ldap_groups.accounts.backends.ActiveDirectoryGroupMembershipSSLBackend',
+		'django.contrib.auth.backends.ModelBackend',
+	)
+except:
+	pass	
 
 # Needed for the decorator
 LOGIN_URL = '/'

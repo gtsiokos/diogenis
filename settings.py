@@ -91,8 +91,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'diogenis.accounts', 'diogenis.labs',
     'diogenis.teachers', 'diogenis.students',
-# MY ADDITIONS FOR LDAP 
-    'diogenis.ldap_groups',# 'diogenis.LDAPGroup', 'diogenis.LDAPGroupAdmin',
+	'diogenis.ldap_groups',# 'diogenis.LDAPGroup', 'diogenis.LDAPGroupAdmin',
+	'south',
 )
 
 try:

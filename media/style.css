@@ -83,9 +83,7 @@ a { text-decoration: none; }
 				background: #e0e0e0;
 				border: solid 1px #f4f4f4;
 			
-				-moz-border-radius: 4px;
-				-webkit-border-radius: 4px;
-				border-radius: 4px;
+				-moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;
 			}
 
 			#login label, #login input { display: block; }
@@ -97,17 +95,19 @@ a { text-decoration: none; }
 			}
 			#login label:hover { cursor: pointer; }
 			
-			#login input[type='text'] {
+			#login input[type='text'], #login input[type='password'] {
 				width: 180px;
 				margin: 8px 0 11px 8px; padding: 3px 2px;
-				background: #fafafa;
+				background: #fafafa; color: #474747;
 				border: solid 1px #949494;
 				
-				-moz-border-radius: 3px;
-				-webkit-border-radius: 3px;
-				border-radius: 3px;
+				-moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px;
 			}
-			#login input[type='text']:focus { background: #fff; border: solid 1px #474747; }
+			#login input[type='text']:focus, #login input[type='password']:focus {
+				background: #fff; color: #141414;
+				border: solid 1px #474747;
+			}
+			
 			#login input[type='submit']{
 				width: 186px;
 				margin: 17px 0 0 8px; padding: 6px 5px 7px 5px;
@@ -116,11 +116,15 @@ a { text-decoration: none; }
 			#login label.remember, #login input.remember { width: auto; display: inline; vertical-align: middle; }
 			
 			#login div.panel li a:link, #login div.panel li a:visited {
-				
-				font: normal 14px/1 Verdana, Arial, Helvetica, sans-serif; letter-spacing: 0.05em;
+				display: block; padding: 5px 7px 8px 8px; margin: 0 8px;
+				font: normal 13px/1 Verdana, Arial, Helvetica, sans-serif; letter-spacing: 0.05em;
 				color: #474747;
-				text-shadow: 0 1px 0 #fcfcfc;
-							
+				
+				-moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;
+			}
+			#login div.panel li a:hover, #login div.panel li a:focus {
+				color: #fff; background: #adadad;
+				text-shadow: 0 1px 1px #696969;
 			}
 
 #main {

@@ -22,7 +22,7 @@
 		    				<a href="#" class="options-panel">{{ user.username }}</a>
 							<div class="panel">
 								<ul>								
-									<li><a href="/logout/">Έξοδος</a></li>
+									<li><a href="/logout/">&crarr;&ensp;Έξοδος</a></li>
 								</ul>
 								{% if hash %}
 									<input type="hidden" value="{{hash}}" />
@@ -35,7 +35,7 @@
 						  			<label for="username">Username</label>
 									<input type="text" name="username" id="username">
 									<label for="password">Password</label>
-									<input type="text" name="password" id="password">
+									<input type="password" name="password" id="password">
 									<label class="remember" for="remember">Μείνε Συνδεμένος</label>
 									<input type="checkbox" name="remember" id="remember" class="remember" value="true">
 									<input class="button important" type="submit" value="Είσοδος">

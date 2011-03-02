@@ -1,4 +1,4 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
@@ -61,7 +61,8 @@ def display_labs(request, username):
 							"lesson_name":subscription.teacher_to_lab.lesson.name,
 							"lab_name":subscription.teacher_to_lab.lab.name,
 							"lab_day":subscription.teacher_to_lab.lab.day,
-							"lab_hour":subscription.teacher_to_lab.lab.hour,
+							"start_hour":subscription.teacher_to_lab.lab.start_hour,
+							"end_hour":subscription.teacher_to_lab.lab.end_hour,
 							"teacher":subscription.teacher_to_lab.teacher.name,
 							})
 		return render_to_response('students/labs.html', {'results': result, 'unique_lessons':unique_lessons, 'hash':username_hashed}, context_instance = RequestContext(request))
@@ -112,11 +113,11 @@ def add_new_lab(request, hashed_request):
 				except KeyError:
 					msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
 					message.append({ "status": 2, "msg": msg })
-				available_labs = TeacherToLab.objects.filter(lesson__name__contains=lesson, teacher__name__contains=teacher, lab__hour__gt=1).order_by('lab__day', 'lab__hour').select_related()
+				available_labs = TeacherToLab.objects.filter(lesson__name__contains=lesson, teacher__name__contains=teacher, lab__start_hour__gt=1, lab__end_hour__gt=1).order_by('lab__day', 'lab__start_hour').select_related()
 				if available_labs:
 					classes_list = []
 					for l in available_labs:
-						class_time = humanize_time(l.lab.hour)
+						class_time = humanize_time(l.lab.start_hour)
 						classes_list.append({"name":l.lab.name,"day":l.lab.day,"hour":class_time})
 					
 					message.append({ "status": 1, "action": action, "classes": classes_list })
@@ -136,7 +137,7 @@ def add_new_lab(request, hashed_request):
 					message.append({ "status": 2, "msg": msg })
 				
 				try:
-					unique_class = TeacherToLab.objects.get(lesson__name__contains=lesson, teacher__name__contains=teacher, lab__name__contains=class_name, lab__day__contains=class_day, lab__hour=class_hour)
+					unique_class = TeacherToLab.objects.get(lesson__name__contains=lesson, teacher__name__contains=teacher, lab__name__contains=class_name, lab__day__contains=class_day, lab__start_hour=class_hour)
 				except:
 					msg = u"Το εργαστήριο που ζητήσατε δεν βρέθηκε"
 					message.append({ "status": 2, "action": action, "msg": msg })

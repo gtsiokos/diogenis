@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 from django import forms
 
@@ -18,13 +19,14 @@ class Lesson(models.Model):
 class Lab(models.Model):
 	name = models.CharField(max_length=20)
 	day = models.CharField(max_length=10)
-	hour = models.IntegerField(max_length=2)
+	start_hour = models.IntegerField(max_length=2)
+	end_hour = models.IntegerField(max_length=2)
 
 	class Meta:
-		ordering = ['name', 'day', 'hour']
+		ordering = ['name', 'day', 'start_hour', 'end_hour']
 	
 	def __unicode__(self):
-		return u'%s %s %s' % (self.name, self.day, self.hour)
+		return u'%s %s %s' % (self.name, self.day, self.start_hour, self.end_hour)
 
 class TeacherToLab(models.Model):
 	lesson = models.ForeignKey('Lesson')
@@ -36,7 +38,7 @@ class TeacherToLab(models.Model):
 		ordering = ['lesson']
 	
 	def __unicode__(self):
-		return u'%s - %s [ %s - %s - %s ]' % (self.lesson.name, self.teacher.name, self.lab.name, self.lab.day, self.lab.hour)
+		return u'%s - %s [ %s - %s - %s ]' % (self.lesson.name, self.teacher.name, self.lab.name, self.lab.day, self.lab.start_hour, self.lab.end_hour)
 		
 class StudentToLesson(models.Model):
 	student = models.ForeignKey('accounts.AuthStudent')

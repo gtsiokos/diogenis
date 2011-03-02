@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #coding: UTF-8
 #most workable and usefull Ver:2
 # -*- coding: utf8 -*-

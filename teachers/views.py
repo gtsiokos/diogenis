@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #coding: UTF-8
 #most workable and usefull Ver:2
 # -*- coding: utf8 -*-
@@ -54,13 +55,14 @@ def manage_labs(request, username):
 		#####################################################################		
 		my_labs = my_labs.filter(lab__hour__gt=1)
 		for my_lab in my_labs:
-			time =  my_lab.lab.hour
+			start_hour =  my_lab.lab.start_hour
+			end_hour =  my_lab.lab.end_hour
 			lesson = my_lab.lesson
 			lab = my_lab.lab
 			data = []
 			lab_data = []
 			
-			total_labs = TeacherToLab.objects.filter(lesson=lesson, teacher=q2, lab__hour__gt=1)
+			total_labs = TeacherToLab.objects.filter(lesson=lesson, teacher=q2, lab__start_hour__gt=1, lab__end_hour__gt=1)
 			total_labs_count = total_labs.count()
 			the_labs = total_labs.filter(lab=lab)
 		
@@ -90,7 +92,8 @@ def manage_labs(request, username):
 						data.append({
 								"name": lab.name,
 								"day": my_lab.lab.day,
-								"hour": lab_time,
+								"start_hour": start_hour,
+								"end_hour": end_hour,
 								"students": pending_stud,
 								"empty_seats": empty_seats
 								})
@@ -98,8 +101,9 @@ def manage_labs(request, username):
 					data.append({
 								"name": lab.name,
 								"day": my_lab.lab.day,
-								"hour": lab_time,
-								"hour_raw": time,
+								"start_hour": start_hour,
+								"end_hour": end_hour,
+			#					"hour_raw": time,
 								"students": stud,
 								"empty_seats": empty_seats
 								})
@@ -112,7 +116,8 @@ def manage_labs(request, username):
 				lab_data.append({
 							"name": s.lab.name,
 							"day": stripped_day,
-							"hour": lab_time
+							"start_hour": start_hour,
+							"end_hour": end_hour,
 							})
 			
 			results.append({

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #coding: UTF-8
 #most workable and usefull Ver:2
 # -*- coding: utf8 -*-
@@ -42,6 +43,8 @@ def control_panel(request):
 					Lesson.objects.all().delete()
 					TeacherToLab.objects.all().delete()
 					Lab.objects.all().delete()
+					StudentSubscription.objects.all().delete()
+					StudentToLesson.objects.all().delete()
 
 					k=''
 					kk=''

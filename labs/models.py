@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django import forms
-
+# 
 from accounts.models import *
 
 class UploadPdf(forms.Form):

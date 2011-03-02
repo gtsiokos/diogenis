@@ -38,7 +38,7 @@ def manage_labs(request, username):
 		my_labs = TeacherToLab.objects.filter(teacher=q2).order_by('lesson__name').select_related()
 		
 		#####################################################################
-		# To unique_lessons periexei ola ta onomata mathimatwn pou mporei
+		# To unique_lessons periexei ola ta onomata mathimatwn pou mporei 
 		# na epileksei o kathigitis gia dimiourgia neou ergastiriou se
 		# alphabitiki seira.
 		#####################################################################

@@ -46,7 +46,7 @@ def display_labs(request, username):
 			unique_lessons.append({"name":l.lesson.name})
 		#q2 = AuthStudent()
 		#for i in AuthStudent.objects.all():
-		#	if i.user.username == q1.username:
+		#	if i.user.username == q1.username: 
 		#		q2 = i
 		#res1 = StudentSubscription.objects.filter(student=q2)
 		#q3 = u'%s %s' % (q1.last_name, q1.first_name)

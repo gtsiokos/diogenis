@@ -77,7 +77,8 @@ $(function(){
 				hidePanel();
 			} else {
 				showPanel();
-				options.find("input")[0].focus();
+				var firstInput = options.find("input")[0];
+				if (firstInput) { firstInput.focus(); }
 			}
 			if(e){ e.stopPropagation(); }
 			if(e){ e.preventDefault(); }

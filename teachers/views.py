@@ -18,7 +18,7 @@ from django.contrib.auth.models import User
 from accounts.models import *
 from labs.models import *
 
-from teachers.helpers import get_hashed_username, humanize_time, pdf_exporter
+from teachers.helpers import get_hashed_username, humanize_time, get_lab_hour, pdf_exporter
 
 def user_is_teacher(user):
 	return user.is_authenticated() and user.get_profile().is_teacher
@@ -35,10 +35,10 @@ def manage_labs(request, username):
 		q2 = u'%s %s' % (q1.last_name, q1.first_name)
 		q2 = Teacher.objects.get(name=q2)
 		results = []
-		my_labs = TeacherToLab.objects.filter(teacher=q2).order_by('lesson__name').select_related()
+		my_labs = TeacherToLab.objects.filter(teacher=q2).order_by('lesson__name', 'lab__start_hour').select_related()
 		
 		#####################################################################
-		# To unique_lessons periexei ola ta onomata mathimatwn pou mporei 
+		# To unique_lessons periexei ola ta onomata mathimatwn pou mporei
 		# na epileksei o kathigitis gia dimiourgia neou ergastiriou se
 		# alphabitiki seira.
 		#####################################################################
@@ -55,17 +55,20 @@ def manage_labs(request, username):
 		#####################################################################		
 		my_labs = my_labs.filter(lab__hour__gt=1)
 		for my_lab in my_labs:
-			start_hour =  my_lab.lab.start_hour
-			end_hour =  my_lab.lab.end_hour
+			hour = get_lab_hour(my_lab.lab)
+			
 			lesson = my_lab.lesson
 			lab = my_lab.lab
 			data = []
 			lab_data = []
 			
-			total_labs = TeacherToLab.objects.filter(lesson=lesson, teacher=q2, lab__start_hour__gt=1, lab__end_hour__gt=1)
+			total_labs = TeacherToLab.objects.filter(lesson=lesson, teacher=q2, lab__hour__gt=1).order_by('lab__start_hour')
 			total_labs_count = total_labs.count()
 			the_labs = total_labs.filter(lab=lab)
-		
+			
+			start_hour_raw = my_lab.lab.start_hour
+			end_hour_raw = my_lab.lab.end_hour
+			
 			for a_lab in the_labs:
 				subscriptions = StudentSubscription.objects.filter(teacher_to_lab=my_lab).order_by('student').select_related()
 				stud = []
@@ -84,7 +87,7 @@ def manage_labs(request, username):
 										"last": sub.student.user.last_name,
 										"am": sub.student.am
 										})
-				lab_time = humanize_time(time)
+				
 				empty_seats = ( my_lab.max_students-len(stud) if stud and my_lab.max_students>len(stud) else 0 )
 				
 				if pending_students_request:
@@ -92,8 +95,7 @@ def manage_labs(request, username):
 						data.append({
 								"name": lab.name,
 								"day": my_lab.lab.day,
-								"start_hour": start_hour,
-								"end_hour": end_hour,
+								"hour": hour,
 								"students": pending_stud,
 								"empty_seats": empty_seats
 								})
@@ -101,23 +103,19 @@ def manage_labs(request, username):
 					data.append({
 								"name": lab.name,
 								"day": my_lab.lab.day,
-								"start_hour": start_hour,
-								"end_hour": end_hour,
-			#					"hour_raw": time,
+								"hour": hour,
 								"students": stud,
 								"empty_seats": empty_seats
 								})
 			
 			for s in total_labs:
-				time = s.lab.hour
-				lab_time = humanize_time(time)
+				hour = get_lab_hour(s.lab)
 				stripped_day = s.lab.day[:3]
 			
 				lab_data.append({
 							"name": s.lab.name,
 							"day": stripped_day,
-							"start_hour": start_hour,
-							"end_hour": end_hour,
+							"hour": hour
 							})
 			
 			results.append({
@@ -145,38 +143,37 @@ def submit_student_to_lab(request, hashed_request):
 			json_data = simplejson.loads(request.raw_post_data)
 		
 			try:
-				new_name = json_data['lnew'][0]['newName']
-				new_hour = json_data['lnew'][0]['newHour']
-				new_day = json_data['lnew'][0]['newDay']
-				old_name = json_data['lold'][0]['oldName']
-				old_hour = json_data['lold'][0]['oldHour']
-				old_day = json_data['lold'][0]['oldDay']
+				new_name = json_data['lnew']['newName']
+				new_hour = json_data['lnew']['newHour']
+				new_day = json_data['lnew']['newDay']
+				old_name = json_data['lold']['oldName']
+				old_hour = json_data['lold']['oldHour']
+				old_day = json_data['lold']['oldDay']
 			except KeyError:
 				msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
 				message.append({ "status": 2, "msg": msg })
-		
-			check_lab = Lab.objects.filter(day=new_day, hour=new_hour)
-			check_t2l = TeacherToLab.objects.filter(lab=check_lab)
-			new_lab = Lab.objects.filter(name=new_name, day=new_day, hour=new_hour)
+			
+			new_lab = Lab.objects.filter(name=new_name, day=new_day, start_hour=new_hour['start'], end_hour=new_hour['end'])
 			new_t2l = TeacherToLab.objects.get(lab=new_lab)
-			old_lab = Lab.objects.filter(name=old_name, day=old_day, hour=old_hour)
+			old_lab = Lab.objects.filter(name=old_name, day=old_day, start_hour=old_hour['start'], end_hour=old_hour['end'])
 			old_t2l = TeacherToLab.objects.filter(lab=old_lab)
-		
-		
-			if json_data['stud']:
-				for student in json_data['stud']:
-					check_availability = []
-					the_stud = AuthStudent.objects.get(am=student["am"])
-					check_availability = StudentSubscription.objects.filter(student=the_stud, teacher_to_lab=check_t2l)
-					if not check_availability:
-						StudentSubscription.objects.filter(student=the_stud, teacher_to_lab=old_t2l).delete()
-						StudentSubscription.objects.create(student=the_stud, teacher_to_lab=new_t2l)
+			
+			try:
+				students = json_data['stud']
+				empty_test = students[0]
+				for student in students:
+					stud = AuthStudent.objects.get(am=student['am'])
+					available = StudentSubscription.check_availability(student=stud, new_t2l=new_t2l)
+					if available:
+						StudentSubscription.objects.filter(student=stud, teacher_to_lab=old_t2l).delete()
+						StudentSubscription.objects.create(student=stud, teacher_to_lab=new_t2l)
 					else:
 						msg = u"Κάποιοι σπουδαστές έχουν δηλώσει άλλα εργαστήρια αυτές τις ώρες"
 						message.append({ "status": 3, "msg": msg })
-			else:
+			except:
 				msg = u"Δεν έχετε επιλέξει κάποιον σπουδαστή"
 				message.append({ "status": 3, "msg": msg })
+			
 				
 			ok_msg = u"Η μεταφορά στο εργαστήριο %s ολοκληρώθηκε" % new_name
 			if not message:

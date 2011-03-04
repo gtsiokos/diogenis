@@ -20,9 +20,17 @@ def get_hashed_username(username):
 	return uname_hashed.hexdigest()
 
 def humanize_time(time):
-	t = ("%d μ.μ." % (time-12) if time > 13 else "%d π.μ." % time)
+	t = ("%d μ.μ." % (time-12) if time >= 13 else "%d π.μ." % time)
 	if time == 12: t = "%d μ.μ." % time
 	return t
+
+def get_lab_hour(lab):
+	hour = {
+			'legacy':{'raw':lab.hour, 'humanized':humanize_time(lab.hour)},
+			'start':{'raw':lab.start_hour, 'humanized':humanize_time(lab.start_hour)},
+			'end':{'raw':lab.end_hour, 'humanized':humanize_time(lab.end_hour)},
+			}
+	return hour
 
 def normalize_locale(text):
 	normalizedText = ''

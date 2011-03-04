@@ -8,7 +8,7 @@
 	{% for labt in results %}
 		<dt> {{ labt.lesson_name }} </dt>
 		<dd>
-			<span class="lab-name">{{ labt.lab_name }}</span><span class="lab-date">{{ labt.lab_day }} {{ labt.lab_hour }}</span><span class="teacher-name">{{ labt.teacher }}</span>
+			<span class="lab-name">{{ labt.lab_name }}</span><span class="lab-date">{{ labt.lab_day }} {{ labt.lab_hour.start.humanized }} - {{ labt.lab_hour.end.humanized }}</span><span class="teacher-name">{{ labt.teacher }}</span>
 		</dd>
 	{% endfor %}
 	</dl>

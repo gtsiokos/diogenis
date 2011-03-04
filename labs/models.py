@@ -19,14 +19,16 @@ class Lesson(models.Model):
 class Lab(models.Model):
 	name = models.CharField(max_length=20)
 	day = models.CharField(max_length=10)
+	hour = models.IntegerField(max_length=2)
 	start_hour = models.IntegerField(max_length=2)
 	end_hour = models.IntegerField(max_length=2)
 
 	class Meta:
-		ordering = ['name', 'day', 'start_hour', 'end_hour']
+		#WARNING to hour tha bgei molis ftiaksoume to start_hour
+		ordering = ['name', 'day', 'hour', 'start_hour']
 	
 	def __unicode__(self):
-		return u'%s %s %s' % (self.name, self.day, self.start_hour, self.end_hour)
+		return u'%s %s %s [%s %s]' % (self.name, self.day, self.hour, self.start_hour, self.end_hour)
 
 class TeacherToLab(models.Model):
 	lesson = models.ForeignKey('Lesson')
@@ -38,7 +40,7 @@ class TeacherToLab(models.Model):
 		ordering = ['lesson']
 	
 	def __unicode__(self):
-		return u'%s - %s [ %s - %s - %s ]' % (self.lesson.name, self.teacher.name, self.lab.name, self.lab.day, self.lab.start_hour, self.lab.end_hour)
+		return u'%s - %s [ %s - %s - %s - (%s - %s) ]' % (self.lesson.name, self.teacher.name, self.lab.name, self.lab.day, self.lab.hour, self.lab.start_hour, self.lab.end_hour)
 		
 class StudentToLesson(models.Model):
 	student = models.ForeignKey('accounts.AuthStudent')
@@ -54,7 +56,27 @@ class StudentSubscription(models.Model):
 	
 	def __unicode__(self):
 		return u'%s [ %s - %s - %s ]' % (self.student.user.get_full_name(), self.teacher_to_lab.lesson.name, self.teacher_to_lab.teacher.name, self.teacher_to_lab.lab.name)
-
+	
+	@classmethod
+	def check_availability(self, *args, **kwargs):
+		new_t2l = kwargs.get('new_t2l')
+		student = kwargs.get('student')
+		
+		name = new_t2l.lab.name
+		day = new_t2l.lab.day
+		start = new_t2l.lab.start_hour
+		end = new_t2l.lab.end_hour
+		current_subscriptions = StudentSubscription.objects.filter(student=student, teacher_to_lab__lab__day__contains=day, in_transit=False).select_related()
+		
+		flag = -1
+		for cs in current_subscriptions:
+			if (( (start > cs.teacher_to_lab.lab.end_hour) or (start == cs.teacher_to_lab.lab.end_hour) ) or ( (end == cs.teacher_to_lab.lab.start_hour) or (end < cs.teacher_to_lab.lab.start_hour) )):
+				a = 2
+			else:
+				flag = 0
+		
+		return False if flag==0 else True
+	
 class Teacher(models.Model):
 	name = models.CharField(max_length=40)
 

@@ -43,88 +43,73 @@ $(function(){
 		}
 	});
 	
-	//********************************
-	//Global Ajax Behaviour
-	//********************************		
-	
-	var theBody = $("body:first");
-	
-	theBody.ajaxStart(function(){
-		theBody.addClass("wait");
-	});
-	theBody.ajaxComplete(function(){
-		theBody.removeClass("wait");
-	});
 	
 	//********************************
 	//Ajax-Transfer Feature
 	//********************************	
 	
-	var ajaxTrans 		= transfer.find("ul.labs-list li");
-	var msg 			= $("#ui-messages p", "#content");
-	var theLabs 		= $("div.lab", "#content");
+	var Helpers			= X$('Helpers');
+		ajaxTrans 		= transfer.find("ul.labs-list li"),
+		theLabs 		= $("div.lab", "#content"),
+		msg 			= $("#ui-messages p", "#content");
+	
 	theLabs.find("table td>input").removeAttr("disabled").attr('checked', false);
 	
 	ajaxTrans.click(function(){
 		
-		var ms;
-		var parentDiv = $(this).parents("div.lab");
+		var ms,
+			data,
+			parentDiv = $(this).parents("div.lab");
 		
-		var newLabName, newLabDate, newLabDay, newLabHour;
+		
+		var newLabName,
+			newLabDay,
+			newLabHour = {};
 		
 		newLabName = $(this).find("span.name").text();
 		var day = $(this).find("span.day").text();
-		newLabDate = $(this).find("span.hour").text();
-		var date = newLabDate.split(" ");
-		var hour = parseInt(date[0], 10);
-		var AmPm = date[1];
-		if (AmPm == "π.μ." || AmPm == "μ.μ." && hour == 12) {
-			newLabHour = hour;
-		} else { newLabHour = hour+12; }
-		var dString = "Δευτέρα Τρίτη Τετάρτη Πέμπτη Παρασκευή";
-		var sDay = day;
-		var tDay = dString.split(/ +/);
-		var len = tDay.length;
-		for(var i=0; i<len; i++){
-			if(sDay == tDay[i].substr(0,3)){
-				newLabDay = tDay[i];
-				//console.log(i);
-				break;
-			}
-		}
+		newLabDay = Helpers.explodeFullname(day);
+		
+		data = $(this).find("span.hour").metadata();
+		newLabHour.start = data.start;
+		newLabHour.end = data.end;
 		
 		
-		var oldLabName, oldLabDate, oldLabDay, oldLabHour
+		var oldLabName,
+			oldLabDay,
+			oldLabHour = {};
 		
 		oldLabName = parentDiv.find("h4>span.lab-name").text();
-		oldLabDate = parentDiv.find("h4>span.lab-date").text();
+		oldLabDay = parentDiv.find("h4>span.lab-date>span.day").text();
 		
-		var splittedDate = X$('Helpers').splitDate(oldLabDate);
-		oldLabDay = splittedDate.day;
-		oldLabHour = splittedDate.hour;
+		data = parentDiv.find("h4>span.lab-date>span.hour").metadata();
+		oldLabHour.start = data.start;
+		oldLabHour.end = data.end;
 		
-		/*
+		
 		console.log(newLabName);
 		console.log(newLabDay);
-		console.log(newLabHour);
+		console.log(newLabStartHour);
+		console.log(newLabEndHour);
 		console.log("--------------");
 		console.log(oldLabName);
 		console.log(oldLabDay);
-		console.log(oldLabHour);
+		console.log(oldLabStartHour);
+		console.log(oldLabEndHour);
 		console.log("--------------");
 		console.log("--------------");
-		*/
 		
-		var errorMsg = "Προέκυψε σφάλμα στην σύνδεση";
-		var amToSend = [];
-		var students = theActive.parents("div.lab").find("table tr:not(.disabled) td>input:checked");
-		var i=0;
+		
+		var i=0,
+			amToSend = [],
+			students = theActive.parents("div.lab").find("table tr:not(.disabled) td>input:checked");
+		
 		students.each(function(){
 			amToSend[i] = { am: $(this).val() };
 			i++;
 		});
 		
-		if (newLabName != oldLabName || newLabDay != oldLabDay || newLabHour != oldLabHour) {
+		if (newLabName != oldLabName || newLabDay != oldLabDay || newLabHour.start !== oldLabHour.start || newLabHour.end !== oldLabHour.end) {
 			
 			var request =	{
 							lnew: [ { newName: newLabName, newDay: newLabDay, newHour: newLabHour} ],
@@ -132,7 +117,7 @@ $(function(){
 							stud: amToSend
 							};
 			
-			var ajaxUrl = '/teachers/'+X$('Helpers').getHash()+'/submit-student-to-lab/';
+			var ajaxUrl = '/teachers/'+Helpers.getHash()+'/submit-student-to-lab/';
 			$.ajax({
 				url: ajaxUrl,
 				type: 'POST',

@@ -20,13 +20,13 @@
 				
 				<h4>
 					<span class="lab-name">{{ q2.name }}</span>
-					<span class="lab-date">{{ q2.day }} {{ q2.hour }}</span>
+					<span class="lab-date"><span class="day">{{ q2.day }}</span> <span class="hour { start:{{q2.hour.start.raw}}, end:{{q2.hour.end.raw}} }">{{ q2.hour.start.humanized }} - {{ q2.hour.end.humanized }}</span></span>
 					{% if q.labs_count > 1 and q2.students %}
 						<span class="transfer enabled">
 							<span>Μετακίνηση</span>
 							<ul class="labs-list">
 								{% for s in q.labs_list %}
-									<li><span class="name">{{ s.name }}</span> &ndash; <span class="day">{{ s.day }}</span> &ndash; <span class="hour">{{ s.hour }}</span></li>
+									<li><span class="name">{{ s.name }}</span> &ndash; <span class="day">{{ s.day }}</span> &ndash; <span class="hour { start:{{s.hour.start.raw}}, end:{{s.hour.end.raw}} }">{{ s.hour.start.raw }}-{{ s.hour.end.raw }}</span></li>
 								{% endfor %}
 							</ul>
 						</span>
@@ -84,8 +84,4 @@
 
 {% endblock content %}
 
-{% block extra_js_bottom %}
-	{{ block.super }}
-	<script type="text/javascript" src="/media/js/teacher-labs-gui.js"></script>
-{% endblock %}
 

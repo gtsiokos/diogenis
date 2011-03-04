@@ -97,13 +97,14 @@ X$('StudentRegister',
 		});
 	
 		_self.lessonClass.change(function() {
-			var hisParent = $(this).parent("li");
+			var $this = $(this).find(":selected"),
+				hisParent = $this.parent("li");
+			
 			if ( !hisParent.hasClass("isset") ){
-				classToSend = $(this).val();
 				hisParent.addClass("isset");
-			} else {
-				classToSend = $(this).val();
 			}
+			classToSend = $this.data("info");
+			
 			if( lessonToSend && teacherToSend && classToSend ){
 				_self.submit(lessonToSend, teacherToSend, classToSend, 0);
 			}
@@ -137,15 +138,32 @@ X$('StudentRegister',
 			request;
 		
 		if (lessonToSend && teacherToSend && classToSend){
-			var classInfo 	= classToSend.split(" ");
-			var classDate 	= X$('Helpers').splitDate(classToSend);
-			var className 	= classInfo[3];
-			var classDay 	= classDate.day;
-			var classHour 	= classDate.hour;
+			var className 	= classToSend.name;
+			var classDay 	= classToSend.day;
+			var classStartHour 	= classToSend.start_hour;
+			var classEndHour 	= classToSend.end_hour;
 			if ( submitRequest===0 ) {
-				request = { action:"checkAvailability", lesson:lessonToSend, teacher:teacherToSend, cname:className, cday:classDay, chour:classHour };
+				request = {
+					action: "checkAvailability",
+					lesson: lessonToSend,
+					teacher: teacherToSend,
+					name: className,
+					day: classDay,
+					start_hour: classStartHour,
+					end_hour: classEndHour
+				};
 			}
-			else { request = { action:"submitLab", lesson:lessonToSend, teacher:teacherToSend, cname:className, cday:classDay, chour:classHour }; }
+			else {
+				request = {
+					action:"submitLab",
+					lesson:lessonToSend,
+					teacher:teacherToSend,
+					name:className,
+					day:classDay,
+					start_hour: classStartHour,
+					end_hour: classEndHour
+				};
+			}
 		}
 		else if (lessonToSend && teacherToSend){
 			request = { action:"getClasses", lesson:lessonToSend, teacher:teacherToSend };
@@ -194,13 +212,23 @@ X$('StudentRegister',
 					}
 					else if (data[0].action == "getClasses") {
 						_self.lessonClass.children().not(":first-child").remove();
-						var len = data[0].classes.length;
-						for(var i=0; i<len; i++){
-							var str 	= data[0].classes[i].day+" - "+data[0].classes[i].hour+" - "+data[0].classes[i].name;
-							var strVal 	= data[0].classes[i].day+" "+data[0].classes[i].hour+" "+data[0].classes[i].name;
-							strHtml += "<option value='"+strVal+"'>"+str+"</option>";
+						
+						var list = [];
+						for(var i=0, d=data[0], len = d.classes.length; i<len; i++){
+							//var str 	= data[0].classes[i].day+" - "+data[0].classes[i].hour+" - "+data[0].classes[i].name;
+							//var strVal 	= data[0].classes[i].day+" "+data[0].classes[i].hour+" "+data[0].classes[i].name;
+							//strHtml += "<option value='"+strVal+"'>"+str+"</option>";
+							
+							var str = "["+d.classes[i].start_hour+" με "+d.classes[i].end_hour+"] "+d.classes[i].day+" - "+d.classes[i].name;
+							var info = {
+										name: d.classes[i].name,
+										day: d.classes[i].day,
+										start_hour: d.classes[i].start_hour_raw,
+										end_hour: d.classes[i].end_hour_raw
+										};
+							list[i] = $("<option value='"+i+"'>"+str+"</option>").data("info", info);
+							_self.lessonClass.append(list[i]);
 						}
-						_self.lessonClass.append(strHtml);
 						
 						var parentClass = _self.lessonClass.parent("li");
 						parentClass.removeClass("disabled");

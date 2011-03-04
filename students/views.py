@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# -*- coding: utf8 -*-
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
@@ -11,7 +12,7 @@ from django.contrib.auth.models import User
 from accounts.models import *
 from labs.models import *
 
-from teachers.helpers import get_hashed_username, humanize_time
+from teachers.helpers import get_hashed_username, humanize_time, get_lab_hour
 
 def user_is_student(user):
 	return user.is_authenticated() and not user.get_profile().is_teacher
@@ -46,7 +47,7 @@ def display_labs(request, username):
 			unique_lessons.append({"name":l.lesson.name})
 		#q2 = AuthStudent()
 		#for i in AuthStudent.objects.all():
-		#	if i.user.username == q1.username: 
+		#	if i.user.username == q1.username:
 		#		q2 = i
 		#res1 = StudentSubscription.objects.filter(student=q2)
 		#q3 = u'%s %s' % (q1.last_name, q1.first_name)
@@ -61,8 +62,9 @@ def display_labs(request, username):
 							"lesson_name":subscription.teacher_to_lab.lesson.name,
 							"lab_name":subscription.teacher_to_lab.lab.name,
 							"lab_day":subscription.teacher_to_lab.lab.day,
-							"start_hour":subscription.teacher_to_lab.lab.start_hour,
-							"end_hour":subscription.teacher_to_lab.lab.end_hour,
+							"lab_hour":get_lab_hour(subscription.teacher_to_lab.lab),
+							"lab_start_hour":humanize_time(subscription.teacher_to_lab.lab.start_hour),
+							"lab_end_hour":humanize_time(subscription.teacher_to_lab.lab.end_hour),
 							"teacher":subscription.teacher_to_lab.teacher.name,
 							})
 		return render_to_response('students/labs.html', {'results': result, 'unique_lessons':unique_lessons, 'hash':username_hashed}, context_instance = RequestContext(request))
@@ -113,12 +115,16 @@ def add_new_lab(request, hashed_request):
 				except KeyError:
 					msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
 					message.append({ "status": 2, "msg": msg })
-				available_labs = TeacherToLab.objects.filter(lesson__name__contains=lesson, teacher__name__contains=teacher, lab__start_hour__gt=1, lab__end_hour__gt=1).order_by('lab__day', 'lab__start_hour').select_related()
+				
+				available_labs = TeacherToLab.objects.filter(lesson__name__contains=lesson, teacher__name__contains=teacher, lab__start_hour__gt=1).order_by('lab__day', 'lab__start_hour').select_related()
+				
 				if available_labs:
 					classes_list = []
 					for l in available_labs:
-						class_time = humanize_time(l.lab.start_hour)
-						classes_list.append({"name":l.lab.name,"day":l.lab.day,"hour":class_time})
+						class_time = humanize_time(l.lab.hour)
+						class_start_time = humanize_time(l.lab.start_hour)
+						class_end_time = humanize_time(l.lab.end_hour)
+						classes_list.append({"name":l.lab.name,"day":l.lab.day,"hour":class_time, "start_hour":class_start_time, "end_hour":class_end_time, "start_hour_raw":l.lab.start_hour, "end_hour_raw":l.lab.end_hour })
 					
 					message.append({ "status": 1, "action": action, "classes": classes_list })
 				else:
@@ -129,21 +135,24 @@ def add_new_lab(request, hashed_request):
 				try:
 					lesson = json_data['lesson']
 					teacher = json_data['teacher']
-					class_name = json_data['cname']
-					class_day = json_data['cday']
-					class_hour = json_data['chour']
+					class_name = json_data['name']
+					class_day = json_data['day']
+					class_start_hour = json_data['start_hour']
+					class_end_hour = json_data['end_hour']
 				except KeyError:
 					msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
 					message.append({ "status": 2, "msg": msg })
 				
+				lab_available = False
 				try:
-					unique_class = TeacherToLab.objects.get(lesson__name__contains=lesson, teacher__name__contains=teacher, lab__name__contains=class_name, lab__day__contains=class_day, lab__start_hour=class_hour)
+					unique_class = TeacherToLab.objects.get(lesson__name__contains=lesson, teacher__name__contains=teacher, lab__name__contains=class_name, lab__day__contains=class_day, lab__start_hour=class_start_hour, lab__end_hour=class_end_hour)
+					students_count = StudentSubscription.objects.filter(teacher_to_lab=unique_class).count()
+					available_seats = unique_class.max_students - students_count
+					lab_available = (True if available_seats > 0 else False)
 				except:
 					msg = u"Το εργαστήριο που ζητήσατε δεν βρέθηκε"
 					message.append({ "status": 2, "action": action, "msg": msg })
-				students_count = StudentSubscription.objects.filter(teacher_to_lab=unique_class).count()
-				available_seats = unique_class.max_students - students_count
-				lab_available = (True if available_seats > 0 else False)	
+					
 			
 			if action == "checkAvailability":
 				if lab_available:
@@ -173,7 +182,6 @@ def add_new_lab(request, hashed_request):
 			data = simplejson.dumps(message)
 			return HttpResponse(data, mimetype='application/javascript')
 	else:
-		#sxolio pou prepei na allaksei
 		return HttpResponse("Atime hax0r, an se vrw tha sou gamisw to kerato...", mimetype="text/plain")
 			
 			

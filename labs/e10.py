@@ -22,7 +22,7 @@ def fill_labs():
 	for i in onomata_aithouson:
 		for j in  imeres:
 			for k in ores_enarksis:
-				tmpobj = Lab(name=i,day=j,hour=k)
+				tmpobj = Lab(name=i, day=j, hour=k, start_hour=1, end_hour=1)
 				tmpobj.save()
 
 

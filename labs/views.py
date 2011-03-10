@@ -55,7 +55,7 @@ def control_panel(request):
 
 					try:
 						temp = e10.xls_rdr()
-						empty_lab = Lab(name='', day='', hour=1, start_hour=1, end_hour=1)
+						empty_lab = Lab(name='', day='', start_hour=1, end_hour=1)
 						empty_lab.save()
 					except:
 						msg= u'Παρουσιάστηκε Σφάλμα'

@@ -8,12 +8,16 @@ X$('TeacherRegister',
 	labList 		: undefined,
 	lessonName 		: undefined,
 	lessonDay 		: undefined,
-	lessonHour 		: undefined,
+	lessonHourStart : undefined,
+	lessonHourEnd 	: undefined,
+	
+	thirdStep		: undefined,
 	lessonClass 	: undefined,
 	maxSlider 		: undefined,
 	maxStudents 	: undefined,
 	modalMsg 		: undefined,
 	submitLab 		: undefined,
+	msg				: {1:"ok", 2:"error", 3:"warning"},
 
 
 	init: function() {
@@ -22,7 +26,9 @@ X$('TeacherRegister',
 		_self.labList 		= $("#lab-registration");
 		_self.lessonName 	= $("#select-lesson select[name='lesson-name']");
 		_self.lessonDay 	= $("#select-lab select[name='lesson-day']");
-		_self.lessonHour 	= $("#select-lab select[name='lesson-hour']");
+		_self.lessonHourStart 	= $("#select-lab select[name='lesson-hour-start']");
+		_self.lessonHourEnd 	= $("#select-lab select[name='lesson-hour-end']");
+		_self.thirdStep		= $("#select-class");
 		_self.lessonClass 	= $("#select-class select[name='lesson-class']");
 		_self.maxSlider 	= $("#slider-max-students");
 		_self.maxStudents 	= $("#max-students");
@@ -45,7 +51,8 @@ X$('TeacherRegister',
 		var _self = this;
 		
 		_self.lessonDay.attr("disabled", "disabled").parent("li").addClass("disabled");
-		_self.lessonHour.attr("disabled", "disabled");
+		_self.lessonHourStart.attr("disabled", "disabled");
+		_self.lessonHourEnd.attr("disabled", "disabled");
 		_self.lessonClass.attr("disabled", "disabled").parent("li").addClass("disabled").hide();
 		_self.modalMsg.find("#modal-loader").hide().siblings("p").hide();
 		_self.maxSlider.slider({ range: "min", min: 5, max: 40, value: 20,
@@ -71,12 +78,23 @@ X$('TeacherRegister',
 	cleanMessages: function() {
 		var _self = this;
 		_self.modalMsg.find("p").fadeOut(100).delay(100).removeClass();
+		
+		return this;
 	},
 	
+	showMessage: function(status, new_msg, new_speed) {
+		var _self = this;
+		var speed = new_speed || 150;
+		
+		_self.cleanMessages().modalMsg.find("p").addClass(_self.msg[status]).text(new_msg).fadeIn(speed);
+	},
 	
 	setEvents: function(){
 		var _self = this;
-		var lessonToSend, dayToSend, hourToSend, classToSend;
+		var	lessonToSend,
+			dayToSend,
+			hourToSend = {start: 1, end: 1},
+			classToSend;
 		
 		_self.lessonName.change(function() {
 			var hisParent = $(this).parent("li");
@@ -87,7 +105,8 @@ X$('TeacherRegister',
 				
 				_self.lessonDay.parent("li").removeClass("disabled").addClass("focused").addClass("isset");
 				_self.lessonDay.removeAttr("disabled").focus();
-				_self.lessonHour.removeAttr("disabled");
+				_self.lessonHourStart.removeAttr("disabled");
+				_self.lessonHourEnd.removeAttr("disabled");
 			
 				hisParent.addClass("isset");	
 			} else {
@@ -109,27 +128,54 @@ X$('TeacherRegister',
 			} else {
 				dayToSend = $(this).val();
 			}
-			if( dayToSend && hourToSend ){
+			if( dayToSend && hourToSend.start!==1 && hourToSend.end!==1 ){
 				classToSend = null;
 				_self.submit(dayToSend, hourToSend);
 			}
 			_self.cleanMessages();
 		});
 	
-		_self.lessonHour.change(function() {
-			var hisParent = $(this).parent("li");
+		_self.lessonHourStart.change(function() {
+			var start,
+				hisParent = $(this).parent("li");
+			
 			if ( !hisParent.hasClass("isset") ){
 		
-				hourToSend = $(this).attr("value");
-			
+				start = $(this).attr("value");
+				
 				if( !hisParent.hasClass("isset" ) ) {
 					hisParent.addClass("isset");
 				}
 			
 			} else {
-				hourToSend = $(this).attr("value");
+				start = $(this).attr("value");
 			}
-			if( dayToSend && hourToSend ){
+			hourToSend.start = parseInt(start, 10);
+			
+			if( dayToSend && hourToSend.start!==1 && hourToSend.end!==1 ){
+				classToSend = null;
+				_self.submit(dayToSend, hourToSend);
+			}
+			_self.cleanMessages();
+		});
+		
+		_self.lessonHourEnd.change(function() {
+			var end,
+				hisParent = $(this).parent("li");
+			
+			if ( !hisParent.hasClass("isset") ){
+		
+				end = $(this).attr("value");
+				
+				if( !hisParent.hasClass("isset" ) ) {
+					hisParent.addClass("isset");
+				}
+			
+			} else {
+				end = $(this).attr("value");
+			}
+			hourToSend.end = parseInt(end, 10);
+			if( dayToSend && hourToSend.start!==1 && hourToSend.end!==1 ){
 				classToSend = null;
 				_self.submit(dayToSend, hourToSend);
 			}
@@ -150,7 +196,7 @@ X$('TeacherRegister',
 		});
 	
 		var submitLabRequest = function() {
-			if ( lessonToSend && dayToSend && hourToSend && classToSend ) {
+			if ( lessonToSend && dayToSend && hourToSend.start && hourToSend.end && classToSend ) {
 				_self.submitLab.unbind("click");
 				_self.modalMsg.find("p").hide().removeClass().siblings("img").fadeIn(50);
 				_self.submit(dayToSend, hourToSend, lessonToSend, classToSend);
@@ -160,8 +206,7 @@ X$('TeacherRegister',
 			}
 			else {
 				var ms = "Παρακαλώ συμπληρώστε τα στοιχεία του εργαστηρίου";
-				_self.cleanMessages();
-				_self.modalMsg.find("p").addClass("error").text(ms).fadeIn(200);
+				_self.showMessage(2, ms, 200);
 			}
 			return false;
 		};
@@ -176,8 +221,8 @@ X$('TeacherRegister',
 			request,
 			maxToSend = _self.maxSlider.slider("value");
 		
-		if (classToSend) { request = { newLesson: [{ action: "submitLab", newName: lessonToSend, newDay: dayToSend, newHour: hourToSend, newClass: classToSend, maxStudents: maxToSend}] }; }
-		else { request = { newLesson: [{ action: "getClass", newDay: dayToSend, newHour: hourToSend}] }; }
+		if (classToSend) 	{ request = { action: "submitLab", newName: lessonToSend, newDay: dayToSend, newHour: hourToSend, newClass: classToSend, maxStudents: maxToSend }; }
+		else 				{ request = { action: "getClass", newDay: dayToSend, newHour: hourToSend }; }
 		
 		var ajaxUrl = '/teachers/'+X$('Helpers').getHash()+'/add-new-lab/';
 		$.ajax({
@@ -188,7 +233,7 @@ X$('TeacherRegister',
 			dataType: 'json',
 			timeout: 10000,
 			beforeSend: function() {
-				if (request.newLesson[0].action == "submitLab") { _self.modalMsg.find("#modal-loader").show(); }
+				if (request.action == "submitLab") { _self.modalMsg.find("#modal-loader").show(); }
 			},
 			success: function(data) {
 				try {
@@ -237,14 +282,11 @@ X$('TeacherRegister',
 					else if (data[0].status == 2){
 				
 						if (data[0].action == "getClass") {
-							_self.modalMsg.find("p").addClass("error").text(data[0].msg).fadeIn(200);
+							_self.showMessage(data[0].status, data[0].msg, 200);
 						}
 						else if (data[0].action == "submitLab") {
 							_self.modalMsg.find("#modal-loader").fadeOut(150, function(){
-																	_self.modalMsg.find("p")
-																	.addClass("error")
-																	.text(data[0].msg)
-																	.fadeIn(200);
+																	_self.showMessage(data[0].status, data[0].msg, 200);
 																}
 															);
 						}
@@ -257,7 +299,7 @@ X$('TeacherRegister',
 				//if(xhr.status==500)
 				_self.modalMsg.find("#modal-loader").fadeOut(150);
 				setTimeout( function() {
-					_self.modalMsg.find("p").addClass("error").text(ms).fadeIn(200);
+					_self.showMessage(2, ms);
 				},400);
 			}
 		});

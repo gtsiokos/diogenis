@@ -33,8 +33,8 @@ div.logged div.lab {
 		border-radius: 7px 0 0 0;
 	}
 	div.lab h4>span.lab-date {
-		width: 198px;
-		padding: 10px 13px 11px 13px;
+		width: 208px;
+		padding: 10px 8px 11px 8px;
 		border-right: solid 1px #2e5d8a;
 		text-align: center;
 	}

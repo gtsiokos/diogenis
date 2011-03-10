@@ -140,12 +140,15 @@
 	//Second Step Add-New-lab
 	//^*****************************/
 
-	#lab-registration #select-lab select 			{ display: inline; width: 160px; }
-	#lab-registration #select-lab select.lesson-day 	{ margin-left: 58px; }
+	#lab-registration #select-lab select 				{ display: inline; width: 160px; }
+	#lab-registration #select-lab select.lesson-day 	{ width: 128px; margin-left: 58px; }
 	#lab-registration span.ux-text {
-		margin: 0 12px 0 11px;
+		margin: 0 7px;
 		font: normal 15px Verdana, Arial, Helvetica, sans-serif;
 	}
+	
+	#lab-registration #select-lab select.lesson-hour-start { width: 128px; }
+	#lab-registration #select-lab select.lesson-hour-end { width: 80px; }
 	
 	/********************************^
 	//Third Add-New-lab

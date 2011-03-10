@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from accounts.models import *
 from labs.models import *
 
-from teachers.helpers import get_hashed_username, humanize_time, get_lab_hour
+from teachers.helpers import get_hashed_username, humanize_time, get_lab_hour, set_hour_range
 
 def user_is_student(user):
 	return user.is_authenticated() and not user.get_profile().is_teacher
@@ -121,10 +121,9 @@ def add_new_lab(request, hashed_request):
 				if available_labs:
 					classes_list = []
 					for l in available_labs:
-						class_time = humanize_time(l.lab.hour)
 						class_start_time = humanize_time(l.lab.start_hour)
 						class_end_time = humanize_time(l.lab.end_hour)
-						classes_list.append({"name":l.lab.name,"day":l.lab.day,"hour":class_time, "start_hour":class_start_time, "end_hour":class_end_time, "start_hour_raw":l.lab.start_hour, "end_hour_raw":l.lab.end_hour })
+						classes_list.append({"name":l.lab.name,"day":l.lab.day, "start_hour":class_start_time, "end_hour":class_end_time, "start_hour_raw":l.lab.start_hour, "end_hour_raw":l.lab.end_hour })
 					
 					message.append({ "status": 1, "action": action, "classes": classes_list })
 				else:
@@ -137,15 +136,14 @@ def add_new_lab(request, hashed_request):
 					teacher = json_data['teacher']
 					class_name = json_data['name']
 					class_day = json_data['day']
-					class_start_hour = json_data['start_hour']
-					class_end_hour = json_data['end_hour']
+					class_hour = set_hour_range(json_data['start_hour'], json_data['end_hour'])
 				except KeyError:
 					msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
 					message.append({ "status": 2, "msg": msg })
 				
 				lab_available = False
 				try:
-					unique_class = TeacherToLab.objects.get(lesson__name__contains=lesson, teacher__name__contains=teacher, lab__name__contains=class_name, lab__day__contains=class_day, lab__start_hour=class_start_hour, lab__end_hour=class_end_hour)
+					unique_class = TeacherToLab.objects.get(lesson__name__contains=lesson, teacher__name__contains=teacher, lab__name__contains=class_name, lab__day__contains=class_day, lab__start_hour=class_hour['start'], lab__end_hour=class_hour['end'])
 					students_count = StudentSubscription.objects.filter(teacher_to_lab=unique_class).count()
 					available_seats = unique_class.max_students - students_count
 					lab_available = (True if available_seats > 0 else False)

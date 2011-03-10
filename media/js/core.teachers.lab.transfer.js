@@ -8,7 +8,7 @@ X$('StudentTransfer',
 	old_lab:			{ name: "", day: "", hour: {} },
 	
 	init: 		function(){
-					_self = this;
+					var _self = this;
 					
 					_self.url = _self.urlCheck();
 					

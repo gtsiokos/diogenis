@@ -4,6 +4,7 @@ from django.contrib import admin
 
 
 admin.site.register(Lesson)
+admin.site.register(Classroom)
 admin.site.register(Lab)
 admin.site.register(Teacher)
 admin.site.register(TeacherToLab)

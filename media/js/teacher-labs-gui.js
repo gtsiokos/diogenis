@@ -85,8 +85,7 @@ $(function(){
 		data = parentDiv.find("h4>span.lab-date>span.hour").metadata();
 		oldLabHour.start = data.start;
 		oldLabHour.end = data.end;
-		
-		
+		/*
 		console.log(newLabName);
 		console.log(newLabDay);
 		console.log(newLabStartHour);
@@ -98,8 +97,7 @@ $(function(){
 		console.log(oldLabEndHour);
 		console.log("--------------");
 		console.log("--------------");
-		
-		
+		*/
 		var i=0,
 			amToSend = [],
 			students = theActive.parents("div.lab").find("table tr:not(.disabled) td>input:checked");

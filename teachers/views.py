@@ -18,7 +18,7 @@ from django.contrib.auth.models import User
 from accounts.models import *
 from labs.models import *
 
-from teachers.helpers import get_hashed_username, humanize_time, get_lab_hour, pdf_exporter
+from teachers.helpers import get_hashed_username, humanize_time, get_lab_hour, set_hour_range, pdf_exporter
 
 def user_is_teacher(user):
 	return user.is_authenticated() and user.get_profile().is_teacher
@@ -53,7 +53,7 @@ def manage_labs(request, username):
 		# Ola ta onomata mathimatwn, ergastiriwn, oi wres twn ergastiriwn
 		# kai oi eggegrammenoi foitites gia to template [teachers/labs.html] 
 		#####################################################################		
-		my_labs = my_labs.filter(lab__hour__gt=1)
+		my_labs = my_labs.filter(lab__start_hour__gt=1)
 		for my_lab in my_labs:
 			hour = get_lab_hour(my_lab.lab)
 			
@@ -62,7 +62,7 @@ def manage_labs(request, username):
 			data = []
 			lab_data = []
 			
-			total_labs = TeacherToLab.objects.filter(lesson=lesson, teacher=q2, lab__hour__gt=1).order_by('lab__start_hour')
+			total_labs = TeacherToLab.objects.filter(lesson=lesson, teacher=q2, lab__start_hour__gt=1).order_by('lab__start_hour')
 			total_labs_count = total_labs.count()
 			the_labs = total_labs.filter(lab=lab)
 			
@@ -192,66 +192,68 @@ def add_new_lab(request, hashed_request):
 		if request.method == "POST" and request.is_ajax():
 
 			message = []
+			new_hour = set_hour_range(1,1)
 			json_data = simplejson.loads(request.raw_post_data)
 			#print json_data;
 			
 			try:
-				action = json_data['newLesson'][0]['action']
-				new_day = json_data['newLesson'][0]['newDay']
-				new_hour = json_data['newLesson'][0]['newHour']
+				action = json_data['action']
+				new_day = json_data['newDay']
+				new_hour['start'] = json_data['newHour']['start']
+				new_hour['end'] = json_data['newHour']['end']
 			except KeyError:
 				msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
-				message.append({ "status": 2, "msg": msg })
-			
-			
-			booked_labs = TeacherToLab.objects.filter(lab__day__contains=new_day).filter(lab__hour=new_hour)
-			booked_labs_names = []
-			for lab in booked_labs:
-				booked_labs_names.append(lab.lab.name)
-			open_labs = Lab.objects.exclude(name__in=booked_labs_names).filter(day=new_day).filter(hour=new_hour).select_related()
+				message.append({ "status":2, "msg":msg })
 			
 			if action == "getClass":
-				if open_labs:
-					lab_names = []
-					for lab in open_labs:
-						lab_names.append({ "name": lab.name })
-					
-					message.append({ "status": 1, "action": action, "classes": lab_names })
+				if new_hour['start'] >= new_hour['end']:
+					msg = u"H ώρα έναρξης του εργαστηρίου είναι μεγαλύτερη της ώρας λήξης"
+					message.append({ "status":2, "action":action, "msg":msg })
 				else:
-					msg = u"Δεν υπάρχουν διαθέσιμες αίθουσες για αυτήν την ώρα και ημέρα"
-					message.append({ "status": 2, "action": action, "msg": msg })
+					unique_labs = []
+					lab_names = []
+					#new_lab = Lab(day=new_day, start_hour=new_hour['start'], end_hour=new_hour['end'])
+					labs = Lab.objects.filter(day__contains=new_day)
+					#available_labs = Lab.get_available_labs(new_lab=new_lab)
+					for lab in labs:
+						if lab.name not in lab_names:
+							lab_names.append(lab.name)
+							unique_labs.append({ "name": lab.name })
+					message.append({ "status":1, "action":action, "classes":unique_labs })
+				
 			elif action == "submitLab":
 				try:
-					new_name = json_data['newLesson'][0]['newName']
-					new_class = json_data['newLesson'][0]['newClass']
-					max_students = json_data['newLesson'][0]['maxStudents']
+					new_name = json_data['newName']
+					new_class = json_data['newClass']
+					max_students = json_data['maxStudents']
 				except KeyError:
 					msg = u"Δεν επιλέξατε αίθουσα εργαστηρίου"
-					message.append({ "status": 2, "action": action, "msg": msg })
+					message.append({ "status":2, "action":action, "msg":msg })
 				
-				available_lab = open_labs.filter(name=new_class)
-				if available_lab:
+				new_lab = Lab(name=new_class, day=new_day, start_hour=new_hour['start'], end_hour=new_hour['end'])
+				no_conflict = Lab.check_conflict(new_lab=new_lab)
+				if no_conflict and new_hour['start'] < new_hour['end']:
 					try:
-						new_lab = Lab.objects.get(name=new_class, day=new_day, hour=new_hour)
-						new_lesson = Lesson.objects.get(name=new_name)
 						q1 = User.objects.get(username=request.user.username)
 						q2 = u'%s %s' % (q1.last_name, q1.first_name)
 						new_teacher = Teacher.objects.get(name=q2)
+						new_lesson = Lesson.objects.get(name=new_name)
 						
-						TeacherToLab.objects.create(lesson=new_lesson, teacher=new_teacher, lab=new_lab, max_students=max_students)
+						new_lab.save()
+						TeacherToLab(lesson=new_lesson, teacher=new_teacher, lab=new_lab, max_students=max_students).save()
 					except:
 						msg = u"Παρουσιάστηκε σφάλμα κατά την αποθήκευση των δεδομένων"
-						message.append({ "status": 2, "action": action, "msg": msg })
+						message.append({ "status":2, "action":action, "msg":msg })
 					
 					msg = u"Η προσθήκη ολοκληρώθηκε"
-					message.append({ "status": 1, "action": action, "msg": msg })
+					message.append({ "status":1, "action":action, "msg":msg })
 				else:
-					msg = u"Σου πήρανε το εργαστήριο μέσα από τα χέρια"
-					message.append({ "status": 2, "action": action, "msg": msg })
+					msg = u"Η αίθουσα δεν είναι διαθέσιμη"
+					message.append({ "status":2, "action":action, "msg":msg })
 			
 			error_msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
 			if not message:
-				message.append({ "status": 2, "action": action, "msg": error_msg })
+				message.append({ "status":2, "action":action, "msg":error_msg })
 			data = simplejson.dumps(message)
 			return HttpResponse(data, mimetype='application/javascript')
 	else:
@@ -259,13 +261,14 @@ def add_new_lab(request, hashed_request):
 
 
 @user_passes_test(user_is_teacher, login_url="/login/")
-def export_pdf(request, hashed_request, class_name, day, hour):
+def export_pdf(request, hashed_request, name, day, start_hour, end_hour):
 	username_hashed = get_hashed_username(request.user.username)
 	
 	if username_hashed == hashed_request:
 		if request.method == "GET":
-
-			labtriplet = [class_name, day, hour]
+			hour = set_hour_range(start_hour, end_hour)
+			
+			labtriplet = [name, day, hour]
 			
 			username = request.user.username
 			username = User.objects.get(username=username)

@@ -26,10 +26,13 @@ def humanize_time(time):
 
 def get_lab_hour(lab):
 	hour = {
-			'legacy':{'raw':lab.hour, 'humanized':humanize_time(lab.hour)},
 			'start':{'raw':lab.start_hour, 'humanized':humanize_time(lab.start_hour)},
 			'end':{'raw':lab.end_hour, 'humanized':humanize_time(lab.end_hour)},
 			}
+	return hour
+
+def set_hour_range(start, end):
+	hour = {'start':start, 'end':end}
 	return hour
 
 def normalize_locale(text):

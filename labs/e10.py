@@ -7,23 +7,14 @@
 from diogenis.labs.models import *
 
 def fill_labs():
+	days = [u'Δευτέρα',u'Τρίτη',u'Τετάρτη',u'Πέμπτη',u'Παρασκευή']
+	classrooms = Classroom.objects.all()
 	
-	imeres = [u'Δευτέρα',u'Τρίτη',u'Τετάρτη',u'Πέμπτη',u'Παρασκευή']
-	onomata_aithouson = [u'ΕΣΕ',u'ΕΡΓ1',u'ΕΡΓ2',u'ΕΡΓ3',u'UNIX',u'NT',u'Τ1',u'Τ2',]
-	
-	ores_enarksis = []
-	for i in range(8,13,2):
-		ores_enarksis.append(i)
-	i=0
-	for i in range(15,20,2):
-		ores_enarksis.append(i)
-
-	i=j=k=''
-	for i in onomata_aithouson:
-		for j in  imeres:
-			for k in ores_enarksis:
-				tmpobj = Lab(name=i, day=j, hour=k, start_hour=1, end_hour=1)
-				tmpobj.save()
+	i=j=''
+	for classroom in classrooms:
+		for day in days:
+			lab = Lab(name=classroom.name, day=day, start_hour=1, end_hour=1)
+			lab.save()
 
 
 def xls_rdr():

@@ -20,8 +20,8 @@ def get_hashed_username(username):
 	return uname_hashed.hexdigest()
 
 def humanize_time(time):
-	t = ("%d μ.μ." % (time-12) if time >= 13 else "%d π.μ." % time)
-	if time == 12: t = "%d μ.μ." % time
+	t = (u"%d μ.μ." % (time-12) if time >= 13 else u"%d π.μ." % time)
+	if time == 12: t = u"%d μ.μ." % time
 	return t
 
 def get_lab_hour(lab):
@@ -67,15 +67,15 @@ def pdf_exporter(labtriplet,response):
 	localEdited = ''
 	pdf = SimpleDocTemplate(response, pagesize = letter)
 	style = getSampleStyleSheet()
-	color = 'red'
+	color = 'black'
 	story = []
 	studinfo = ''
-	lab = Lab.objects.get(name = labtriplet[0], day = labtriplet[1], hour = labtriplet[2])
+	lab = Lab.objects.get(name = labtriplet[0], day = labtriplet[1], start_hour = labtriplet[2]['start'], end_hour = labtriplet[2]['end'])
 	labInfo = TeacherToLab.objects.get(lab = lab)
 	studsub = StudentSubscription.objects.filter(teacher_to_lab = labInfo, in_transit = False).order_by('student').select_related()
-	title = u'%s - <font color=%s>[ %s ]</font>' % (labInfo.lesson.name, color, labInfo.teacher.name)
-	localEdited = normalize_locale(title)
+	localEdited = u'<font color=%s>%s [%s - %s]</font>' % (color, normalize_locale(labInfo.lesson.name), humanize_time(labInfo.lab.start_hour), humanize_time(labInfo.lab.end_hour))
 	story.append(Paragraph(localEdited, style["Heading1"]))
+	story.append(Paragraph(normalize_locale(labInfo.teacher.name), style["Heading2"])) 
 	localEdited = normalize_locale(labInfo.lab.name)
 #	classNum = classNum + 1
 	tmp = str('ΕΡΓΑΣΤΗΡΙΟ:')
@@ -85,7 +85,7 @@ def pdf_exporter(labtriplet,response):
 	total_subs=len(studsub)
 	if total_subs == 0:
 		story.append(Spacer(0, inch * .3))
-		msg = "ΔΕΝ ΕΧΟΥΝ ΓΙΝΕΙ ΕΓΓΡΑΦΕΣ ΣΕ ΑΥΤΟ ΤΟ ΕΡΓΑΣΤΗΡΙΟ"
+		msg = u"ΔΕΝ ΕΧΟΥΝ ΓΙΝΕΙ ΕΓΓΡΑΦΕΣ ΣΕ ΑΥΤΟ ΤΟ ΕΡΓΑΣΤΗΡΙΟ"
 		story.append(Paragraph(msg, style["Normal"]))
 		story.append(Spacer(0, inch * .3))
 	else:

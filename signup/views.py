@@ -88,6 +88,9 @@ def checkStudentCredentials(username, password):
 			year = str(soup2.findAll('span','tablecell')[0].contents[0].split('-')[0])
 		credentials['introduction_year'] = year + season
 		soup1 = BeautifulSoup(str(soup_declaration.findAll('table')[14]))
+		exam_msg = str(soup1.td.contents[0])
+		if exam_msg == 'ΝΑ ΜΗΝ ΞΕΧΑΣΩ ΝΑ ΚΑΝΩ ΑΠΟΣΤΟΛΗ ΤΗ ΔΗΛΩΣΗ ΣΤΗ ΓΡΑΜΜΑΤΕΙΑ ΚΑΙ ΝΑ ΕΠΙΒΕΒΑΙΩΣΩ ΤΗΝ ΕΠΙΤΥΧΗ ΑΠΟΣΤΟΛΗ ΤΗΣ !!!':
+			soup1 = BeautifulSoup(str(soup_declaration.findAll('table')[16]))
 		declaration = []
 		k = 8
 		tempspan = soup1.findAll('span', 'underline')

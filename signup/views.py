@@ -165,7 +165,10 @@ def signup(request):
 						except Exception, e:
 							msg = "Δεν έγινε binding με τον LDAP"
 							raise
-						check_user = l.search_s(settings.SEARCH_DN, ldap.SCOPE_SUBTREE, 'uid=%s' % (credentials['username']))
+						try:
+							check_user = l.search_s(settings.SEARCH_DN, ldap.SCOPE_SUBTREE, 'uid=%s' % (credentials['username']))
+						except:
+							check_user = ""
 						if check_user:
 							msg = "Ο χρήστης υπάρχει ήδη."
 							raise

@@ -7,7 +7,7 @@
 from django.db import models
 from django import forms
 
-from accounts.models import *
+from diogenis.accounts.models import *
 
 class UploadPdf(forms.Form):
     file  = forms.FileField()

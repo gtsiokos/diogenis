@@ -1,10 +1,11 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #coding: UTF-8
 #most workable and usefull Ver:2
 # -*- coding: utf8 -*-
 
 import hashlib
-from labs.models import *
+from diogenis.labs.models import *
 try:
 	from reportlab.lib.pagesizes import letter
 	from reportlab.lib.styles import getSampleStyleSheet

@@ -15,10 +15,10 @@ from django.contrib.auth.decorators import user_passes_test
 from django.utils import simplejson
 
 from django.contrib.auth.models import User
-from accounts.models import *
-from labs.models import *
+from diogenis.accounts.models import *
+from diogenis.labs.models import *
 
-from teachers.helpers import get_hashed_username, humanize_time, get_lab_hour, set_hour_range, pdf_exporter
+from diogenis.teachers.helpers import get_hashed_username, humanize_time, get_lab_hour, set_hour_range, pdf_exporter
 
 def user_is_teacher(user):
 	return user.is_authenticated() and user.get_profile().is_teacher

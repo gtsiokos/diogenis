@@ -9,13 +9,13 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import user_passes_test
 
-import settings
-import e10
+from django.conf import settings
+from diogenis.labs import e10
 
 from django.contrib.auth.models import User
-from accounts.models import *
-from labs.models import *
-from labs.helpers import handle_uploaded_pdf
+from diogenis.accounts.models import *
+from diogenis.labs.models import *
+from diogenis.labs.helpers import handle_uploaded_pdf
 
 def user_is_superuser(user):
 	return user.is_superuser

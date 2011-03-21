@@ -22,7 +22,7 @@ import os
 import httplib
 import StringIO
 import urllib
-import settings
+from django.conf import settings
 
 
 try:

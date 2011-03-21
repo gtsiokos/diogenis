@@ -33,15 +33,15 @@
 	-webkit-box-shadow: 0 -5px 35px #474747; /* Saf3.0+, Chrome */
 	box-shadow: 0 -5px 35px #474747; /* Opera 10.5, IE 9.0 */
 }
-#osx-container>a {color:#141414; font: normal 15px Verdana; border-bottom: 1px solid #141414; }
-#osx-container #osx-modal-title {color:#000; background-color:#ddd; border-bottom:1px solid #ccc; font-weight:bold; padding:6px 8px; text-shadow:0 1px 0 #f4f4f4;}
-#osx-container .close {display:none; position:absolute; right:0; top:0;}
-#osx-container .close a {display:block; color:#777; font-weight:bold; padding:6px 12px 0; text-decoration:none; text-shadow:0 1px 0 #f4f4f4;}
-#osx-container .close a:hover {color:#000;}
-#osx-container #osx-modal-data {font-size:12px; padding:18px 18px;}
-#osx-container h2 {margin:10px 0 6px;}
-#osx-container p {margin: 0 0 10px 10px;}
-#osx-container span {color:#555;}
+#osx-container>a 				{color:#141414; font: normal 15px Verdana; border-bottom: 1px solid #141414; }
+#osx-container #osx-modal-title {color:#777; background-color:#ddd; border-bottom:1px solid #ccc; font-weight:bold; padding:6px 8px 6px 12px; text-shadow:0 1px 0 #f4f4f4;}
+#osx-container .close 			{display:none; position:absolute; right:0; top:0;}
+#osx-container .close a 		{display:block; color:#777; font-weight:bold; padding:6px 12px 0; text-decoration:none; text-shadow:0 1px 0 #f4f4f4;}
+#osx-container .close a:hover 	{color:#000;}
+#osx-container #osx-modal-data 	{font-size:12px; padding:18px 18px;}
+#osx-container h2 				{margin:10px 0 6px;}
+#osx-container p 				{margin: 0 0 10px 10px;}
+#osx-container span 			{color:#555;}
 
 
 /********************************^

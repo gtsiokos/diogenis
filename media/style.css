@@ -205,7 +205,7 @@ div.not-logged {
 
 }	
 div.logged {
-	width: 680px; min-height: 700px;
+	width: 680px; min-height: 450px;
 	background: #fafafa;
 	border: solid 1px #E6DB55; border-left: 0;
 	
@@ -331,25 +331,34 @@ div.logged {
 
 	.button { display: inline-block; font: normal 13px/1 'Droid Sans Bold', Verdana; text-align: center; }
 
-		.important {
+		.button.important {
 			padding: 11px 9px 12px 10px;
-			background: #5690C7;
 			color: #FCFCFC;
 			word-spacing: 0.2em; /*letter-spacing: 0.04em;*/
+			
+			-moz-border-radius: 	5px;
+			-webkit-border-radius: 	5px;
+			border-radius: 			5px;
+			
+			box-shadow: 		0 1px 1px #fff, 0 0 3px #fff inset;
+			-moz-box-shadow: 	0 1px 1px #fff, 0 0 3px #fff inset;
+			-webkit-box-shadow: 0 1px 1px #fff, 0 0 3px #fff inset;
+		}
+		
+		:active.button.important {
+			position: relative; top: 1px;
+			border: solid 1px #fff;
+			color: #f1f1f1;
+		}
+		
+		/********************************^
+		//Blue Button
+		//^*****************************/
+		.button.regular {
+			background: #5690C7;
 			border: solid 1px #3e7fbd;
 			text-shadow: #214363 0 1px 1px;
 			
-			-moz-border-radius: 5px;
-			-webkit-border-radius: 5px;
-			border-radius: 5px;
-			
-			box-shadow: 0 1px 2px #fff, 0px 0px 5px #adadad,
-					0 0 3px #fff inset;
-			-moz-box-shadow: 0 1px 2px #fff, 0px 0px 5px #adadad,
-						0 0 3px #fff inset;
-			-webkit-box-shadow: 0 1px 2px #fff, 0px 0px 5px #adadad,
-						0 0 3px #fff inset;
-						
 			background: -webkit-gradient(
 				linear, left top, left bottom,
 				color-stop(0.2, #70a1cf),
@@ -362,17 +371,8 @@ div.logged {
 				#5690c7 100%
 			);
 		}
-
-		:hover.important, :focus.important {
-			box-shadow: 0 1px 2px #fff, 0px 0px 5px #adadad,
-						0 0 3px #fff inset;
-						
-			-moz-box-shadow: 0 1px 2px #fff, 0px 0px 5px #adadad,
-						0 0 3px #fff inset;
-						
-			-webkit-box-shadow: 0 1px 2px #fff, 0px 0px 5px #adadad,
-						0 0 3px #fff inset;
-						
+		:hover.button.regular, :focus.button.regular {
+			
 			background: -webkit-gradient(
 				linear, left top, left bottom,
 				color-stop(0.2, #89b2d8),
@@ -386,20 +386,33 @@ div.logged {
 			);
 
 		}
-
-		:active.important {
-			position: relative; top: 1px;
-			border: solid 1px #fff;
-			color: #f1f1f1;
-			background: #5690c7;
+		:active.button.regular {
 			text-shadow: #214363 0 0 2px;
 
-			box-shadow: 0px -1px 5px #adadad,
-						0 0 10px #18324a inset;
-						
-			-moz-box-shadow: 0px -1px 5px #adadad,
-						0 0 10px #18324a inset;
-								
-			-webkit-box-shadow: 0px -1px 5px #adadad,
-						0 0 10px #18324a inset;
+			-moz-box-shadow: 	0 1px 0 #c3c3c3, 0 0 10px #18324a inset;
+			-webkit-box-shadow: 0 1px 0 #c3c3c3, 0 0 10px #18324a inset;
+			box-shadow: 		0 1px 0 #c3c3c3, 0 0 10px #18324a inset;
+		
 		}
+		
+		/********************************^
+		//Red Button
+		//^*****************************/
+		.button.warning {
+			background: #DC0A09;
+			border: solid 1px #AF080B;
+			text-shadow: #141414 0 1px 1px;
+		
+		}
+		:hover.button.warning, :focus.button.warning {
+			background: #DC0A09;
+		}
+		:active.button.warning {
+			text-shadow: #141414 0 0 2px;
+
+			-moz-box-shadow: 	0 1px 0 #c3c3c3, 0 0 10px #141414 inset;
+			-webkit-box-shadow: 0 1px 0 #c3c3c3, 0 0 10px #141414 inset;
+			box-shadow: 		0 1px 0 #c3c3c3, 0 0 10px #141414 inset;
+		}
+		
+		

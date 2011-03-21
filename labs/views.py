@@ -38,14 +38,7 @@ def control_panel(request):
 					for chunk in xls_file.chunks():
 						destination.write(chunk)
 					destination.close()
-			
-					Teacher.objects.all().delete()
-					Lesson.objects.all().delete()
-					TeacherToLab.objects.all().delete()
-					Lab.objects.all().delete()
-					StudentSubscription.objects.all().delete()
-					StudentToLesson.objects.all().delete()
-
+					
 					k=''
 					kk=''
 					temp=[]
@@ -59,7 +52,6 @@ def control_panel(request):
 						empty_lab.save()
 					except:
 						msg= u'Παρουσιάστηκε Σφάλμα'
-						#print msg
 						message.append({ "status": 2, "msg": msg })
 
 					for k in temp:
@@ -95,11 +87,12 @@ def control_panel(request):
 					message.append({ "status": 2, "msg": msg })
 			else:
 				msg= u'Το αρχείο το οποίο ανεβάσατε δεν είναι τύπου excel (.xls κατάληξη)'
-				#print msg
 				message.append({ "status": 2, "msg": msg })
-		
+		else:
+			msg= u'Πρέπει να ανεβάσετε το αρχείο excel της γραμματείας του τμήματος'
+			message.append({ "status": 2, "msg": msg })
+			
 		ok_msg = u"Η μεταφορά του αρχείου Excel ολοκληρώθηκε"
-		
 		if not message:
 			message.append({"status": 1, "msg": ok_msg})
 	else:
@@ -114,3 +107,20 @@ def control_panel(request):
 	return render_to_response('system/cpanel.html', context, context_instance = RequestContext(request))
 
 
+@user_passes_test(user_is_superuser, login_url="/login/")
+def clean_database(request):
+	message = []
+	'''
+	Teacher.objects.all().delete()
+	Lesson.objects.all().delete()
+	TeacherToLab.objects.all().delete()
+	Lab.objects.all().delete()
+	StudentSubscription.objects.all().delete()
+	StudentToLesson.objects.all().delete()
+	'''
+	form = UploadPdf()
+	msg = u'Η εκκαθάριση της βάσης δεδομένων ολοκληρώθηκε'
+	message.append({"status": 1, "msg": msg})
+	
+	context = {'form':form, 'message':message[0]}
+	return render_to_response('system/cpanel.html', context, context_instance = RequestContext(request))

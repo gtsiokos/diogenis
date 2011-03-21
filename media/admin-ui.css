@@ -1,0 +1,21 @@
+/*
+
+	#5690C7
+	#FCFCFC
+	#141414
+	#949494
+	#FFF1BF
+
+*/
+
+#admin-options {
+	width: 640px; float: left;
+	margin: 16px 0 25px 19px;
+}
+
+#admin-options div:first-child { border-color: #dedede #ddd #c6c6c6 #ddd; }
+#admin-options div {
+	padding: 22px 16px 27px 16px;
+	background: #f0f0f0;
+	border: solid 1px #ccc; border-color: transparent #ddd #bbb #ddd;
+}

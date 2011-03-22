@@ -34,7 +34,9 @@ a { text-decoration: none; }
 #container1 {
 	height: 47px; position: fixed; top: 0; left: 0; z-index: 5; background: #141414 url('./img/header_bg.png') top left repeat-x;
 	
-	-moz-box-shadow: 0 1px 3px #333, 0 0 10px #949494; -webkit-box-shadow: 0 1px 3px #333, 0 0 10px #949494; box-shadow: 0 1px 3px #333, 0 0 10px #949494;
+	-moz-box-shadow: 	0 1px 3px #333, 0 0 10px #949494;
+	-webkit-box-shadow: 0 1px 3px #333, 0 0 10px #949494;
+	box-shadow: 		0 1px 3px #333, 0 0 10px #949494;
 }
 #container2 { margin-top: 62px; }
 
@@ -72,9 +74,9 @@ a { text-decoration: none; }
 			width: 220px; position: absolute; top: 43px; right: 0; float: left; display: block;
 			background: #474747; background: rgba(71, 71, 71, 0.7);
 			
-			-moz-border-radius: 0 0 4px 4px;
-			-webkit-border-radius: 0 0 4px 4px;
-			border-radius: 0 0 4px 4px;
+			-moz-border-radius: 	0 0 4px 4px;
+			-webkit-border-radius: 	0 0 4px 4px;
+			border-radius: 			0 0 4px 4px;
 		}
 
 			#login div.panel form, #login div.panel ul {
@@ -340,9 +342,9 @@ div.logged {
 			-webkit-border-radius: 	5px;
 			border-radius: 			5px;
 			
-			box-shadow: 		0 1px 1px #fff, 0 0 3px #fff inset;
 			-moz-box-shadow: 	0 1px 1px #fff, 0 0 3px #fff inset;
 			-webkit-box-shadow: 0 1px 1px #fff, 0 0 3px #fff inset;
+			box-shadow: 		0 1px 1px #fff, 0 0 3px #fff inset;
 		}
 		
 		:active.button.important {

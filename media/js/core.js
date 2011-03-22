@@ -61,9 +61,8 @@ $(function(){
 	};
 	
 	oPanel.find("div.panel").each(function(){
-		
-		var options = $(this);
-		var loginDiv = $(this).parent();
+		var options = $(this),
+			loginDiv = options.parent();
 		
 		var showPanel = function(){
 			hidePanel();
@@ -78,7 +77,9 @@ $(function(){
 			} else {
 				showPanel();
 				var firstInput = options.find("input")[0];
-				if (firstInput) { firstInput.focus(); }
+				try{
+					firstInput.focus();
+				} catch(err){ }
 			}
 			if(e){ e.stopPropagation(); }
 			if(e){ e.preventDefault(); }

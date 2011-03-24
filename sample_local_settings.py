@@ -42,7 +42,7 @@ PROJECT_ROOT = os.path.dirname(__file__)
 # and create an admin_media symlink pointing to django's media
 # (admin_media is used for django's admin panel static content)
 MEDIA_ROOT = PROJECT_ROOT + '/media/'
-MEDIA_URL = 'http://127.0.0.1:8080/media/'
+MEDIA_URL = '/media/'
 ADMIN_MEDIA_PREFIX = '/admin_media/'
 
 

@@ -4,14 +4,20 @@
 
 <div id="content" class="logged">
 	{{ block.super }}
-	<dl class="labs">
-	{% for labt in results %}
-		<dt> {{ labt.lesson_name }} </dt>
-		<dd>
-			<span class="lab-name">{{ labt.lab_name }}</span><span class="lab-date">{{ labt.lab_day }} {{ labt.lab_hour.start.humanized }} - {{ labt.lab_hour.end.humanized }}</span><span class="teacher-name">{{ labt.teacher }}</span>
-		</dd>
-	{% endfor %}
-	</dl>
+	{% if results %}
+		<dl class="labs">
+		{% for labt in results %}
+			<dt> {{ labt.lesson_name }} </dt>
+			<dd>
+				<span class="lab-name">{{ labt.lab_name }}</span><span class="lab-date">{{ labt.lab_day }} {{ labt.lab_hour.start.humanized }} - {{ labt.lab_hour.end.humanized }}</span><span class="teacher-name">{{ labt.teacher }}</span>
+			</dd>
+		{% endfor %}
+		</dl>
+	{% else %}
+	<div id="ui-messages">
+		<p class="warning">Δεν έχετε προσθέσει τα εργαστήρια σας στον Διογένη</p>
+	</div>
+	{% endif %}
 </div>
 
 {% endblock content %}

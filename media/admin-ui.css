@@ -15,7 +15,13 @@
 
 #admin-options div:first-child { border-color: #dedede #ddd #c6c6c6 #ddd; }
 #admin-options div {
-	padding: 22px 16px 27px 16px;
+	padding: 16px 16px 27px 16px;
 	background: #f0f0f0;
 	border: solid 1px #ccc; border-color: transparent #ddd #bbb #ddd;
+}
+
+#admin-options div>h3 {
+	font: normal 21px/1 'Droid Sans', Verdana;
+	color: #949494;
+	text-shadow: 1px 1px 1px #fff;
 }

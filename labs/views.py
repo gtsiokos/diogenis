@@ -15,7 +15,7 @@ from diogenis.labs import e10
 from django.contrib.auth.models import User
 from diogenis.accounts.models import *
 from diogenis.labs.models import *
-from diogenis.labs.helpers import handle_uploaded_pdf
+#from diogenis.labs.helpers import handle_uploaded_pdf
 
 def user_is_superuser(user):
 	return user.is_superuser
@@ -38,6 +38,13 @@ def control_panel(request):
 					for chunk in xls_file.chunks():
 						destination.write(chunk)
 					destination.close()
+					
+					Teacher.objects.all().delete()
+					Lesson.objects.all().delete()
+					TeacherToLab.objects.all().delete()
+					Lab.objects.all().delete()
+					StudentSubscription.objects.all().delete()
+					StudentToLesson.objects.all().delete()
 					
 					k=''
 					kk=''
@@ -80,10 +87,10 @@ def control_panel(request):
 					try:
 						e10.fill_labs()
 					except:
-						msg= u'Παρουσιάστηκε Σφάλμα'
+						msg= u'Παρουσιάστηκε σφάλμα στην αποθήκευση των δεδομένων'
 						message.append({ "status": 2, "msg": msg })
 				except:
-					msg= u'Παρουσιάστηκε Σφάλμα'
+					msg= u'Παρουσιάστηκε σφάλμα στην ανάγνωση του excel'
 					message.append({ "status": 2, "msg": msg })
 			else:
 				msg= u'Το αρχείο το οποίο ανεβάσατε δεν είναι τύπου excel (.xls κατάληξη)'

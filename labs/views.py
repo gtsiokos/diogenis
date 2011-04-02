@@ -20,7 +20,7 @@ from diogenis.labs.models import *
 def user_is_superuser(user):
 	return user.is_superuser
 
-xls_final_pathname = '%s/ANATHESEIS.xls' % (settings.MEDIA_ROOT)
+xls_final_pathname = settings.MEDIA_ROOT + 'ANATHESEIS.xls'
 # 	ALTERNATIVE SUBROUTINE:
 #a = os.path.abspath('')
 #a = a + '/media'

@@ -44,7 +44,7 @@ PROJECT_ROOT = os.path.dirname(__file__)
 MEDIA_ROOT = PROJECT_ROOT + '/media/'
 MEDIA_URL = '/media/'
 ADMIN_MEDIA_PREFIX = '/admin_media/'
-
+XLS_ROOT = MEDIA_ROOT+'xls_files/'
 
 # LDAP
 BIND_USER = 'uid=root,dc=teilar,dc=gr'

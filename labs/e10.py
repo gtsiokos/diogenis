@@ -29,7 +29,7 @@ def xls_rdr():
 	from django.utils.encoding import smart_str, smart_unicode
 	from django.conf import settings
 	
-	xls_final_pathname = '%s/ANATHESEIS.xls' % (settings.MEDIA_ROOT)
+	xls_final_pathname = settings.MEDIA_ROOT + 'ANATHESEIS.xls'
 	teachers=[]
 	labcells=[]
 	lessons=[]

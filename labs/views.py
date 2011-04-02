@@ -57,9 +57,10 @@ def control_panel(request):
 						temp = e10.xls_rdr()
 						empty_lab = Lab(name='', day='', start_hour=1, end_hour=1)
 						empty_lab.save()
-					except:
-						msg= u'Παρουσιάστηκε Σφάλμα'
-						message.append({ "status": 2, "msg": msg })
+					except Exception as e:
+						raise e
+						#msg= u'Παρουσιάστηκε Σφάλμα'
+						#message.append({ "status": 2, "msg": msg })
 
 					for k in temp:
 						if k.startswith('-'):

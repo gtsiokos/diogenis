@@ -13,7 +13,7 @@ class UploadPdf(forms.Form):
     file  = forms.FileField()
 
 class Lesson(models.Model):
-	name = models.CharField(max_length=40)
+	name = models.CharField(max_length=100)
 	
 	class Meta:
 		ordering = ['name']

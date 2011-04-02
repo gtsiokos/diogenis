@@ -58,9 +58,9 @@ def control_panel(request):
 						empty_lab = Lab(name='', day='', start_hour=1, end_hour=1)
 						empty_lab.save()
 					except Exception as e:
-						raise e
-						#msg= u'Παρουσιάστηκε Σφάλμα'
-						#message.append({ "status": 2, "msg": msg })
+						#raise e
+						msg= u'Παρουσιάστηκε σφάλμα στην ανάγνωση του excel'
+						message.append({ "status": 2, "msg": msg })
 
 					for k in temp:
 						if k.startswith('-'):
@@ -88,13 +88,13 @@ def control_panel(request):
 					try:
 						e10.fill_labs()
 					except Exception as e:
-						raise e
-						#msg= u'Παρουσιάστηκε σφάλμα στην αποθήκευση των δεδομένων'
-						#message.append({ "status": 2, "msg": msg })
+						#raise e
+						msg= u'Παρουσιάστηκε σφάλμα στην δημιουργία της βάσης'
+						message.append({ "status": 2, "msg": msg })
 				except Exception as e:
-					raise e
-					#msg= u'Παρουσιάστηκε σφάλμα στην ανάγνωση του excel'
-					#message.append({ "status": 2, "msg": msg })
+					#raise e
+					msg= u'Παρουσιάστηκε σφάλμα στην αποθήκευση των δεδομένων'
+					message.append({ "status": 2, "msg": msg })
 			else:
 				msg= u'Το αρχείο το οποίο ανεβάσατε δεν είναι τύπου excel (.xls κατάληξη)'
 				message.append({ "status": 2, "msg": msg })

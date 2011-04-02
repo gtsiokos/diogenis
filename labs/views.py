@@ -87,12 +87,14 @@ def control_panel(request):
 							
 					try:
 						e10.fill_labs()
-					except:
-						msg= u'Παρουσιάστηκε σφάλμα στην αποθήκευση των δεδομένων'
-						message.append({ "status": 2, "msg": msg })
-				except:
-					msg= u'Παρουσιάστηκε σφάλμα στην ανάγνωση του excel'
-					message.append({ "status": 2, "msg": msg })
+					except Exception as e:
+						raise e
+						#msg= u'Παρουσιάστηκε σφάλμα στην αποθήκευση των δεδομένων'
+						#message.append({ "status": 2, "msg": msg })
+				except Exception as e:
+					raise e
+					#msg= u'Παρουσιάστηκε σφάλμα στην ανάγνωση του excel'
+					#message.append({ "status": 2, "msg": msg })
 			else:
 				msg= u'Το αρχείο το οποίο ανεβάσατε δεν είναι τύπου excel (.xls κατάληξη)'
 				message.append({ "status": 2, "msg": msg })

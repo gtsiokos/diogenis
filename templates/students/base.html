@@ -9,7 +9,12 @@
 <div id="sidebar">
 	<a id="add-lab" class="button important regular" href="#">Προσθήκη Εργαστηρίου</a>
 	<ul id="navigation">
-		<li><a class="first last active black_board" href="/students/{{ user.username }}/">Δηλωμένα Εργαστήρια</a></li>
+		<li>
+			<a class="first last active" href="/students/{{ user.username }}/">
+				<img src="/media/img/black_board_icon.png" />
+				Δηλωμένα Εργαστήρια
+			</a>
+		</li>
 	</ul>
 </div>
 {% endblock %}

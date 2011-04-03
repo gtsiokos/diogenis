@@ -10,8 +10,18 @@
 <div id="sidebar">
 	<a id="add-lab" class="button important regular" href="#">Προσθήκη Εργαστηρίου</a>
 	<ul id="navigation">
-		<li><a class="first {% block manage-labs-active %}{% endblock %} black_board" href="/teachers/{{ user.username }}/">Διαχείριση Εργαστηρίων</a></li>
-		<li><a class="last {% block pending-students-active %}{% endblock %} drawer" href="/teachers/{{ user.username }}/pending-students/">Αίθουσα Αναμονής</a></li>
+		<li>
+			<a class="first {% block manage-labs-active %}{% endblock %}" href="/teachers/{{ user.username }}/">
+				<img src="/media/img/black_board_icon.png" />
+				Διαχείριση Εργαστηρίων
+			</a>
+		</li>
+		<li>
+			<a class="last {% block pending-students-active %}{% endblock %}" href="/teachers/{{ user.username }}/pending-students/">
+				<img src="/media/img/drawer_icon.png" />
+				Αίθουσα Αναμονής
+			</a>
+		</li>
 	</ul>
 </div>
 {% endblock %}

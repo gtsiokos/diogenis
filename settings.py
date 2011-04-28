@@ -62,25 +62,12 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'diogenis.accounts', 'diogenis.labs',
     'diogenis.teachers', 'diogenis.students',
-	'diogenis.ldap_groups',# 'diogenis.LDAPGroup', 'diogenis.LDAPGroupAdmin',
 	'south',
 )
 
-try:
-	import ldap
-	AUTHENTICATION_BACKENDS = (
-		'diogenis.ldap_groups.accounts.backends.ActiveDirectoryGroupMembershipSSLBackend',
-		'django.contrib.auth.backends.ModelBackend',
-	)
-except:
-	pass	
+AUTHENTICATION_BACKENDS = (
+	'django.contrib.auth.backends.ModelBackend',
+)
 
 # Needed for the decorator
 LOGIN_URL = '/'
-
-# LDAP
-LDAP_SERVER = 'localhost'
-LDAP_PORT = 389
-LDAP_URL = 'ldap://%s:%s' % (LDAP_SERVER, LDAP_PORT)
-SEARCH_DN = 'ou=teilarStudents,dc=teilar,dc=gr'
-SEARCH_FIELDS = ['*']

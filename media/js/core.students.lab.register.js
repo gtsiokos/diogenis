@@ -172,7 +172,7 @@ X$('StudentRegister',
 			request = { action:"getTeachers", lesson:lessonToSend };
 		}
 		
-		var ajaxUrl = '/students/'+X$('Helpers').getHash()+'/add-new-lab/';
+		var ajaxUrl = '/students/add-new-lab/';
 		$.ajax({
 			url: ajaxUrl,
 			type: 'POST',

@@ -224,7 +224,7 @@ X$('TeacherRegister',
 		if (classToSend) 	{ request = { action: "submitLab", newName: lessonToSend, newDay: dayToSend, newHour: hourToSend, newClass: classToSend, maxStudents: maxToSend }; }
 		else 				{ request = { action: "getClass", newDay: dayToSend, newHour: hourToSend }; }
 		
-		var ajaxUrl = '/teachers/'+X$('Helpers').getHash()+'/add-new-lab/';
+		var ajaxUrl = '/teachers/add-new-lab/';
 		$.ajax({
 			url: ajaxUrl,
 			type: 'POST',

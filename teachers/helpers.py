@@ -4,8 +4,9 @@
 #most workable and usefull Ver:2
 # -*- coding: utf8 -*-
 
-import hashlib
 from diogenis.labs.models import *
+
+from diogenis.common.helpers import humanize_time
 try:
 	from reportlab.lib.pagesizes import letter
 	from reportlab.lib.styles import getSampleStyleSheet
@@ -16,25 +17,6 @@ try:
 except:
 	pass
 
-def get_hashed_username(username):
-	uname_hashed = hashlib.sha256(username)
-	return uname_hashed.hexdigest()
-
-def humanize_time(time):
-	t = (u"%d μ.μ." % (time-12) if time >= 13 else u"%d π.μ." % time)
-	if time == 12: t = u"%d μ.μ." % time
-	return t
-
-def get_lab_hour(lab):
-	hour = {
-			'start':{'raw':lab.start_hour, 'humanized':humanize_time(lab.start_hour)},
-			'end':{'raw':lab.end_hour, 'humanized':humanize_time(lab.end_hour)},
-			}
-	return hour
-
-def set_hour_range(start, end):
-	hour = {'start':start, 'end':end}
-	return hour
 
 def normalize_locale(text):
 	normalizedText = ''

@@ -4,9 +4,9 @@
 import os.path
 
 try:
-	from diogenis.local_settings import *
+    from diogenis.local_settings import *
 except:
-	pass
+    pass
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -34,21 +34,33 @@ USE_I18N = True
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
-    'django.template.loaders.app_directories.load_template_source',
-#     'django.template.loaders.eggs.load_template_source',
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+#     'django.template.loaders.eggs.Loader',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+#    'django.core.context_processors.static',
+    'django.contrib.messages.context_processors.messages',
+    'diogenis.common.context_processors.get_csrf_token_value',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
 )
 
 ROOT_URLCONF = 'diogenis.urls'
 
 TEMPLATE_DIRS = (
-	os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),
+    os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -62,18 +74,18 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'diogenis.accounts', 'diogenis.labs',
     'diogenis.teachers', 'diogenis.students',
-	'diogenis.ldap_groups',# 'diogenis.LDAPGroup', 'diogenis.LDAPGroupAdmin',
-	'south',
+    'diogenis.ldap_groups',# 'diogenis.LDAPGroup', 'diogenis.LDAPGroupAdmin',
+    'south',
 )
 
 try:
-	import ldap
-	AUTHENTICATION_BACKENDS = (
-		'diogenis.ldap_groups.accounts.backends.ActiveDirectoryGroupMembershipSSLBackend',
-		'django.contrib.auth.backends.ModelBackend',
-	)
+    import ldap
+    AUTHENTICATION_BACKENDS = (
+        'diogenis.ldap_groups.accounts.backends.ActiveDirectoryGroupMembershipSSLBackend',
+        'django.contrib.auth.backends.ModelBackend',
+    )
 except:
-	pass	
+    pass	
 
 # Needed for the decorator
 LOGIN_URL = '/'

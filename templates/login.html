@@ -10,6 +10,7 @@
 		<input type="text" name="password" id="password">
 		<label class="remember" for="remember">Μείνε Συνδεμένος</label>
 		<input type="checkbox" name="remember" id="remember" class="remember" value="true">
+		{% csrf_token %}
 		<input class="button important regular" type="submit" value="Είσοδος">
 	</form>
 </div>

@@ -60,8 +60,7 @@ X$('StudentTransfer',
 					//Ajax-Transfer Feature
 					//********************************	
 	
-					var Helpers			= X$('Helpers'),
-						ajaxTrans 		= transfer.find("ul.labs-list li"),
+					var ajaxTrans 		= transfer.find("ul.labs-list li"),
 						theLabs 		= $("div.lab", "#content"),
 						msg 			= $("#ui-messages p", "#content");
 	
@@ -75,7 +74,7 @@ X$('StudentTransfer',
 		
 						_self.new_lab['name'] = $(this).find("span.name").text();
 						var day = $(this).find("span.day").text();
-						_self.new_lab['day'] = Helpers.explodeFullname(day);
+						_self.new_lab['day'] = X$('Helpers').explodeFullname(day);
 		
 						data = $(this).find("span.hour").metadata();
 						_self.new_lab['hour'].start = data.start;
@@ -107,7 +106,7 @@ X$('StudentTransfer',
 											stud: _self.am_to_transfer
 											};
 			
-							var ajaxUrl = '/teachers/'+Helpers.getHash()+'/submit-student-to-lab/';
+							var ajaxUrl = '/teachers/submit-student-to-lab/';
 							$.ajax({
 								url: ajaxUrl,
 								type: 'POST',

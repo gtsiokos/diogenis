@@ -43,10 +43,14 @@ a { text-decoration: none; }
 #header { height: 43px; }
 
 	#header h1 {
-		float: left;		
-		font: normal 35px/1 'Droid Sans', Verdana;
+		float: left; width: 500px; height: 38px;
+		padding: 5px 0 0 0;
+		background: url('./img/diogenis_logo.png') -2px 2px no-repeat;
+		font: normal 30px/1 'Droid Sans Bold', Verdana;
 		letter-spacing: -0.03em; word-spacing: 0.05em;
-		color: #949494;
+		color: #e0e0e0; text-shadow: 1px 1px 1px #5b5b5b;
+		text-indent: -3333px;
+		
 	}
 
 	#header #login {
@@ -185,7 +189,7 @@ a { text-decoration: none; }
 			color: #326596; background: #afcbe5 url('./img/sidebar_options.png') 0 0 repeat-x;
 			border: solid 1px #5690C7;
 			text-shadow: 1px 1px 0 #fcfcfc;
-			-moz-box-shadow: 0 0 5px #fcfcfc inset; -webkit-box-shadow: 0 0 5px #fcfcfc inset; box-shadow: 0 0 5px #fcfcfc inset;
+			-moz-box-shadow: 0 0 3px #fcfcfc inset; -webkit-box-shadow: 0 0 3px #fcfcfc inset; box-shadow: 0 0 3px #fcfcfc inset;
 		}
 		
 		#navigation a>img { position: absolute; top: 5px; left: 8px; }

@@ -25,6 +25,7 @@
 			<h3>Excel Νέου Τμήματος</h3>
 			<form action="/system/admin/" enctype="multipart/form-data" method="POST">
 				{{ form.as_p }}
+				{% csrf_token %}
 				<input type="submit" value="Upload" />
 			</form>
 		</div>

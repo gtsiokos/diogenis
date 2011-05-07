@@ -100,11 +100,11 @@ def checkStudentCredentials(username, password):
 	except:
 		return 0
 
-def addDataToAuthDB(credentials)
+def addDataToAuthDB(credentials):
 	user = User(
-		username = credentials['username']
-		first_name = credentails['first_name']
-		last_name = credentials['last_name']
+		username = credentials['username'],
+		first_name = credentails['first_name'],
+		last_name = credentials['last_name'],
 		email = credentials['username'] + '@emptymail.com'
 	)
 	user.is_staff = False
@@ -117,7 +117,7 @@ def addDataToAuthDB(credentials)
 		is_teacher = False,
 		am = credentials['registration_number'],
 		introduction_year = credentials['introduction_year'],
-		semester = credentials['semester'],
+		semester = credentials['semester']
 	)	
 	authStudentProfile.save()
 

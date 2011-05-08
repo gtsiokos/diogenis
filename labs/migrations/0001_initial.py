@@ -11,16 +11,24 @@ class Migration(SchemaMigration):
         # Adding model 'Lesson'
         db.create_table('labs_lesson', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=40)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
         ))
         db.send_create_signal('labs', ['Lesson'])
+
+        # Adding model 'Classroom'
+        db.create_table('labs_classroom', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=20)),
+        ))
+        db.send_create_signal('labs', ['Classroom'])
 
         # Adding model 'Lab'
         db.create_table('labs_lab', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=20)),
             ('day', self.gf('django.db.models.fields.CharField')(max_length=10)),
-            ('hour', self.gf('django.db.models.fields.IntegerField')(max_length=2)),
+            ('start_hour', self.gf('django.db.models.fields.IntegerField')(max_length=2)),
+            ('end_hour', self.gf('django.db.models.fields.IntegerField')(max_length=2)),
         ))
         db.send_create_signal('labs', ['Lab'])
 
@@ -64,6 +72,9 @@ class Migration(SchemaMigration):
         # Deleting model 'Lesson'
         db.delete_table('labs_lesson')
 
+        # Deleting model 'Classroom'
+        db.delete_table('labs_classroom')
+
         # Deleting model 'Lab'
         db.delete_table('labs_lab')
 
@@ -84,6 +95,8 @@ class Migration(SchemaMigration):
         'accounts.authstudent': {
             'Meta': {'ordering': "['am']", 'object_name': 'AuthStudent', '_ormbases': ['accounts.UserProfile']},
             'am': ('django.db.models.fields.CharField', [], {'max_length': '15'}),
+            'introduction_year': ('django.db.models.fields.CharField', [], {'max_length': '15'}),
+            'semester': ('django.db.models.fields.CharField', [], {'max_length': '2'}),
             'userprofile_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['accounts.UserProfile']", 'unique': 'True', 'primary_key': 'True'})
         },
         'accounts.userprofile': {
@@ -128,17 +141,23 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'labs.lab': {
-            'Meta': {'ordering': "['name', 'day', 'hour']", 'object_name': 'Lab'},
-            'day': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
-            'hour': ('django.db.models.fields.IntegerField', [], {'max_length': '2'}),
+        'labs.classroom': {
+            'Meta': {'ordering': "['name']", 'object_name': 'Classroom'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '20'})
+        },
+        'labs.lab': {
+            'Meta': {'ordering': "['name', 'day', 'start_hour']", 'object_name': 'Lab'},
+            'day': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
+            'end_hour': ('django.db.models.fields.IntegerField', [], {'max_length': '2'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
+            'start_hour': ('django.db.models.fields.IntegerField', [], {'max_length': '2'})
         },
         'labs.lesson': {
             'Meta': {'ordering': "['name']", 'object_name': 'Lesson'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '40'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         'labs.studentsubscription': {
             'Meta': {'object_name': 'StudentSubscription'},

@@ -12,12 +12,6 @@ try:
 except:
 	msg = "Δεν έχει εγκατασταθει το Module της Python: pycurl"
 
-try:
-	import ldap
-	import ldap.modlist as modlist
-except:
-	msg = "Δεν έχει εγκατασταθει το Module της Python: python-ldap"
-
 import os
 import httplib
 import StringIO
@@ -106,48 +100,34 @@ def checkStudentCredentials(username, password):
 	except:
 		return 0
 
-def addDataToLDAP(credentials, l):
-	attrs = {}
-	attrs['objectClass'] = ['person', 'top', 'teilarStudent', 'posixAccount']
-	attrs['uid'] =  [str(credentials['username'])]
-	attrs['sn'] = [credentials['last_name']]
-	attrs['cn'] = [credentials['first_name']]
-	attrs['userPassword'] = [str(credentials['password'])]
-	attrs['gidNumber'] =['1']
-	attrs['homeDirectory'] = [str('/home/%s' % (credentials['username']))]
-	if credentials['labs']:
-		attrs['labs'] = credentials['labs']
-	attrs['semester'] = [credentials['semester']]
-	attrs['introductionYear'] = [credentials['introduction_year']]
-	attrs['registrationNumber'] = [credentials['registration_number']]
-	try:
-		results = l.search_s(settings.SEARCH_DN, ldap.SCOPE_SUBTREE, 'uid=*', ['uidNumber'])
-		uids = []
-		for item in results:
-			uids.append(int(item[1]['uidNumber'][0]))
-			attrs['uidNumber'] = [str(max(uids) + 1)]
-	except:
-		attrs['uidNumber'] = ['1']
-		# ldap is empty, initializing it
-		init_attrs1 = {}
-		init_attrs1['objectClass'] = ['dcObject', 'organizationalUnit', 'top']
-		init_attrs1['dc'] = ['teilar']
-		init_attrs1['ou'] = ['TEI Larissas']
-		ldif1 = modlist.addModlist(init_attrs1)
-		l.add_s('dc=teilar,dc=gr', ldif1)
+def addDataToAuthDB(credentials):
+	user = User(
+		username = credentials['username'],
+		first_name = credentails['first_name'],
+		last_name = credentials['last_name'],
+		email = credentials['username'] + '@emptymail.com'
+	)
+	user.is_staff = False
+	user.is_superuser = False
+	user.set_password(credentials['password'])
+	user.save()
 
-		init_attrs2 = {}
-		init_attrs2['objectClass'] = ['organizationalUnit', 'top']
-		init_attrs2['ou'] = ['teilarStudents']
-		ldif2 = modlist.addModlist(init_attrs2)
-		l.add_s('ou=teilarStudents,dc=teilar,dc=gr', ldif2)
-	ldif = modlist.addModlist(attrs)
-	try:
-		l.add_s('uid=%s,ou=teilarStudents,dc=teilar,dc=gr' % (credentials['username']), ldif)
-	except Exception as error:
-		print 'ERROR: %s\n' % str(error)
-	l.unbind_s()
+	authStudentProfile = AuthStudent(
+		user = user,
+		is_teacher = False,
+		am = credentials['registration_number'],
+		introduction_year = credentials['introduction_year'],
+		semester = credentials['semester']
+	)	
+	authStudentProfile.save()
 
+	if result.has_key('labs'):
+		for lab in result['labs']:
+			studentLessons = StudentToLesson(
+			student = authStudentProfile,
+			lesson = Lesson.objects.get(name = lab),
+		)
+		studentLessons.save()
 
 def signup(request):
 	global msg
@@ -159,21 +139,7 @@ def signup(request):
 				try:
 					credentials = checkStudentCredentials(request.POST.get('dionysos_username'), request.POST.get('dionysos_password'))
 					if credentials != 0:
-						l = ldap.initialize(settings.LDAP_URL)
-						try:
-							l.simple_bind_s(settings.BIND_USER, settings.BIND_PASSWORD)
-						except Exception, e:
-							msg = "Δεν έγινε binding με τον LDAP"
-							raise
-						try:
-							check_user = l.search_s(settings.SEARCH_DN, ldap.SCOPE_SUBTREE, 'uid=%s' % (credentials['username']))
-						except:
-							check_user = ""
-						if check_user:
-							msg = "Ο χρήστης υπάρχει ήδη."
-							raise
-						else:
-							addDataToLDAP(credentials, l)
+						addDataToAuthDB(credentials)
 					else:
 						msg = "Παρουσιάστηκε σφάλμα στο διόνυσο"
 						raise

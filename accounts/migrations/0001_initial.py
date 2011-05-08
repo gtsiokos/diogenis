@@ -26,6 +26,8 @@ class Migration(SchemaMigration):
         db.create_table('accounts_authstudent', (
             ('userprofile_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['accounts.UserProfile'], unique=True, primary_key=True)),
             ('am', self.gf('django.db.models.fields.CharField')(max_length=15)),
+            ('introduction_year', self.gf('django.db.models.fields.CharField')(max_length=15)),
+            ('semester', self.gf('django.db.models.fields.CharField')(max_length=2)),
         ))
         db.send_create_signal('accounts', ['AuthStudent'])
 
@@ -46,6 +48,8 @@ class Migration(SchemaMigration):
         'accounts.authstudent': {
             'Meta': {'ordering': "['am']", 'object_name': 'AuthStudent', '_ormbases': ['accounts.UserProfile']},
             'am': ('django.db.models.fields.CharField', [], {'max_length': '15'}),
+            'introduction_year': ('django.db.models.fields.CharField', [], {'max_length': '15'}),
+            'semester': ('django.db.models.fields.CharField', [], {'max_length': '2'}),
             'userprofile_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['accounts.UserProfile']", 'unique': 'True', 'primary_key': 'True'})
         },
         'accounts.authteacher': {

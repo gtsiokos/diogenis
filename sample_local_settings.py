@@ -15,22 +15,30 @@ ADMINS = (
 MANAGERS = ADMINS
 
 # Change them to reflect your own db settings
-DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'diogenis'             # Or path to database file if using sqlite3.
-DATABASE_USER = 'diogenis'             # Not used with sqlite3.
-DATABASE_PASSWORD = 'diogenis' # Not used with sqlite3.
-DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+DATABASES = {
+    'default': {
+        'ENGINE':   'mysql',
+        'NAME':     'diogenis',
+        'USER':     'diogenis',
+        'PASSWORD': 'diogenis',
+        'HOST':     '',
+        'PORT':     ''
+    }
+}
 
 ####
 #SQLite development database
 ####
-#DATABASE_ENGINE = 'django.db.backends.sqlite3'
-#DATABASE_NAME = os.path.join(os.path.dirname(__file__), 'diogenis.db')
-#DATABASE_USER = ''
-#DATABASE_PASSWORD = ''
-#DATABASE_HOST = ''
-#DATABASE_PORT = ''
+#DATABASES = {
+#    'default': {
+#        'ENGINE':   'django.db.backends.sqlite3',
+#        'NAME':     os.path.join(os.path.dirname(__file__), 'diogenis.db'),
+#        'USER':     '',
+#        'PASSWORD': '',
+#        'HOST':     '',
+#        'PORT':     ''
+#    }
+#}
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'secret'
@@ -45,10 +53,6 @@ MEDIA_ROOT = PROJECT_ROOT + '/media/'
 MEDIA_URL = '/media/'
 ADMIN_MEDIA_PREFIX = '/admin_media/'
 XLS_ROOT = MEDIA_ROOT+'xls_files/'
-
-# LDAP
-BIND_USER = 'uid=root,dc=teilar,dc=gr'
-BIND_PASSWORD = 'secret'
 
 ##### The following variables can remain unset in development boxes
 

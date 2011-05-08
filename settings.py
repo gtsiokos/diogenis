@@ -60,7 +60,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'diogenis.urls'
 
 TEMPLATE_DIRS = (
-    os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),
+    os.path.join(os.path.dirname(__file__), 'templates'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -74,25 +74,13 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'diogenis.accounts', 'diogenis.labs',
     'diogenis.teachers', 'diogenis.students',
-    'diogenis.ldap_groups',# 'diogenis.LDAPGroup', 'diogenis.LDAPGroupAdmin',
     'south',
 )
 
-try:
-    import ldap
-    AUTHENTICATION_BACKENDS = (
-        'diogenis.ldap_groups.accounts.backends.ActiveDirectoryGroupMembershipSSLBackend',
-        'django.contrib.auth.backends.ModelBackend',
-    )
-except:
-    pass	
+AUTHENTICATION_BACKENDS = (
+	'django.contrib.auth.backends.ModelBackend',
+)
 
 # Needed for the decorator
 LOGIN_URL = '/'
 
-# LDAP
-LDAP_SERVER = 'localhost'
-LDAP_PORT = 389
-LDAP_URL = 'ldap://%s:%s' % (LDAP_SERVER, LDAP_PORT)
-SEARCH_DN = 'ou=teilarStudents,dc=teilar,dc=gr'
-SEARCH_FIELDS = ['*']

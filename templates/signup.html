@@ -7,6 +7,7 @@
 		{% for field in form %}
 			{{ field.label.tag }} {{ field }}
 		{% endfor %}
+		{% csrf_token %}
 		<input type="submit" value="Είσοδος" />
 	</form>
 	{{ credentials }}

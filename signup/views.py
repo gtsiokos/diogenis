@@ -103,7 +103,7 @@ def checkStudentCredentials(username, password):
 def addDataToAuthDB(credentials):
 	user = User(
 		username = credentials['username'],
-		first_name = credentails['first_name'],
+		first_name = credentials['first_name'],
 		last_name = credentials['last_name'],
 		email = credentials['username'] + '@emptymail.com'
 	)

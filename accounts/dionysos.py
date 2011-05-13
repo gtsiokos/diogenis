@@ -1,33 +1,20 @@
 # -*- coding: utf-8 -*-
 
-msg = ''
+import os
+import StringIO
+import urllib
 
 try:
 	from BeautifulSoup import BeautifulSoup
 except:
-	msg = "Δεν έχει εγκατασταθει το Module της Python: BeautifulSoup"
-
+	raise
+	
 try:
 	import pycurl
 except:
-	msg = "Δεν έχει εγκατασταθει το Module της Python: pycurl"
+	raise
 
-import os
-import httplib
-import StringIO
-import urllib
-from django.conf import settings
-
-
-try:
-	from diogenis.signup.forms import *
-except:
-	pass
-
-from django.shortcuts import render_to_response
-from django.template import RequestContext
-
-def checkStudentCredentials(username, password):
+def get_student_credentials(username, password):
 	conn = pycurl.Curl()
 	b = StringIO.StringIO()
 	try:
@@ -98,61 +85,6 @@ def checkStudentCredentials(username, password):
 		credentials['password'] = password
 		return credentials
 	except:
-		return 0
+		return {}
 
-def addDataToAuthDB(credentials):
-	user = User(
-		username = credentials['username'],
-		first_name = credentails['first_name'],
-		last_name = credentials['last_name'],
-		email = credentials['username'] + '@emptymail.com'
-	)
-	user.is_staff = False
-	user.is_superuser = False
-	user.set_password(credentials['password'])
-	user.save()
-
-	authStudentProfile = AuthStudent(
-		user = user,
-		is_teacher = False,
-		am = credentials['registration_number'],
-		introduction_year = credentials['introduction_year'],
-		semester = credentials['semester']
-	)	
-	authStudentProfile.save()
-
-	if result.has_key('labs'):
-		for lab in result['labs']:
-			studentLessons = StudentToLesson(
-			student = authStudentProfile,
-			lesson = Lesson.objects.get(name = lab),
-		)
-		studentLessons.save()
-
-def signup(request):
-	global msg
-	if not msg:
-		credentials = 0
-		if request.method == 'POST':
-			form = StudentSignupForm(request.POST)
-			if form.is_valid():
-				try:
-					credentials = checkStudentCredentials(request.POST.get('dionysos_username'), request.POST.get('dionysos_password'))
-					if credentials != 0:
-						addDataToAuthDB(credentials)
-					else:
-						msg = "Παρουσιάστηκε σφάλμα στο διόνυσο"
-						raise
-				except:
-					form = ''
-					credentials = msg
-		else:
-			form = StudentSignupForm()
-	else:
-		form = ''
-		credentials = msg
-	return render_to_response('signup.html', {
-			'form': form,
-			'credentials': credentials,
-		}, context_instance = RequestContext(request))
 

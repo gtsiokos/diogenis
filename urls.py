@@ -4,10 +4,8 @@ from django.conf import settings
 from django.contrib import admin
 admin.autodiscover()
 
-from diogenis.views import *
-from diogenis.labs.views import *
-from diogenis.students.views import *
-from diogenis.signup.views import *
+from diogenis.views import index
+from diogenis.accounts.views import login, logout, signup
 
 urlpatterns = patterns('',
 	(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT }),
@@ -20,8 +18,6 @@ urlpatterns = patterns('',
 	(r'^signup/', signup),
 	(r'^login/$', login),
 	(r'^logout/$', logout),
-	
-	(r'^api/', excel_api),
 	(r'^$', index),
     
 	# Uncomment the admin/doc line below and add 'django.contrib.admindocs' 

@@ -6,6 +6,9 @@ from django.template import RequestContext
 from django.contrib import auth
 
 def index(request):
+	'''
+	Handles index page, redirects logged-in users
+	'''
 	user = request.user
 	if user.is_authenticated and user.is_active and user is not None:
 		if user.is_superuser:

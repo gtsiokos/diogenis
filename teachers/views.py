@@ -28,8 +28,13 @@ def user_is_teacher(user):
 
 @user_passes_test(user_is_teacher, login_url="/login/")
 def manage_labs(request, username):
+	'''
+	Manages teacher's views.
+	
+	Handling Templates: /teachers/labs.html | /teachers/pending-students.html
+	'''
 	if username == request.user.username:
-		pending_students_request = request.path.endswith('pending-students/')
+		pending_students_request = request.path.endswith('pending-students/')		#[Boolean] checking current url path
 		
 		q1 = User.objects.get(username=username)
 		q2 = u'%s %s' % (q1.last_name, q1.first_name)
@@ -38,9 +43,7 @@ def manage_labs(request, username):
 		my_labs = TeacherToLab.objects.filter(teacher=q2).order_by('lesson__name', 'lab__start_hour').select_related()
 		
 		#####################################################################
-		# To unique_lessons periexei ola ta onomata mathimatwn pou mporei
-		# na epileksei o kathigitis gia dimiourgia neou ergastiriou se
-		# alphabitiki seira.
+		# [unique_lessons] contains lesson names related to the teacher.
 		#####################################################################
 		unique_lessons = []
 		labs_list = []
@@ -50,8 +53,8 @@ def manage_labs(request, username):
 				unique_lessons.append({"name": my_lab.lesson.name})
 			
 		#####################################################################
-		# Ola ta onomata mathimatwn, ergastiriwn, oi wres twn ergastiriwn
-		# kai oi eggegrammenoi foitites gia to template [teachers/labs.html] 
+		# Builds the context making related dicts/lists with lesson names,
+		# teacher's labs, and the registered students for each lab.
 		#####################################################################		
 		my_labs = my_labs.filter(lab__start_hour__gt=1)
 		for my_lab in my_labs:
@@ -62,8 +65,8 @@ def manage_labs(request, username):
 			data = []
 			lab_data = []
 			
-			total_labs = TeacherToLab.objects.filter(lesson=lesson, teacher=q2, lab__start_hour__gt=1).order_by('lab__start_hour')
-			total_labs_count = total_labs.count()
+			total_labs = TeacherToLab.objects.filter(lesson=lesson, teacher=q2, lab__start_hour__gt=1).order_by('lab__start_hour')		#available teacher owned labs for transferring student(s)
+			total_labs_count = total_labs.count()																						#needed for iteration
 			the_labs = total_labs.filter(lab=lab)
 			
 			start_hour_raw = my_lab.lab.start_hour
@@ -75,7 +78,7 @@ def manage_labs(request, username):
 				pending_stud = []
 			
 				for sub in subscriptions:
-					if not sub.in_transit:
+					if not sub.in_transit:		#The subscriber can be listed, is not in transit.
 						stud.append({
 									"first": sub.student.user.first_name,
 									"last": sub.student.user.last_name,
@@ -88,9 +91,9 @@ def manage_labs(request, username):
 										"am": sub.student.am
 										})
 				
-				empty_seats = ( my_lab.max_students-len(stud) if stud and my_lab.max_students>len(stud) else 0 )
+				empty_seats = ( my_lab.max_students-len(stud) if stud and my_lab.max_students>len(stud) else 0 )		#Max available seats minus already subscribed students
 				
-				if pending_students_request:
+				if pending_students_request:				#builds data for pending students template
 					if pending_stud:
 						data.append({
 								"name": lab.name,
@@ -99,7 +102,7 @@ def manage_labs(request, username):
 								"students": pending_stud,
 								"empty_seats": empty_seats
 								})
-				else:
+				else:										#builds data for labs template
 					data.append({
 								"name": lab.name,
 								"day": my_lab.lab.day,
@@ -125,10 +128,7 @@ def manage_labs(request, username):
 						"labs_list": lab_data,
 						})
 		
-		request_context = RequestContext(request)
-		token_value = request_context['csrf_token']
-		
-		context = {'results':results, 'unique_lessons':unique_lessons, 'token_value':token_value}
+		context = {'results':results, 'unique_lessons':unique_lessons}
 		template_to_render = ('teachers/pending_students.html' if pending_students_request else 'teachers/labs.html')
 		return render_to_response(template_to_render, context, context_instance = RequestContext(request))
 	else:
@@ -137,6 +137,11 @@ def manage_labs(request, username):
 
 @user_passes_test(user_is_teacher, login_url="/login/")
 def submit_student_to_lab(request):
+	'''
+	Manages JSON request for transferring student(s) across lesson-specific labs.
+	
+	Client-side: [js/core.teachers.lab.transfer.js]
+	'''
 	if request.method == "POST" and request.is_ajax():
 		message = []
 		json_data = simplejson.loads(request.raw_post_data)
@@ -159,10 +164,10 @@ def submit_student_to_lab(request):
 		
 		try:
 			students = json_data['stud']
-			empty_test = students[0]
+			empty_test = students[0]		#raises an error students dict is empty
 			for student in students:
 				stud = AuthStudent.objects.get(am=student['am'])
-				available = StudentSubscription.check_availability(student=stud, new_t2l=new_t2l)
+				available = StudentSubscription.check_availability(student=stud, new_t2l=new_t2l)		#checks student's availability in order to be transferred.
 				if available:
 					StudentSubscription.objects.filter(student=stud, teacher_to_lab=old_t2l).delete()
 					StudentSubscription.objects.create(student=stud, teacher_to_lab=new_t2l)
@@ -183,6 +188,11 @@ def submit_student_to_lab(request):
 
 @user_passes_test(user_is_teacher, login_url="/login/")
 def add_new_lab(request):
+	'''
+	Manages JSON request for creating a new lab.
+	
+	Client-side: [js/core.teachers.lab.register.js]
+	'''
 	if request.method == "POST" and request.is_ajax():
 		message = []
 		new_hour = set_hour_range(1,1)
@@ -198,7 +208,7 @@ def add_new_lab(request):
 			msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
 			message.append({ "status":2, "msg":msg })
 		
-		if action == "getClass":
+		if action == "getClass":		#returns the available classes
 			if new_hour['start'] >= new_hour['end']:
 				msg = u"H ώρα έναρξης του εργαστηρίου είναι μεγαλύτερη της ώρας λήξης"
 				message.append({ "status":2, "action":action, "msg":msg })
@@ -214,7 +224,7 @@ def add_new_lab(request):
 						unique_labs.append({ "name": lab.name })
 				message.append({ "status":1, "action":action, "classes":unique_labs })
 			
-		elif action == "submitLab":
+		elif action == "submitLab":		#saves new lab
 			try:
 				new_name = json_data['newName']
 				new_class = json_data['newClass']
@@ -224,7 +234,7 @@ def add_new_lab(request):
 				message.append({ "status":2, "action":action, "msg":msg })
 			
 			new_lab = Lab(name=new_class, day=new_day, start_hour=new_hour['start'], end_hour=new_hour['end'])
-			no_conflict = Lab.check_conflict(new_lab=new_lab)
+			no_conflict = Lab.check_conflict(new_lab=new_lab)		#Checks hour conflict with already created labs
 			if no_conflict and new_hour['start'] < new_hour['end']:
 				try:
 					q1 = User.objects.get(username=request.user.username)
@@ -253,6 +263,11 @@ def add_new_lab(request):
 
 @user_passes_test(user_is_teacher, login_url="/login/")
 def export_pdf(request, csrf_token, name, day, start_hour, end_hour):
+	'''
+	###
+	# Needs to be documented by Lomar
+	###
+	'''
 	if request.method == "GET" and csrf_token == request.COOKIES['csrftoken']:
 		hour = set_hour_range(start_hour, end_hour)
 		

@@ -16,6 +16,9 @@ from diogenis.accounts.dionysos import get_student_credentials
 
 
 def login(request):
+	'''
+	Authenticates username and password, creates a session and redirects user to the respective page.
+	'''
 	if request.method == "POST":
 		post = request.POST.copy()
 		if post.has_key('username') and post.has_key('password'):
@@ -42,11 +45,20 @@ def login(request):
 
 
 def logout(request):
+	'''
+	Logs out user
+	'''
 	auth.logout(request)
 	return HttpResponseRedirect('/')
 
 
 def signup(request):
+	'''
+	Signup form for students.
+	
+	Uses get_student_credentials for retrieving student's data from dionysos.teilar.gr
+	Uses get_create_student for saving new student user and redirects him to the respective page.
+	'''
 	global messages
 	messages = []
 	
@@ -70,6 +82,12 @@ def signup(request):
 
 
 def get_create_student(credentials):
+	'''
+	Saves new User and his profile with extended data.
+	Saves relations with existing lessons retrieved by dionysos.teilar.gr
+	
+	Returns: User object || None (if User already exists)
+	'''
 	global messages
 
 	try:

@@ -15,6 +15,13 @@ except:
 	raise
 
 def get_student_credentials(username, password):
+	'''
+	Connects to dionysos.teilar.gr using pycurl, aggregates student's data.
+	
+	Returns credentials including: 	username | password | last_name | first_name
+									registration_number (A.M.) | semester | introduction_year
+									labs (current registered labs)
+	'''
 	conn = pycurl.Curl()
 	b = StringIO.StringIO()
 	try:

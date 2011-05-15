@@ -19,6 +19,9 @@ except:
 
 
 def normalize_locale(text):
+	'''
+	Normalize locale for pdf exporting
+	'''
 	normalizedText = ''
 	for achar in text:
 		if achar == u'έ':
@@ -47,6 +50,11 @@ def normalize_locale(text):
 	
 
 def pdf_exporter(labtriplet,response):
+	'''
+	###
+	# Needs to be documented by Lomar
+	###
+	'''
 	localEdited = ''
 	pdf = SimpleDocTemplate(response, pagesize = letter)
 	style = getSampleStyleSheet()

@@ -47,6 +47,12 @@ class Lab(models.Model):
 	
 	@classmethod
 	def check_conflict(self, *args, **kwargs):
+		'''
+		Checks hour conflict with already created labs.
+		
+		Arguments:	[new_lab]
+		Returns: 	True | False
+		'''
 		new_lab = kwargs.get('new_lab')
 		
 		start = new_lab.start_hour
@@ -110,6 +116,14 @@ class StudentSubscription(models.Model):
 	
 	@classmethod
 	def check_availability(self, *args, **kwargs):
+		'''
+		Checks student's availability in order to be transferred.
+		
+		Arguments:	[new_t2l] - Teacher's lab to be tranferred
+					[student]
+		
+		Returns:	True | False
+		'''
 		new_t2l = kwargs.get('new_t2l')
 		student = kwargs.get('student')
 		

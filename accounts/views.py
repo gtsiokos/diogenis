@@ -124,9 +124,10 @@ def get_create_student(credentials):
                     #################
                     # Logging needed
                     #################
-                    print u'##############'
-                    print e
-                    print u'##############'
+                    
+                    #print u'##############'
+                    #print e
+                    #print u'##############'
                     pass
     
         return user

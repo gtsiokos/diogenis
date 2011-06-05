@@ -6,12 +6,14 @@ The goal is to solve, with a pragmatic approach, the management of lab registrat
 
 ## Setting Up
 Get the current dev database and the rest of configurations files, including python modules from [here](http://dl.dropbox.com/u/60164/Web%20Dev/diogenis/DiogenisStarterKit.zip).
+
 * Both <code>diogenis.db</code> and <code>local_settings.py</code> should be placed in the project root directory
 * <code>python manage.py syncdb</code>
 * <code>python manage.py migrate</code>
 * Install the required python modules
 
 Admin Username/Password: <code>admin</code>/<code>1</code>
+
 Users Password: <code>1</code>
 
 Now you have a working draft of Diogenis. :)
@@ -29,6 +31,7 @@ Diogenis uses [South](http://south.aeracode.org/) for database migration. Please
 
 ### Changes in Models
 If you've changed models and before you commit, you do:
+
 * <code>python manage.py syncdb</code>
 * <code>python manage.py schemamigration app_name_for_model_you_have_changed --auto</code>
 

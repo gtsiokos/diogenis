@@ -36,6 +36,6 @@ If you've changed models and before you commit, you do:
 * <code>python manage.py schemamigration app_name_for_model_you_have_changed --auto</code>
 
 ### Starting a New Application
-* python manage.py convert_to_south app_name
-* python manage.py schemamigration app_name --initial
-* python manage.py migrate
+* <code>python manage.py convert_to_south app_name</code>
+* <code>python manage.py schemamigration app_name --initial</code>
+* <code>python manage.py migrate</code>

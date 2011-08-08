@@ -5,8 +5,7 @@
 # -*- coding: utf8 -*-
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 from django.contrib.auth.decorators import user_passes_test
 
 from django.conf import settings
@@ -114,7 +113,7 @@ def control_panel(request):
         message = []
     
     context = {'form':form, 'message':message}
-    return render_to_response('system/cpanel.html', context, context_instance = RequestContext(request))
+    return render(request, 'system/cpanel.html', context)
 
 
 @user_passes_test(user_is_superuser, login_url="/login/")
@@ -133,4 +132,4 @@ def clean_database(request):
     message.append({"status": 1, "msg": msg})
     
     context = {'form':form, 'message':message[0]}
-    return render_to_response('system/cpanel.html', context, context_instance = RequestContext(request))
+    return render(request, 'system/cpanel.html', context)

@@ -3,8 +3,7 @@
 messages = []
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 from django.contrib import auth
 
 from django.contrib.auth.models import User
@@ -39,9 +38,9 @@ def login(request):
                 else:
                     return HttpResponseRedirect('/students/'+user.username+'/')
             else:
-                return render_to_response('index.html', {'message':'Δεν ανοίκεις στο μαγικό Teilar, φύγε όσο είναι καιρός'}, context_instance = RequestContext(request))
+                return render(request, 'index.html', {'message':'Δεν ανοίκεις στο μαγικό Teilar, φύγε όσο είναι καιρός'})
             
-    return render_to_response('accounts/login.html', {}, context_instance = RequestContext(request))
+    return render(request, 'accounts/login.html', {})
 
 
 def logout(request):
@@ -78,7 +77,7 @@ def signup(request):
         form = StudentSignupForm()
     
     context = {'form':form, 'messages':messages}
-    return render_to_response('accounts/signup.html', context, context_instance = RequestContext(request))
+    return render(request, 'accounts/signup.html', context)
 
 
 def get_create_student(credentials):

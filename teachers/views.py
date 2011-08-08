@@ -8,9 +8,8 @@ import os
 import datetime
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 
-from django.template import RequestContext
 from django.contrib.auth.decorators import user_passes_test
 from django.utils import simplejson
 
@@ -129,8 +128,8 @@ def manage_labs(request, username):
                         })
         
         context = {'results':results, 'unique_lessons':unique_lessons}
-        template_to_render = ('teachers/pending_students.html' if pending_students_request else 'teachers/labs.html')
-        return render_to_response(template_to_render, context, context_instance = RequestContext(request))
+        template = ('teachers/pending_students.html' if pending_students_request else 'teachers/labs.html')
+        return render(request, template, context)
     else:
         raise Http404
 

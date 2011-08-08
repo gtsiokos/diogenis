@@ -2,9 +2,8 @@
 # -*- coding: utf8 -*-
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 
-from django.template import RequestContext
 from django.contrib.auth.decorators import user_passes_test
 from django.utils import simplejson
 
@@ -17,23 +16,6 @@ from diogenis.labs.helpers import get_lab_hour
 
 def user_is_student(user):
     return user.is_authenticated() and not user.get_profile().is_teacher
-
-
-def excel_api(request):
-    '''
-    For testing purposes, not implemented
-    '''
-    results = []
-    tmp = []
-    the_lessons = Lesson.objects.all()
-    the_t2l = TeacherToLab.objects.all()
-    for result in the_lessons:
-        for t2l_entry in the_t2l:
-            if t2l_entry.lesson.name == result.name:
-                tmp.append({"name": t2l_entry.teacher.name})
-        results.append({"lesson": result.name})#, "professors": {tmp}})
-    data = simplejson.dumps(results)
-    return HttpResponse(data, mimetype='application/javascript')
 
 
 @user_passes_test(user_is_student, login_url="/login/")
@@ -63,7 +45,7 @@ def display_labs(request, username):
                             "lab_end_hour":humanize_time(subscription.teacher_to_lab.lab.end_hour),
                             "teacher":subscription.teacher_to_lab.teacher.name,
                             })
-        return render_to_response('students/labs.html', {'results': result, 'unique_lessons':unique_lessons}, context_instance = RequestContext(request))
+        return render(request, 'students/labs.html', {'results': result, 'unique_lessons':unique_lessons})
     else:
         raise Http404
 

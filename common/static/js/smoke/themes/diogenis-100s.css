@@ -1,0 +1,66 @@
+.smoke-base { 
+	background: none; 
+}
+
+.smoke-base .dialog {
+    position: absolute; top: 15%; left: 0;
+    width: 100%;
+}
+
+.smoke-base .dialog-inner { 
+	padding: 15px;
+}
+
+.smokebg { background: rgba(255,255,255,0.44); }
+
+.smoke {
+	font: normal 34px/1.4 'Droid Sans Bold', Verdana;
+    color:#eee;
+	text-shadow: 0 1px 1px #000; text-align: center;
+	background: #3a3a3a;
+	background: rgba(0,0,0,.75);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#3a3a3a,endColorstr=#3a3a3a);
+	border: solid 1px #000; border-right: 0; border-left: 0;
+	
+	-moz-box-shadow: 	0 0 7px #000 inset, 0 0 2px #000 inset;
+	-webkit-box-shadow: 0 0 7px #000 inset, 0 0 2px #000 inset;
+	box-shadow: 		0 0 7px #000 inset, 0 0 2px #000 inset;
+}
+.dialog-buttons {
+	margin: 0px 0 5px 0;
+}
+
+.dialog-buttons button {
+    margin:22px 10px 0 10px; padding: 8px 10px 9px 10px;
+    font: normal 15px Verdana, Arial, Helvetica, sans-serif;
+    text-shadow: none;
+    color: #333;
+    background: #ebebeb;
+    border: solid 1px transparent;
+    
+    -moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	
+	-moz-background-clip: padding;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box; 
+	
+	-moz-box-shadow: 	0 1px 2px #141414;
+	-webkit-box-shadow: 0 1px 2px #141414;
+	box-shadow: 		0 1px 2px #141414;
+}
+
+button.cancel { 
+	background: #999; 
+	color:#222;
+}
+
+.dialog-prompt{
+	margin-top:0;
+}
+.dialog-prompt input{
+	width:300px;
+	text-align:center;
+	background-color:#ccc;
+}

@@ -1,0 +1,78 @@
+.smoke-base {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  visibility: hidden;
+  opacity: 0;
+  -moz-transition: all .3s;
+  -webkit-transition: opacity .3s;
+  -o-transition: all .3s;
+  transition: all .3s;
+}
+
+.smoke-base.smoke-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.smokebg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.smoke-base .dialog {}
+
+.dialog-prompt {}
+
+.dialog-buttons {}
+
+.smoke {}
+
+.dialog-buttons button {
+  display: inline-block;
+  cursor: pointer;
+  border: 0;
+  outline: 0;
+}
+
+.dialog-prompt input {
+  margin: 0;
+  border: 0;
+  font-family: sans-serif;
+  outline: none;
+  border: 1px solid #333;
+  width: 97%;
+  background-color: #fff;
+  font-size: 15px;
+  padding: 5px;
+}
+/*
+.smoke-base {
+  background: rgba(0,0,0,.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#90000000,endColorstr=#900000000);
+}
+*/
+.smoke-base .dialog {
+  top: 25%;
+  left: 25%;
+  width: 50%;
+}
+
+.smoke-base .dialog-inner {
+  padding: 15px
+}
+
+.smoke {}
+
+.dialog-buttons button {}
+
+button.cancel {}
+
+.queue{
+	display:none;
+}

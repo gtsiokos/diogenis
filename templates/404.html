@@ -1,13 +1,25 @@
 {% extends "base.html" %}
 
 {% block alerts %}
-	<div id="ui-messages">
+	<div id="ui-messages" style="display:block;">
 		<p class="error">Η σελίδα που ζητήσατε δεν βρέθηκε</p>
 	</div>
 {% endblock %}
 
 {% block content %}
-<div id="content" class="not-logged">
-	<h2>Καλωσήρθατε στον <em>Διογένη</em></h2>
+<div id="content" class="not-logged" style="overflow: hidden;">
+	<div class="box" style="width:440px;">
+	    <h2>Τι είναι ο Διογένης;</h2>
+	    <p>O Διογένης διαχειρίζεται την ηλεκτρονική εγγραφή εργαστηρίων του ΤΕΙ Λάρισας.</p>
+	    <p class="new">Οι φοιτητές μπορούν να εγγραφούν στα εργαστήρια εύκολα και γρήγορα.</p>
+	    <p class="new">Οι καθηγητές μπορούν να δημιουργήσουν εργαστηριακές ομάδες ορίζοντας την ημέρα και την ώρα του εργαστηρίου και να διαχειριστούν τους φοιτητές των τμημάτων τους.</p>
+	</div>
+	<div class="box" style="width:440px;">
+	    <a href="{% url signup %}" alt="Εγγραφή φοιτητή στον Διογένη">
+	        <img src="{{ STATIC_URL }}img/signup_button.png"/>
+	    </a>
+	    <p class="new">Ο Διογένης δουλεύει με τα στοιχεία πρόσβασης από τον Διόνυσο.</p>
+	    <p class="new"><strong>Για τους καθηγητές</strong> απαιτείται η δημιουργία λογαριασμού από την Γραμματεία του τμήματος.</p>
+	</div>
 </div>
 {% endblock content %}

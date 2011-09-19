@@ -1,83 +1,98 @@
 {% extends "teachers/base.html" %}
+{% load diogenis_extras %}
 
 {% block manage-labs-active %}active{% endblock %}
 {% block content %}
 
 <div id="content" class="logged">
 	<div id="ui-messages">
-		{% if results %}
+		{% if labs %}
 		<p>Κονσόλα Μηνυμάτων</p>
 		{% else %}
 		<p class="warning">Δεν έχετε προσθέσει τα εργαστήρια σας στον Διογένη</p>
 		{% endif %}
 	</div>
 	{{ block.super }}
-	{% if results %}
-		{% for q in results %}
-			{% ifchanged q.name %}<h3>{{ q.name }}</h3>{% endifchanged %}
-			{% for q2 in q.labs %}
-			<div class="lab">
-				
-				<h4>
-					<span class="lab-name">{{ q2.name }}</span>
-					<span class="lab-date"><span class="day">{{ q2.day }}</span> <span class="hour { start:{{q2.hour.start.raw}}, end:{{q2.hour.end.raw}} }">{{ q2.hour.start.humanized }} - {{ q2.hour.end.humanized }}</span></span>
-					{% if q.labs_count > 1 and q2.students %}
-						<span class="transfer enabled">
-							<span>Μετακίνηση</span>
-							<ul class="labs-list">
-								{% for s in q.labs_list %}
-									<li><span class="name">{{ s.name }}</span> &ndash; <span class="day">{{ s.day }}</span> &ndash; <span class="hour { start:{{s.hour.start.raw}}, end:{{s.hour.end.raw}} }">{{ s.hour.start.raw }}-{{ s.hour.end.raw }}</span></li>
-								{% endfor %}
-							</ul>
-						</span>
-					{% else %}
-						<span class="transfer disabled">
-							Μετακίνηση
-						</span>
-					{% endif %}
-				</h4>
-				
-				{% if q2.students %}
-					<table>
-						<thead>
-							<tr>
-								<th class="selection" abbr="Selections" scope="col">#</th>
-								<th abbr="Last Name" scope="col">Επώνυμο</th>
-								<th abbr="First Name" scope="col">Όνομα</th>
-								<th class="am" abbr="AM" scope="col">Αριθμός Μητρώου</th>
-							</tr>
-						</thead>
-						<tbody>				
-						{% for q3 in q2.students %}
-							<tr>
-								<td><input type="checkbox" name="{{ q3.am }}" value="{{ q3.am }}"></td>
-								<td>{{ q3.last }}</td>
-								<td>{{ q3.first }}</td>
-								<td>{{ q3.am }}</td>
-							</tr>
-						{% endfor %}
-						</tbody>
-					</table>
-					<div class="extras">
-						{% if q2.empty_seats >= 1 %}
-						<p><span class="empty-seats number">{{ q2.empty_seats }}</span><span class="empty-seats">Ελεύθερ{{ q2.empty_seats|pluralize:"η,ες" }} Θέσ{{ q2.empty_seats|pluralize:"η,εις" }}</span></p>
-						{% endif %}
-						{% if q2.empty_seats == 0 %}
-						<p><span class="empty-seats no-seat">Συμπληρώθηκε</span></p>
-						{% endif %}
-						<a class="export-pdf" href="/teachers/export-pdf/{{ q2.name }}/{{ q2.day }}/{{ q2.hour.start.raw }}/{{ q2.hour.end.raw }}/{{csrf_token_value}}/">Εξαγωγή PDF</a>
-					</div>
-				{% else %}
-					<div class="extras">
-						<p><span class="empty-seats no-seat">Καμία Εγγραφή</span></p>
-					</div>
-				{% endif %}
-			</div>
-			{% endfor %}
+	{% if labs %}
+		{% for lab in labs %}
+		    
+		    {% ifchanged lab.lesson.name %}<h3>{{ lab.lesson.name }}</h3>{% endifchanged %}
+		    <div data-id="{{ lab.id }}" class="lab">
+			
+			    <h4>
+				    <span class="lab-name">{{ lab.classroom.name }}</span>
+				    <span class="lab-date"><span class="day">{{ lab.day }}</span> <span class="hour">{{ lab.hour.start.humanized }} - {{ lab.hour.end.humanized }}</span></span>
+				    {% if lab.sibling_labs and lab.students %}
+					    <span class="transfer enabled">
+						    <span>Μετακίνηση</span>
+						    <ul class="labs-list">
+							    {% for s in lab.sibling_labs %}
+								    <li data-id="{{ s.id }}"><span class="name">{{ s.name }}</span> &ndash; <span class="day">{{ s.day }}</span> &ndash; <span class="hour">{{ s.hour.start.raw }}-{{ s.hour.end.raw }}</span></li>
+							    {% endfor %}
+						    </ul>
+					    </span>
+				    {% else %}
+					    <span class="transfer disabled">
+						    Μετακίνηση
+					    </span>
+				    {% endif %}
+			    </h4>
+			
+			    {% if lab.students %}
+				    <table>
+					    <thead>
+						    <tr>
+							    <th class="selection" style="width:40px" abbr="Selections" scope="col">#</th>
+							    <th abbr="Last Name" style="width:150px" scope="col">Επώνυμο</th>
+							    <th abbr="First Name" style="width:150px" scope="col">Όνομα</th>
+							    <th abbr="Absences" style="width:70px" scope="col">Απουσίες</th>
+							    <th class="am" abbr="AM" style="width:122px" scope="col">Αριθμός Μητρώου</th>
+						    </tr>
+					    </thead>
+					    <tbody>				
+					    {% for student in lab.students %}
+						    <tr title="{{student.last}} {{student.first}}">
+							    <td><input type="checkbox" data-id="{{ student.id }}" value="{{ student.am }}"></td>
+							    <td>{{ student.last|truncatechars:15 }}</td>
+							    <td>{{ student.first|truncatechars:15 }}</td>
+							    <td class="absences">
+							        <div data-id="{{ student.absences.subscription_id }}" class="ui-absences {{student.absences.importance}}">
+                                        <span class="add">
+							                <strong>{{ student.absences.value }}</strong>
+							                +
+							            </span>
+							            <span class="remove">-</span>
+							        </div>
+							     </td>
+							    <td class="am">{{ student.am }}</td>
+						    </tr>
+					    {% endfor %}
+					    </tbody>
+				    </table>
+				    <div class="extras">
+					    {% if lab.empty_seats >= 1 %}
+					    <p><span class="empty-seats number">{{ lab.empty_seats }}</span><span class="empty-seats">Ελεύθερ{{ lab.empty_seats|pluralize:"η,ες" }} Θέσ{{ lab.empty_seats|pluralize:"η,εις" }}</span></p>
+					    {% endif %}
+					    {% if lab.empty_seats == 0 %}
+					    <p><span class="empty-seats no-seat">Συμπληρώθηκε</span></p>
+					    {% endif %}
+					    <a class="export-pdf" href="/teachers/export-pdf/{{ lab.id }}/{{csrf_token_value}}/">Εξαγωγή PDF</a>
+				    </div>
+			    {% else %}
+				    <div class="extras">
+					    <p><span class="empty-seats no-seat">Καμία Εγγραφή</span></p>
+				    </div>
+			    {% endif %}
+		    </div>
+		    
 		{% endfor %}
 	{% endif %}
 </div>
 
 {% endblock content %}
 
-
+{% block footer %}
+    
+    {% include "handlebars/teachers/absences.html" %}
+   
+{% endblock %}

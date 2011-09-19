@@ -1,0 +1,81 @@
+{% load diogenis_extras %}
+
+{% raw %}
+
+<script id="list-tpl" type="text/x-handlebars-template">
+	{{#teachers}}
+    <li class="teacher" data-id="{{id}}">
+        <span>{{#if id}}{{lastname}} {{firstname}}{{else}}Nέος Καθηγητής{{/if}}</span>
+        {{#if id}}
+        <ul class="ui-options">
+			<li><a href="#" class="edit button listed stronger">Επεξεργασία</a></li>
+			<li><a href="#" class="delete button listed">Διαγραφή</a></li>
+		</ul>
+		{{else}}
+		<ul class="ui-options">
+			<li><a href="#" class="save button listed">Αποθήκευση</a></li>
+		</ul>
+		{{/if}}
+		<div data-id="{{id}}" class="details">
+		    <span class="group">
+			    <div class="entry">
+                    <label for="teacher-username">Username</label>
+                    <input id="teacher-username" name="teacher-username" type="text" value="{{username}}"/>
+                </div>
+                <div class="entry input-password">
+                    <label for="teacher-password">Νέος Κωδικός</label>
+                    <input id="teacher-password" name="teacher-password" type="password" />
+                </div>
+            </span>
+            <span class="group">
+                <div class="entry">
+                    <label for="teacher-firstname">Όνομα</label>
+                    <input id="teacher-firstname" name="teacher-firstname" type="text" value="{{firstname}}"/>
+                </div>
+                <div class="entry">
+                    <label for="teacher-lastname">Επώνυμο</label>
+                    <input id="teacher-lastname" name="teacher-lastname" type="text" value="{{lastname}}"/>
+                </div>
+            </span>
+            <div class="entry select-courses">
+                <label for="courses">Μαθήματα</label>
+                <select style="width: 622px;" data-placeholder="Επιλέξτε τα μαθήματα του καθηγητή" multiple id="courses" name="courses">
+                    {{#courses}}
+                        <option {{#if selected}}selected{{/if}} data-id="{{id}}" value="{{lesson}}">{{lesson}}</option>
+                    {{/courses}}
+                </select>
+            </div>
+		</div>
+	</li>
+	{{/teachers}}
+</script>
+
+<script id="details-tpl" type="text/x-handlebars-template">
+	<div class="entry">
+	    <label for="teacher-username">Username</label>
+	    <input id="teacher-username" name="teacher-username" type="text" value="{{username}}"/>
+    </div>
+    <div class="entry">
+	    <label for="teacher-password">Κωδικός</label>
+	    <input id="teacher-password" name="teacher-password" type="password" />
+    </div>
+    <div class="entry">
+	    <label for="teacher-firstname">Όνομα</label>
+	    <input id="teacher-firstname" name="teacher-firstname" type="text" value="{{firstname}}"/>
+    </div>
+    <div class="entry">
+	    <label for="teacher-lastname">Επώνυμο</label>
+	    <input id="teacher-lastname" name="teacher-lastname" type="text" value="{{lastname}}"/>
+    </div>
+    <div class="entry">
+	    <label for="courses">Μαθήματα</label>
+        <select multiple id="courses" name="courses">
+	        {{#courses}}
+	            <option {{#if selected}}selected{{/if}} data-id="{{id}}" value="{{lesson}}">{{lesson}}</option>
+	        {{/courses}}
+        </select>
+    </div>
+    <button class="save button regular important">Αποθήκευση</button>
+</script>
+
+{% endraw %}

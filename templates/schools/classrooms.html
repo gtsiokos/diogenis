@@ -1,0 +1,34 @@
+{% extends "schools/base.html" %}
+
+{% block classrooms-active %}active{% endblock %}
+
+{% block action %}
+<button id="new-classroom" class="button important regular">Προσθήκη Αίθουσας</button>
+{% endblock %}
+
+{% block content %}
+
+<div id="content" data-username="{{ user.username }}" class="logged">
+	{{ block.super }}
+	<div id="ui-messages">
+	    <p>Κονσόλα Μηνυμάτων</p>
+	</div>
+	<ul id="classrooms" class="ui-entries"></ul>
+</div>
+
+{% endblock content %}
+
+{% block extra_js_bottom %}
+	{% spaceless %}
+
+	{{ block.super }}
+	<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/core.schools.classrooms.js"></script>
+	
+	{% endspaceless %}
+{% endblock %}
+
+{% block footer %}
+    
+    {% include "handlebars/schools/classrooms.html" %}
+   
+{% endblock %}

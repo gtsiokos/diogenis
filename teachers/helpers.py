@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#coding: UTF-8
-#most workable and usefull Ver:2
 # -*- coding: utf8 -*-
-
-from diogenis.labs.models import *
-
 from diogenis.common.helpers import humanize_time
 try:
     from reportlab.lib.pagesizes import letter
@@ -17,6 +12,17 @@ try:
 except:
     pass
 
+
+def get_lab_hour(lab):
+    '''
+    Expects: Lab object model
+    Returns: [Dict] with hour ranges in raw and greek humanized way.
+    '''
+    hour = {
+            'start':{'raw':lab.start_hour, 'humanized':humanize_time(lab.start_hour)},
+            'end':{'raw':lab.end_hour, 'humanized':humanize_time(lab.end_hour)},
+            }
+    return hour
 
 def normalize_locale(text):
     '''
@@ -48,45 +54,53 @@ def normalize_locale(text):
         normalizedText = normalizedText + achar
     return normalizedText
     
+def render(template, context):
+    from django.template import Context, Template
+    t = Template(template)
+    c = Context(context)
+    return t.render(c)
 
-def pdf_exporter(labtriplet,response):
-    '''
-    ###
-    # Needs to be documented by Lomar
-    ###
-    '''
-    localEdited = ''
+def pdf_exporter(lab,response):
+    from diogenis.teachers.models import Lab
+    from diogenis.students.models import Subscription
+    #import ipdb; ipdb.set_trace()
+    templates = {
+                'lab-info': u'<font color="#aaaaaa">{{lesson}} <font color="#555555">[{{start_hour}} - {{end_hour}}]</font> {{classroom}}</font>',
+                'student-info': u'<font color="#555555"><font color="#5690C7">{{am}} |</font> {{last_name}} {{first_name}} <font color="#aaaaaa">/ <strong>{{absences}}</strong></font></font>'
+                }
+    
     pdf = SimpleDocTemplate(response, pagesize = letter)
     style = getSampleStyleSheet()
-    color = 'black'
     story = []
-    studinfo = ''
-    lab = Lab.objects.get(name = labtriplet[0], day = labtriplet[1], start_hour = labtriplet[2]['start'], end_hour = labtriplet[2]['end'])
-    labInfo = TeacherToLab.objects.get(lab = lab)
-    studsub = StudentSubscription.objects.filter(teacher_to_lab = labInfo, in_transit = False).order_by('student').select_related()
-    localEdited = u'<font color=%s>%s [%s - %s]</font>' % (color, normalize_locale(labInfo.lesson.name), humanize_time(labInfo.lab.start_hour), humanize_time(labInfo.lab.end_hour))
-    story.append(Paragraph(localEdited, style["Heading1"]))
-    story.append(Paragraph(normalize_locale(labInfo.teacher.name), style["Heading2"])) 
-    localEdited = normalize_locale(labInfo.lab.name)
-#    classNum = classNum + 1
-    tmp = str('ΕΡΓΑΣΤΗΡΙΟ:')
-    tmp = unicode(tmp,"utf-8")
-    story.append(Paragraph("<font color='%s'>%s %s</font>" % (color, tmp, localEdited), style["Heading2"]))
-    story.append(Paragraph(u" AM  - ΟΝΟΜΑΤΕΠΩΝΥΜΟ ΦΟΙΤΗΤΗ", style["Heading2"]))
-    total_subs=len(studsub)
-    if total_subs == 0:
-        story.append(Spacer(0, inch * .3))
+    
+    context =   {
+                'lesson':normalize_locale(lab.course.lesson.name),
+                'classroom':normalize_locale(lab.classroom.name),
+                'start_hour':humanize_time(lab.start_hour),
+                'end_hour':humanize_time(lab.end_hour)
+                }
+    compiled_text = render(templates['lab-info'], context)
+    story.append(Paragraph(compiled_text, style["Heading1"]))
+    story.append(Spacer(0, inch * .1))
+    story.append(Paragraph('<font color="#555555"><font color="#5690C7">Α.Μ. |</font> ΟΝΟΜ/ΠΩΝΥΜΟ ΦΟΙΤΗΤΗ <font color="#aaaaaa">/ ΑΠΟΥΣΙΕΣ</font></font>', style["Heading3"]))
+    
+    subscriptions = Subscription.objects.filter(lab=lab, in_transit=False).order_by('student__user__last_name').select_related()
+    story.append(Spacer(0, inch * .2))
+    if not subscriptions:
         msg = u"ΔΕΝ ΕΧΟΥΝ ΓΙΝΕΙ ΕΓΓΡΑΦΕΣ ΣΕ ΑΥΤΟ ΤΟ ΕΡΓΑΣΤΗΡΙΟ"
         story.append(Paragraph(msg, style["Normal"]))
         story.append(Spacer(0, inch * .3))
     else:
-        for i in range(0,total_subs,1):
-            temp = str(studsub[i].student)
-            studinfo = unicode(temp,"utf-8")
-            studinfo = u'%s - %s' % (studsub[i].student.am, studinfo)
-            localEdited = ''
-            localEdited = normalize_locale(studinfo)
-            story.append(Paragraph(localEdited, style['Normal'],encoding='utf8'))
+        for subscription in subscriptions:
+            student = subscription.student
+            context =   {
+                        'am':student.am,
+                        'last_name':normalize_locale(student.user.last_name),
+                        'first_name':normalize_locale(student.user.first_name),
+                        'absences':subscription.absences
+                        }
+            compiled_text = render(templates['student-info'], context)
+            story.append(Paragraph(compiled_text, style['Normal'],encoding='utf8'))
             story.append(Spacer(0, inch * .1))
     story.append(Spacer(0, inch * .5))
     pdf.build(story)

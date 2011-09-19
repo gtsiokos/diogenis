@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block alerts %}
+	<div id="ui-messages"></div>
+{% endblock %}
+
+{% block content %}
+<div id="content" class="not-logged">
+    <h2 class="decoration">Εγγραφή</h2>
+	<div id="user"></div>
+</div>
+{% endblock content %}
+
+{% block extra_js_bottom %}
+	{% spaceless %}
+
+	{{ block.super }}
+	<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/core.components.signup.js"></script>
+	
+	{% endspaceless %}
+{% endblock %}
+
+{% block footer %}
+    
+   {% include "handlebars/signup.html" %}
+   {% include "handlebars/messages.html" %}
+    
+{% endblock %}

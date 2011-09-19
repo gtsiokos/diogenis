@@ -6,9 +6,9 @@
 
 import hashlib
 
-def get_hashed_username(username):
-    hashed_username = hashlib.sha256(username)
-    return hashed_username.hexdigest()
+def get_hashed_id(object_id):
+    hashed_id = hashlib.sha256( str(object_id) )
+    return hashed_id.hexdigest()
 
 def humanize_time(time):
     t = (u"%d μ.μ." % (time-12) if time >= 13 else u"%d π.μ." % time)

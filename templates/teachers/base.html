@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block extra_css %}
-	<link type="text/css" rel="stylesheet" href="/media/teacher-ui.css" />
-	<link type="text/css" rel="stylesheet" href="/media/redmond/jquery-ui.css" />
-	<link type="text/css" rel="stylesheet" href="/media/modal.css" />
+	<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}ui.teachers.css" />
+	<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}redmond/jquery-ui.css" />
+	<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}modal.css" />
 {% endblock %}
 
 {% block sidebar %}
@@ -11,14 +11,14 @@
 	<a id="add-lab" class="button important regular" href="#">Προσθήκη Εργαστηρίου</a>
 	<ul id="navigation">
 		<li>
-			<a class="first {% block manage-labs-active %}{% endblock %}" href="/teachers/{{ user.username }}/">
-				<img src="/media/img/black_board_icon.png" />
+			<a class="first {% block manage-labs-active %}{% endblock %}" href="{% url teachers.index user.username %}">
+				<img src="{{ STATIC_URL }}img/black_board_icon.png" />
 				Διαχείριση Εργαστηρίων
 			</a>
 		</li>
 		<li>
-			<a class="last {% block pending-students-active %}{% endblock %}" href="/teachers/{{ user.username }}/pending-students/">
-				<img src="/media/img/drawer_icon.png" />
+			<a class="last {% block pending-students-active %}{% endblock %}" href="{% url teachers.pending-students user.username %}">
+				<img src="{{ STATIC_URL }}img/drawer_icon.png" />
 				Αίθουσα Αναμονής
 			</a>
 		</li>
@@ -38,8 +38,18 @@
 					<label for="lesson-name">Επιλέξτε Μάθημα</label>
 					<select id="lesson-name" class="lesson-name" name="lesson-name">
 						<option value="">Όνομα Μαθήματος</option>
-						{% for r in unique_lessons %}
-							<option value="{{ r.name }}">{{ r.name }}</option>
+						{% for course in courses %}
+						    {% if courses|length > 1 %}
+						        <optgroup label="{{course.school}}">
+						        {% for lesson in course.lessons %}
+							    <option data-id="{{ lesson.hash_id }}" value="{{ lesson.lesson__name }}">{{ lesson.lesson__name }}</option>
+						        {% endfor %}
+						        </optgroup>
+							{% else %}
+								{% for lesson in course.lessons %}
+							    <option data-id="{{ lesson.hash_id }}" value="{{ lesson.lesson__name }}">{{ lesson.lesson__name }}</option>
+						        {% endfor %}
+							{% endif %}
 						{% endfor %}
 					</select>
 				</li>
@@ -109,8 +119,8 @@
 			
 			
 			<div id="modal-messages">
-				<img id="modal-loader" src="/media/img/loader.gif" alt="" />
-				<p>Badoo</p>
+				<span id="modal-loader"></span>
+				<p></p>
 			</div>
 			<ul class="modal-controls">
 				<li><button class="simplemodal-close">Ακύρωση</button></li>
@@ -125,15 +135,13 @@
 	{% spaceless %}
 
 	{{ block.super }}
-	<script type="text/javascript" src="/media/js/jquery.json-2.2.min.js"></script>
-	<script type="text/javascript" src="/media/js/jquery.scrollTo-1.4.2-min.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/modal/jquery.simplemodal.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/modal/osx.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.8.6.min.js"></script>
 	
-	<script type="text/javascript" src="/media/js/modal/jquery.simplemodal.js"></script>
-	<script type="text/javascript" src="/media/js/modal/osx.js"></script>
-	<script type="text/javascript" src="/media/js/jquery-ui-1.8.6.min.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/core.teachers.lab.register.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/core.teachers.absences.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/core.teachers.lab.transfer.js"></script>
 	
-	<script type="text/javascript" src="/media/js/core.teachers.lab.register.js"></script>
-	<script type="text/javascript" src="/media/js/core.teachers.lab.transfer.js"></script>
-
-	{% endspaceless %}
+    {% endspaceless %}
 {% endblock %}

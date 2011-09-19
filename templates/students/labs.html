@@ -4,12 +4,21 @@
 
 <div id="content" class="logged">
 	{{ block.super }}
-	{% if results %}
+	{% if subscriptions %}
 		<dl class="labs">
-		{% for labt in results %}
-			<dt> {{ labt.lesson_name }} </dt>
+		{% for subscription in subscriptions %}
+			<dt>
+			    {{ subscription.lesson }}
+			    {% if subscription.absences.value %}
+			        <span class="absences {{subscription.absences.importance}}">
+			        {{subscription.absences.value}} Απουσί{{ subscription.absences.value|pluralize:"α,ες" }}
+			        </span>
+			    {% endif %}
+			 </dt>
 			<dd>
-				<span class="lab-name">{{ labt.lab_name }}</span><span class="lab-date">{{ labt.lab_day }} {{ labt.lab_hour.start.humanized }} - {{ labt.lab_hour.end.humanized }}</span><span class="teacher-name">{{ labt.teacher }}</span>
+				<span class="lab-name">{{ subscription.classroom }}</span>
+				<span class="lab-date">{{ subscription.day }} {{ subscription.hour.start.humanized }} - {{ subscription.hour.end.humanized }}</span>
+				<span class="teacher-name">{{ subscription.teacher }}</span>
 			</dd>
 		{% endfor %}
 		</dl>

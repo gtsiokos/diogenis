@@ -1,23 +1,21 @@
-"""
-This file demonstrates two different styles of tests (one doctest and one
-unittest). These will both pass when you run "manage.py test".
+# -*- coding: utf8 -*-
 
-Replace these with more appropriate tests for your application.
-"""
+from diogenis.tests import *
 
-from django.test import TestCase
-
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.failUnlessEqual(1 + 1, 2)
-
-__test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
-
->>> 1 + 1 == 2
-True
-"""}
-
+class StudentTestCase(DiogenisTestCase):
+    def test_subscriptions_count(self):
+        '''
+        Tests Subscription.check_availability()
+        '''
+        self.assertEqual(Subscription.objects.all().count(), 6)
+        
+    def test_lessons_by_student(self):
+        students = Student.objects.all()
+        for student in students:
+            subscriptions = Subscription.objects.filter(student=student)
+            if student.am == '1111':
+                self.assertEqual(subscriptions.count(), 1)
+            if student.am == '2222':
+                self.assertEqual(subscriptions.count(), 1)
+            if student.am == '3333':
+                self.assertEqual(subscriptions.count(), 2)

@@ -1,51 +1,45 @@
 # -*- coding: utf-8 -*-
 # -*- coding: utf8 -*-
 
+from django.core.exceptions import ValidationError
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 
 from django.contrib.auth.decorators import user_passes_test
 from django.utils import simplejson
 
-from django.contrib.auth.models import User
-from diogenis.accounts.models import *
-from diogenis.labs.models import *
+from diogenis.students.models import *
+from diogenis.teachers.models import *
+from diogenis.schools.models import *
 
 from diogenis.common.helpers import humanize_time, set_hour_range
-from diogenis.labs.helpers import get_lab_hour
+from diogenis.teachers.helpers import get_lab_hour
 
 def user_is_student(user):
-    return user.is_authenticated() and not user.get_profile().is_teacher
+    try:
+        request_user = Student.objects.get(user=user)
+        return user.is_authenticated() and not request_user.is_teacher
+    except:
+        return False
 
-
-@user_passes_test(user_is_student, login_url="/login/")
+@user_passes_test(user_is_student, login_url='/login/')
 def display_labs(request, username):
     '''
     Manages student's view.
     
     Handling Template:    /students/labs.html
     '''
-    result = []
     if username == request.user.username:
-        q1 = User.objects.get(username=username).get_profile()
+        student = Student.objects.get(user=request.user)
         
-        unique_lessons = []        #contains lesson names related to the student.
-        my_lessons = StudentToLesson.objects.filter(student=q1).order_by('lesson__name')
-        for l in my_lessons:
-            unique_lessons.append({"name":l.lesson.name})
+        courses = student.get_courses_by_school()
+        subscriptions = student.get_subscriptions()
         
-        subscriptions = StudentSubscription.objects.filter(student=q1).select_related()
-        for subscription in subscriptions:
-            result.append ({
-                            "lesson_name":subscription.teacher_to_lab.lesson.name,
-                            "lab_name":subscription.teacher_to_lab.lab.name,
-                            "lab_day":subscription.teacher_to_lab.lab.day,
-                            "lab_hour":get_lab_hour(subscription.teacher_to_lab.lab),
-                            "lab_start_hour":humanize_time(subscription.teacher_to_lab.lab.start_hour),
-                            "lab_end_hour":humanize_time(subscription.teacher_to_lab.lab.end_hour),
-                            "teacher":subscription.teacher_to_lab.teacher.name,
-                            })
-        return render(request, 'students/labs.html', {'results': result, 'unique_lessons':unique_lessons})
+        context =   {
+                    'subscriptions':subscriptions['context'],
+                    'courses':courses['context']
+                    }
+        return render(request, 'students/labs.html', context)
     else:
         raise Http404
 
@@ -57,102 +51,103 @@ def add_new_lab(request):
     
     Client-side: [js/core.students.lab.register.js]
     '''
-    if request.method == "POST" and request.is_ajax():
-        message = []
+    if request.method == 'POST' and request.is_ajax():
         json_data = simplejson.loads(request.raw_post_data)
-
+        
+        student = Student.objects.get(user=request.user)
+        schools = student.schools.all()
+        
         try:
             action = json_data['action']    #[action] defines different view handling
         except KeyError:
             msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
-            message.append({ "status": 2, "msg": msg })
+            data = {'status':2, 'msg':msg}
             
-        if action == "getTeachers":            #returns available teachers for the requested lesson
+        if action == "teachers":            #returns available teachers for the requested lesson
             try:
-                lesson = json_data['lesson']
+                course_id = json_data['course_id']
             except KeyError:
                 msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
-                message.append({ "status": 2, "msg": msg })
-            available_teachers = TeacherToLab.objects.filter(lesson__name__contains=lesson).order_by('teacher__name').select_related()
+                data = {'status':2, 'msg':msg}
+            available_teachers = Lab.objects.filter(course__school__in = schools, course__hash_id=course_id).order_by('teacher').select_related()
             teachers_list = []
-            teachers_names = []
-            for t in available_teachers:
-                if t.teacher.name not in teachers_list:
-                    teachers_list.append(t.teacher.name)
-                    teachers_names.append({"name":t.teacher.name})
+            teachers = []
+            for available_teacher in available_teachers:
+                teacher_name = available_teacher.teacher.user.get_full_name()
+                teacher_id = available_teacher.teacher.hash_id
+                if teacher_name not in teachers_list:
+                    teachers_list.append(teacher_name)
+                    teachers.append({'name':teacher_name, 'id':teacher_id})
             
-            message.append({ "status": 1, "action": action, "teachers": teachers_names })
+            data = {'status':1, 'action':action, 'teachers':teachers}
         
-        if action == "getClasses":            #returns available classes for the requested lesson,teacher
+        if action == "classes":            #returns available classes for the requested lesson,teacher
             try:
-                lesson = json_data['lesson']
-                teacher = json_data['teacher']
+                course_id = json_data['course_id']
+                teacher_id = json_data['teacher_id']
             except KeyError:
                 msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
-                message.append({ "status": 2, "msg": msg })
+                data = {'status':2, 'msg':msg}
             
-            available_labs = TeacherToLab.objects.filter(lesson__name__contains=lesson, teacher__name__contains=teacher, lab__start_hour__gt=1).order_by('lab__day', 'lab__start_hour').select_related()
+            available_labs = Lab.objects.filter(course__hash_id=course_id, course__school__in = schools, teacher__hash_id=teacher_id, start_hour__gt=1).order_by('day', 'start_hour').select_related()
             
             if available_labs:                #checks whether requested teacher has registered labs
                 classes_list = []
-                for l in available_labs:
-                    class_start_time = humanize_time(l.lab.start_hour)
-                    class_end_time = humanize_time(l.lab.end_hour)
-                    classes_list.append({"name":l.lab.name,"day":l.lab.day, "start_hour":class_start_time, "end_hour":class_end_time, "start_hour_raw":l.lab.start_hour, "end_hour_raw":l.lab.end_hour })
+                for lab in available_labs:
+                    hour = get_lab_hour(lab)
+                    classes_list.append({'id':lab.hash_id, 'lesson':lab.course.lesson.name, 'day':lab.day, 'start_hour':hour['start']['humanized'], 'end_hour':hour['end']['humanized'] })
                 
-                message.append({ "status": 1, "action": action, "classes": classes_list })
+                data = {'status':1, 'action':action, 'classes':classes_list}
             else:
                 msg = u"Ο καθηγητής που επιλέξατε δεν έχει δημοσιεύσει τα εργαστήρια του στον Διογένη"
-                message.append({ "status": 2, "action": action, "msg": msg })
+                data = {'status':2, 'action':action, 'msg':msg}
         
-        if action == "checkAvailability" or action == "submitLab":            #common processes done by these actions
+        if action == "availability" or action == "submit":            #common processes done by these actions
             try:
-                lesson = json_data['lesson']
-                teacher = json_data['teacher']
-                class_name = json_data['name']
-                class_day = json_data['day']
-                class_hour = set_hour_range(json_data['start_hour'], json_data['end_hour'])
+                lab_id = json_data['lab_id']
             except KeyError:
                 msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
-                message.append({ "status": 2, "msg": msg })
+                data = {'status':2, 'msg':msg}
             
             lab_available = False
             try:
-                unique_class = TeacherToLab.objects.get(lesson__name__contains=lesson, teacher__name__contains=teacher, lab__name__contains=class_name, lab__day__contains=class_day, lab__start_hour=class_hour['start'], lab__end_hour=class_hour['end'])
-                students_count = StudentSubscription.objects.filter(teacher_to_lab=unique_class).count()
-                available_seats = unique_class.max_students - students_count
+                lab = Lab.objects.get(hash_id=lab_id)
+                students_count = Subscription.objects.filter(lab=lab).count()
+                available_seats = lab.max_students - students_count
                 lab_available = (True if available_seats > 0 else False)    #if the requested lab has available seats
             except:
                 msg = u"Το εργαστήριο που ζητήσατε δεν βρέθηκε"
-                message.append({ "status": 2, "action": action, "msg": msg })
+                data = {'status':2, 'action':action, 'msg':msg}
                 
         
-        if action == "checkAvailability":                                    #prompts user to verify a pending subscription in case lab is full
+        if action == "availability":                                    #prompts user to verify a pending subscription in case lab is full
             if lab_available:
-                message.append({ "status": 1, "action": action })
+                data = {'status':1, 'action':action}
             else:
-                msg = u"To εργαστήριο %s δεν έχει ελεύθερες θέσεις. Θέλετε να υποβάλεται αίτημα στον καθηγητή για την έγκριση της εγγραφή σας?" % class_name
-                message.append({ "status": 3, "action": action, "msg": msg })
+                msg = u"To εργαστήριο %s δεν έχει ελεύθερες θέσεις. Θέλετε να υποβάλεται αίτημα στον καθηγητή για την έγκριση της εγγραφή σας?" % lab.classroom.name
+                data = {'status':3, 'action':action, 'msg':msg}
         
-        if action == "submitLab":
-            the_student = AuthStudent.objects.get(user=request.user)
+        if action == "submit":
             try:
-                already_subscribed = StudentSubscription.objects.get(student=the_student, teacher_to_lab__lesson__name=lesson)
+                already_subscribed = Subscription.objects.get(student=student, lab__course__lesson__hash_id=lab.course.lesson.hash_id)
                 msg = u"Έχετε ήδη εγγραφεί στο συγκεκριμένο μάθημα"
-                message.append({ "status": 2, "action": action, "msg": msg })
+                data = {'status':2, 'action':action, 'msg':msg}
             except:
+                subscription = Subscription(student=student, lab=lab)
+                
                 if lab_available:                                            #subscription completed
-                    StudentSubscription.objects.create(student=the_student, teacher_to_lab=unique_class)
-                    msg = u"Η εγγραφή σας στο εργαστήριο %s ολοκληρώθηκε" % class_name
+                    msg = u"Η εγγραφή σας στο εργαστήριο %s ολοκληρώθηκε" % lab.classroom.name
                 else:                                                        #pending subscription completed
-                    StudentSubscription.objects.create(student=the_student, teacher_to_lab=unique_class, in_transit=True)
+                    subscription.in_transit = True
                     msg = u"Στείλαμε το αίτημα σας στον καθηγητή"
-                message.append({ "status": 1, "action": action, "msg": msg })
+                
+                subscription.save()
+                data = {'status':1, 'action':action, 'msg':msg}
         
-        error_msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
-        if not message:
-            message.append({ "status": 2, "msg": error_msg })
-        data = simplejson.dumps(message)
+        if not data:
+            error_msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
+            data = {'status':2, 'msg':error_msg}
+        data = simplejson.dumps(data)
         return HttpResponse(data, mimetype='application/javascript')
         
             

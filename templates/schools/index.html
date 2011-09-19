@@ -1,0 +1,47 @@
+{% extends "schools/base.html" %}
+
+{% block index-active %}active{% endblock %}
+{% block content %}
+
+<div id="content" data-username="{{ user.username }}" class="logged">
+	{{ block.super }}
+	<div id="ui-messages">
+		{% if message %}
+			{% if message.status == 1 %}
+				<p class="ok">{{ message.msg }}</p>
+			{% endif %}
+			{% if message.status == 2 %}
+				<p class="error">{{ message.msg }}</p>
+			{% endif %}
+			{% if message.status == 3 %}
+				<p class="warning">{{ message.msg }}</p>
+			{% endif %}
+		{% else %}
+			<p>Κονσόλα Μηνυμάτων</p>
+		{% endif %}
+	</div>
+	<ul class="ui-categories">
+	    <!--<li>
+	        <h3>Εισαγωγή</h3>
+	    </li>-->
+	    <li>
+	        <h3>Νέο Πρόγραμμα Σπουδών</h3>
+	        <p>Μόλις ανεβάσετε <strong>το αρχείο excel (.xls)</strong> τα μαθήματα του τμήματος θα ανανεωθούν αυτόματα.</p>
+	        <form id="courses-upload" action="/schools/{{ user.username }}/" enctype="multipart/form-data" method="POST">
+	            <input type="file" id="file" name="file" value="Αναζήτηση"> 
+	            {% csrf_token %}
+	        </form>
+	    </li>
+	</ul>
+</div>
+
+{% endblock content %}
+
+{% block extra_js_bottom %}
+	{% spaceless %}
+
+	{{ block.super }}
+	<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/core.schools.index.js"></script>
+	
+	{% endspaceless %}
+{% endblock %}

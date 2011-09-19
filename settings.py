@@ -3,17 +3,7 @@
 
 import os.path
 
-try:
-    from diogenis.local_settings import *
-except:
-    pass
-
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
-
-AUTH_PROFILE_MODULE = 'accounts.UserProfile'
-
-#SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -32,6 +22,15 @@ SITE_ID = 1
 # to load the internationalization machinery.
 USE_I18N = True
 
+# List of finder classes that know how to find static files in
+# various locations.
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+)
+
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -44,7 +43,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
-#    'django.core.context_processors.static',
+    'django.core.context_processors.static',
     'django.contrib.messages.context_processors.messages',
     'diogenis.common.context_processors.get_csrf_token_value',
 )
@@ -71,16 +70,23 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
     'django.contrib.admin',
-    'diogenis.accounts', 'diogenis.labs',
-    'diogenis.teachers', 'diogenis.students',
-    'south',
-)
-
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
+    'compressor',
+    'diogenis.auth',
+    'diogenis.common',
+    'diogenis.schools',
+    'diogenis.students',
+    'diogenis.teachers',
+#    'south',
 )
 
 # Needed for the decorator
 LOGIN_URL = '/'
+
+try:
+    from diogenis.local_settings import *
+except:
+    pass
 

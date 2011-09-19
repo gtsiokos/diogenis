@@ -1,0 +1,26 @@
+{% load diogenis_extras %}
+
+{% raw %}
+
+<script id="list-tpl" type="text/x-handlebars-template">
+	{{#classrooms}}
+	    <li class="classroom" data-id="{{id}}">
+	        <span>{{name}}</span>
+	        <ul class="ui-options">
+				<li><a href="#" class="edit button listed stronger">Επεξεργασία</a></li>
+				<li><a href="#" class="delete button listed">Διαγραφή</a></li>
+			</ul>
+		</li>
+	{{/classrooms}}
+</script>
+
+<script id="edit-tpl" type="text/x-handlebars-template">
+	<span style="margin-top:9px; margin-bottom:9px;">
+        <input type="text" value="{{name}}"/>
+    </span>
+    <ul class="ui-options" style="top:11px">
+		<li><a href="#" class="save button listed stronger">Αποθήκευση</a></li>
+	</ul>
+</script>
+
+{% endraw %}

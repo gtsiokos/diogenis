@@ -1,0 +1,46 @@
+{% load diogenis_extras %}
+
+{% raw %}
+
+<script id="authenticate-tpl" type="text/x-handlebars-template">
+	<span data-action="authenticate"></span>
+	<div class="entry">
+		<label for="signup-username">Username στον Διόνυσο</label>
+		<input id="signup-username" name="signup-username" type="text" />
+	</div>
+    <div class="entry">
+		<label for="signup-password">Κωδικός στον Διόνυσο</label>
+		<input id="signup-password" name="signup-password" type="password" />
+	</div>
+	<button class="button regular important">Εγγραφή</button>	
+</script>
+
+<script id="signup-tpl" type="text/x-handlebars-template">
+    <span 
+        data-action="signup" 
+        data-username="{{credentials.username}}" 
+        data-registration_number="{{credentials.registration_number}}" 
+        data-first_name="{{credentials.first_name}}" 
+        data-last_name="{{credentials.last_name}}" 
+        data-semester="{{credentials.semester}}" 
+        data-introduction_year="{{credentials.introduction_year}}"
+    ></span>
+    <div class="entry">
+	    <label for="school">Τμήμα</label>
+	    <select size="3" style="width: 220px;" data-placeholder="Επιλέξτε το τμήμα σας" id="school" name="school">
+		    <option value=""></option>
+		    {{#schools}}
+		        <option data-id="{{id}}" value="{{title}}">{{title}}</option>
+		    {{/schools}}
+	    </select>
+	</div>
+	<h4 style="margin-top: 22px;">Τα στοιχεία σας</h4>
+    <ul class="credentials">
+        <li><strong>Αριθμός Μητρώου</strong><span>{{credentials.registration_number}}</span></li>
+        <li><strong>Όνομ/πώνυμο</strong><span>{{credentials.first_name}} {{credentials.last_name}}</span></li>
+        <li><strong>Έτος Εισαγωγής</strong><span>{{credentials.introduction_year}}</span></li>
+    </ul>
+	<button class="button regular important">Είσοδος</button>	
+</script>
+
+{% endraw %}

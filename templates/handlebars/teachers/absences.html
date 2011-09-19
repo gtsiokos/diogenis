@@ -1,0 +1,15 @@
+{% load diogenis_extras %}
+
+{% raw %}
+
+<script id="absences-tpl" type="text/x-handlebars-template">
+    <div data-id="{{ subscription_id }}" class="ui-absences {{importance}}">
+        <span class="add">
+            <strong>{{ value }}</strong>
+            +
+        </span>
+        <span class="remove">-</span>
+    </div>
+</script>
+
+{% endraw %}

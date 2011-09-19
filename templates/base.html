@@ -1,29 +1,37 @@
+{% load compress %}
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<!--<meta http-equiv="X-UA-Compatible" content="chrome=1">-->
 		<title>{% block title %}{% endblock title %}Diogenis</title>
-		<link href="/media/img/favicon.ico" rel="shortcut icon" type="image/x-icon" /> 
-		<link type="text/css" rel="stylesheet" href="/media/reset.css" />
-		<link type="text/css" rel="stylesheet" href="/media/style.css" />
+		<link href="{{ STATIC_URL }}img/favicon.ico" rel="shortcut icon" type="image/x-icon" /> 
 		
+		{% compress css %}
+		<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}reset.css" />
+		<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}base.css" />
+		<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}ui.base.css" />
+		<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}js/smoke/smoke.css" />
+		<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}js/smoke/themes/diogenis-100s.css" />
+		<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}js/chosen/chosen.css" />
 		{% block extra_css %}{% endblock %}
+		{% endcompress %}
 		
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
-		<script type="text/javascript" src="/media/js/layout.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 		{% block extra_js_top %}{% endblock %}
 
 	</head>
 	<body>
 		<div id="container1">
 			<div id="header">
-			{% block header %}<h1>diogenis</h1>{% endblock %}
+			{% block header %}<a href="{% url index %}"><h1>diogenis</h1></a>{% endblock %}
 				<div id="login">
 					{% if user.is_authenticated %}
 		    				<a href="#" class="options-panel">{{ user.username }}</a>
 							<div class="panel">
-								<ul>								
-									<li><a href="/logout/">&crarr;&ensp;Έξοδος</a></li>
+								<ul>							
+									<li><a href="{% url logout %}">&crarr;&ensp;Έξοδος</a></li>
 								</ul>
 							</div>
 					{% else %}
@@ -50,14 +58,30 @@
 				{% block sidebar %}{% endblock %}
 				{% block content %}{% endblock %}
 			</div>
-			{% block footer %}{% endblock %}
+			{% block footer %}<div id="spinner"></div>{% endblock %}
 		</div>
+		{% compress js %}
 		{% block extra_js_bottom %}
 			
-			<script type="text/javascript" src="/media/js/core.js"></script>
-			<script type="text/javascript" src="/media/js/jquery.metadata.js"></script>
-			<script type="text/javascript" src="/media/js/core.components.js"></script>
+			<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/core.js"></script>
+			<script type="text/javascript" src="{{ STATIC_URL }}js/handlebars-1.0.0.beta.2.js"></script>
+			<script type="text/javascript" src="{{ STATIC_URL }}js/json2.js"></script>
+			<script type="text/javascript" src="{{ STATIC_URL }}js/jsonselect-0.2.1.js"></script>
+			<script type="text/javascript" src="{{ STATIC_URL }}js/smoke/smoke.js"></script>
+			
+			<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.ba-tinypubsub.min.js"></script>
+			<script type="text/javascript" src="{{ STATIC_URL }}js/chosen/jquery.chosen.min.js"></script>
+			
+			<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.scrollTo-1.4.2-min.js"></script>
+			
+			<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/core.components.layout.js"></script>
+			<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/core.components.helpers.js"></script>
+		    
+		{% endblock %}
+		{% endcompress %}
 		
+		{% block uncompressed_js_bottom %}
+		    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.spin.js"></script>
 		{% endblock %}
 	</body>
 </html>

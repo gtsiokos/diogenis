@@ -4,6 +4,6 @@ from diogenis.students.views import *
 
 
 urlpatterns = patterns('',
-    (r'^(?P<username>\w{0,50})/$', display_labs),
-    (r'^add-new-lab/$', add_new_lab),
+    url(r'^(?P<username>\w{0,50})/$', display_labs, name='students.index'),
+    url(r'^add-new-lab/$', add_new_lab),
 )

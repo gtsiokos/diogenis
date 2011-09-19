@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}ui.schools.css">
+{% endblock %}
+
+{% block sidebar %}
+<div id="sidebar">
+	{% block action %}{% endblock %}
+	<ul id="navigation">
+		<li>
+			<a class="first {% block index-active %}{% endblock %}" href="{% url schools.index user.username %}">
+				<img src="{{ STATIC_URL }}img/black_board_icon.png" />
+				Αρχική
+			</a>
+		</li>
+		<li>
+			<a class="{% block classrooms-active %}{% endblock %}" href="{% url schools.classrooms user.username %}">
+				<img src="{{ STATIC_URL }}img/drawer_icon.png" />
+				Αίθουσες
+			</a>
+		</li>
+		<li>
+			<a class="last {% block teachers-active %}{% endblock %}" href="{% url schools.teachers user.username %}">
+				<img src="{{ STATIC_URL }}img/black_board_icon.png" />
+				Καθηγητές
+			</a>
+		</li>
+	</ul>
+</div>
+{% endblock %}
+
+

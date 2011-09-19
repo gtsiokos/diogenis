@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block extra_css %}
-	<link rel="stylesheet" href="/media/student-ui.css">
-	<link rel="stylesheet" href="/media/modal.css">
+	<link rel="stylesheet" href="{{ STATIC_URL }}ui.students.css">
+	<link rel="stylesheet" href="{{ STATIC_URL }}modal.css">
 {% endblock %}
 
 {% block sidebar %}
@@ -10,8 +10,8 @@
 	<a id="add-lab" class="button important regular" href="#">Προσθήκη Εργαστηρίου</a>
 	<ul id="navigation">
 		<li>
-			<a class="first last active" href="/students/{{ user.username }}/">
-				<img src="/media/img/black_board_icon.png" />
+			<a class="first last active" href="{% url students.index user.username %}">
+				<img src="{{ STATIC_URL }}img/black_board_icon.png" />
 				Δηλωμένα Εργαστήρια
 			</a>
 		</li>
@@ -31,8 +31,18 @@
 					<label for="lesson-name">Επιλέξτε Μάθημα</label>
 					<select id="lesson-name" class="lesson-name" name="lesson-name">
 						<option value="">Όνομα Μαθήματος</option>
-						{% for r in unique_lessons %}
-							<option value="{{ r.name }}">{{ r.name }}</option>
+						{% for course in courses %}
+						    {% if courses|length > 1 %}
+						        <optgroup label="{{course.school}}">
+						        {% for lesson in course.lessons %}
+							    <option data-id="{{ lesson.hash_id }}" value="{{ lesson.lesson__name }}">{{ lesson.lesson__name }}</option>
+						        {% endfor %}
+						        </optgroup>
+							{% else %}
+								{% for lesson in course.lessons %}
+							    <option data-id="{{ lesson.hash_id }}" value="{{ lesson.lesson__name }}">{{ lesson.lesson__name }}</option>
+						        {% endfor %}
+							{% endif %}
 						{% endfor %}
 					</select>
 				</li>
@@ -54,8 +64,8 @@
 			
 			
 			<div id="modal-messages">
-				<img id="modal-loader" src="/media/img/loader.gif" alt="" />
-				<p>Badoo</p>
+				<span id="modal-loader"></span>
+				<p></p>
 			</div>
 			<ul class="modal-controls">
 				<li><button class="simplemodal-close">Ακύρωση</button></li>
@@ -70,11 +80,10 @@
 	{% spaceless %}
 
 	{{ block.super }}
-	<script type="text/javascript" src="/media/js/modal/jquery.simplemodal.js"></script>
-	<script type="text/javascript" src="/media/js/modal/osx.js"></script>
-	<script type="text/javascript" src="/media/js/jquery.json-2.2.min.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/modal/jquery.simplemodal.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/modal/osx.js"></script>
 	
-	<script type="text/javascript" src="/media/js/core.students.lab.register.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/core.students.lab.register.js"></script>
 	
 	{% endspaceless %}
 {% endblock %}

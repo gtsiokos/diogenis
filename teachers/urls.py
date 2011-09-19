@@ -4,9 +4,10 @@ from diogenis.teachers.views import *
 
 
 urlpatterns = patterns('',
-    (r'^(?P<username>\w{0,50})/$', manage_labs),
-    (r'^(?P<username>\w{0,50})/pending-students/$', manage_labs),
-    (r'^submit-student-to-lab/$', submit_student_to_lab),
-    (r'^add-new-lab/$', add_new_lab),
-    (r'^export-pdf/(?P<name>\w{0,20})/(?P<day>\w{0,20})/(?P<start_hour>\d+)/(?P<end_hour>\d+)/(?P<csrf_token>[a-zA-Z0-9]{0,64})/$', export_pdf),
+    url(r'^(?P<username>\w{0,50})/$', manage_labs, name='teachers.index'),
+    url(r'^(?P<username>\w{0,50})/pending-students/$', manage_labs, name='teachers.pending-students'),
+    url(r'^submit-student-to-lab/$', submit_student_to_lab),
+    url(r'^add-new-lab/$', add_new_lab),
+    url(r'^update-absences/$', update_absences),
+    url(r'^export-pdf/(?P<hash_id>[a-zA-Z0-9]{0,64})/(?P<csrf_token>[a-zA-Z0-9]{0,64})/$', export_pdf),
 )

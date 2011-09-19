@@ -6,4 +6,4 @@ diogenis.db
 local_settings.py
 
 common/static/CACHE/
-media/uploads/
+

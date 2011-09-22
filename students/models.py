@@ -118,7 +118,7 @@ class Subscription(models.Model):
         start = self.lab.start_hour
         end = self.lab.end_hour
         subscriptions = Subscription.objects.filter(student=student, lab__day__contains=day).exclude(id=self.id).select_related()
-        
+        #import ipdb; ipdb.set_trace();
         flag = -1
         if subscriptions:
             for subscription in subscriptions:

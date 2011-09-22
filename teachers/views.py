@@ -66,6 +66,7 @@ def manage_labs(request, username):
                                 'first':subscription.student.user.first_name,
                                 'last':subscription.student.user.last_name,
                                 'am':subscription.student.am,
+                                'subscription_id':subscription.hash_id,
                                 'absences':subscription.opinionated_absences,
                                 'id':subscription.student.hash_id
                                 })
@@ -129,10 +130,11 @@ def submit_student_to_lab(request):
             empty_test = students[0]        #raises an error students dict is empty
             for student in students:
                 student = Student.objects.get(hash_id=student['id'])
-                subscription = Subscription(student=student, lab=lab['new'])
+                subscription = Subscription.objects.get(student=student, lab=lab['old'])
+                subscription.lab = lab['new']
                 available = subscription.check_availability()        #checks student's availability in order to be transferred.
                 if available:
-                    Subscription.objects.filter(student=student, lab=lab['old']).delete()
+                    subscription.in_transit = False
                     subscription.save()
                 else:
                     msg = u"Κάποιοι σπουδαστές έχουν δηλώσει άλλα εργαστήρια αυτές τις ώρες"
@@ -147,6 +149,28 @@ def submit_student_to_lab(request):
         data = simplejson.dumps(data)
         return HttpResponse(data, mimetype='application/javascript')
 
+@user_passes_test(user_is_teacher, login_url="/login/")
+def delete_subscription(request):
+    if request.method == "POST" and request.is_ajax():
+        json_data = simplejson.loads(request.raw_post_data)
+        data = {}
+        
+        try:
+            action = json_data['action']
+            students = json_data['students']
+        except KeyError:
+            msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
+            data = {'status':2, 'msg':msg}
+        
+        hashes = map(lambda x:x['subscription_id'], students)
+        subscriptions = Subscription.objects.filter(hash_id__in=hashes)
+        subscriptions.delete()
+        
+        if not data:
+            ok_msg = u"Η διαγραφή των εγγραφών ολοκληρώθηκε"
+            data = { "status": 1, "msg": ok_msg }
+        data = simplejson.dumps(data)
+        return HttpResponse(data, mimetype='application/javascript')
 
 @user_passes_test(user_is_teacher, login_url="/login/")
 def add_new_lab(request):

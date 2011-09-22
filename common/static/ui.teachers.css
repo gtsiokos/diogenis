@@ -38,7 +38,7 @@ div.logged div.lab {
 		border-right: solid 1px #2e5d8a;
 		text-align: center;
 	}
-	div.lab h4>span.transfer {
+	div.lab h4>span.edit {
 		-moz-border-radius: 0 7px 0 0;
 		-webkit-border-radius: 0 7px 0 0;
 		border-radius: 0 7px 0 0;
@@ -53,7 +53,7 @@ div.logged div.lab {
 		text-shadow: 1px 1px 1px #2E5D8A;
 	}
 	
-	div.lab h4>span.transfer {
+	div.lab h4>span.edit {
 		position: relative; width: 160px; height: 15px;
 		padding: 10px 13px 10px 13px;
 		font: normal 13px/1 Verdana, Arial, Helvetica, sans-serif;
@@ -62,9 +62,9 @@ div.logged div.lab {
 		border: solid 1px #d0a300;
 		text-align: center; text-shadow: none;
 	}
-	div.lab h4>span:hover.transfer.enabled { background: #FFF1BF url("./img/transfer_labs_bg.png") right -50px no-repeat; border: solid 1px #ae8800; cursor: pointer; }
-	div.lab h4>span:hover.transfer.enabled>span { color: #7b6000; text-shadow: 1px 1px 1px #fcfcfc; }
-	div.lab h4>span.transfer.disabled {
+	div.lab h4>span:hover.edit.enabled { background: #FFF1BF url("./img/transfer_labs_bg.png") right -50px no-repeat; border: solid 1px #ae8800; cursor: pointer; }
+	div.lab h4>span:hover.edit.enabled>span { color: #7b6000; text-shadow: 1px 1px 1px #fcfcfc; }
+	div.lab h4>span.edit.disabled {
 		background: #c7c7c7; color: #616161;
 		border: solid 1px #949494; border-color: #949494 #949494 #777 #949494;
 		text-shadow: 1px -1px 1px #e0e0e0;
@@ -78,7 +78,7 @@ div.logged div.lab {
 	div.lab h4>span.enabled.active>span 			{ color: #949494; text-shadow: 1px -1px 1px #fcfcfc; }
 	div.lab h4>span:hover.enabled.active>span 		{ color: #949494; text-shadow: 1px -1px 1px #fcfcfc; }
 	
-	div.lab ul.labs-list {
+	div.lab div.edit-widget {
 		position: absolute; display: none; width: 166px; top: 35px; left: -1px; z-index: 5000;
 		padding: 10px 10px 12px 10px;
 		background: #e9e9e9;
@@ -91,8 +91,16 @@ div.logged div.lab {
 		-webkit-box-shadow: -2px 2px 4px #bbb;
 		box-shadow: -2px 2px 4px #bbb;
 	}
-	
-		div.lab ul.labs-list li{
+	    div.lab div.edit-widget span.description {
+	        display: block;
+            margin: 0 0 9px 0;
+            color: #949494;
+            font: italic 13px/1 Georgia; font-weight: bold;
+            text-align: left;
+	    }
+	    
+	    div.lab div.edit-widget ul.transfer { margin-bottom: 18px; }
+		div.lab div.edit-widget ul.transfer li{
 			margin-bottom: 10px; padding: 7px 0 7px 0;
 			background: #cfcfcf; color: #141414;
 			border: solid 1px #bebebe;
@@ -104,12 +112,14 @@ div.logged div.lab {
 			border-radius: 3px;
 		}
 		
-		div.lab ul.labs-list li:hover{
+		div.lab div.edit-widget ul.transfer li:hover{
 			background: #949494; color: #fcfcfc;
 			border: solid 1px #838383;
 			text-shadow: 1px 1px 0 #8c8c8c;
 			cursor: pointer;
 		}
+		
+		div.lab div.edit-widget button { width:100%; }
 	
 	div.lab table { float: left; width: 100%; }
 

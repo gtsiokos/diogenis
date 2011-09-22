@@ -113,7 +113,6 @@ X$('StudentEdit',
             dataType: 'json',
             timeout: 10000,
             success: function(data) {
-                console.log(data);
                 try {
                     if (data.status == 1){
                         self.$students.parents('tr').addClass('disabled', 80).find('input').attr('disabled', 'disabled');

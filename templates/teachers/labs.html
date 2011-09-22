@@ -85,6 +85,7 @@
 			    {% else %}
 				    <div class="extras">
 					    <p><span class="empty-seats no-seat">Καμία Εγγραφή</span></p>
+					    <a class="delete-lab" href="{% url teachers.delete-lab user.username lab.id %}">Διαγραφή Εργαστηρίου</a>
 				    </div>
 			    {% endif %}
 		    </div>

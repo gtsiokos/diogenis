@@ -335,6 +335,19 @@ div.logged div.lab {
 				border: 0; border-right: solid 1px #696969;
 				text-shadow: 1px 1px 1px #505050;
 			}
+			div.extras a.delete-lab {
+			    position: absolute; top: 8px; left: 144px;
+			    padding-left: 18px;
+			    color: #a81600;
+			    background: transparent url('./img/delete_lab_icon.png') left 3px no-repeat;
+                font: normal 12px Verdana, Arial, Helvetica, sans-serif;
+            }
+            div.extras a.delete-lab:hover,
+            div.extras a.delete-lab:focus {
+                color: #141414;
+                background-position: left -14px;
+                text-shadow: 1px 1px 1px #fcfcfc;
+            }
 			
 			div.extras a.export-pdf {
 				display: block; position: absolute; bottom: 7px; right: 7px;

@@ -173,6 +173,14 @@ def delete_subscription(request):
         return HttpResponse(data, mimetype='application/javascript')
 
 @user_passes_test(user_is_teacher, login_url="/login/")
+def delete_lab(request, username, hash_id):
+    if username == request.user.username:
+        lab = Lab.objects.filter(hash_id=hash_id)
+        lab.delete()
+        return HttpResponseRedirect('/teachers/%s/' % username)
+    
+
+@user_passes_test(user_is_teacher, login_url="/login/")
 def add_new_lab(request):
     '''
     Manages JSON request for creating a new lab.

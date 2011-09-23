@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
+from django.http import HttpResponse
 
 from diogenis.views import index
 from diogenis.auth.views import login, logout, signup
@@ -29,4 +30,15 @@ urlpatterns = patterns('',
 )
 
 urlpatterns += staticfiles_urlpatterns()
+
+if hasattr(settings,'BLITZ_ACCOUNTS'):
+    def verify_blitz(request):
+        return HttpResponse('42')
+        
+    def make_url(blitz_account):
+        blitz_url = r'^%s/$' % blitz_account
+        return url(blitz_url, verify_blitz)
+
+    blitz_urlpatterns = map(make_url, settings.BLITZ_ACCOUNTS)
+    urlpatterns += blitz_urlpatterns
 

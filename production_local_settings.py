@@ -62,6 +62,12 @@ STATICFILES_DIRS = (
 # used to send mails by sendmail
 EMAIL_HOST_USER = 'root'
 
+# blitz.io server verification for scaling tests
+BLITZ_ACCOUNTS = (
+    'secret',
+    'secret',
+)
+
 ##Django Compressor Settings
 COMPRESS = True
 #COMPRESS_PARSER = parser.LxmlParser

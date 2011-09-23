@@ -12,7 +12,7 @@
 //Pretty CSS3 buttons
 //^*****************************/	
 
-.button { display: inline-block; font: normal 13px/1 'Droid Sans Bold', Verdana; text-align: center; }
+.button { display: inline-block; font: normal 13px/1 'Droid Sans Bold', Verdana; text-align: center; cursor: pointer; }
 
 	.button.important {
 		padding: 11px 9px 12px 10px;

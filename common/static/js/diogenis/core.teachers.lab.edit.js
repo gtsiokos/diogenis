@@ -48,7 +48,7 @@ X$('StudentEdit',
                             'delete': $target.hasClass('delete')
                             };
                 
-                if(!students[0]){
+                if(!students[0] && (option['transfer'] || option['delete'])){
                     X$('DropdownWidget').events.dropdown.hide();
                     self.show_message(3, "Δεν έχετε επιλέξει κάποιον σπουδαστή", 200);
                 } else {

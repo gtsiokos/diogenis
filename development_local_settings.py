@@ -80,6 +80,7 @@ DEVELOPER_MIDDLEWARES = (
 MIDDLEWARE_CLASSES += DEVELOPER_MIDDLEWARES
 
 DEVELOPER_APPS = (
+    'compressor',
     'django_extensions',
     'debug_toolbar',
 )

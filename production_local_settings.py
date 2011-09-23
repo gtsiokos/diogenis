@@ -66,3 +66,8 @@ EMAIL_HOST_USER = 'root'
 COMPRESS = True
 #COMPRESS_PARSER = parser.LxmlParser
 
+from diogenis.settings import INSTALLED_APPS, MIDDLEWARE_CLASSES
+DEVELOPER_APPS = (
+    'compressor',
+)
+INSTALLED_APPS += DEVELOPER_APPS

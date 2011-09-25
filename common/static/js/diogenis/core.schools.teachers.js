@@ -122,9 +122,7 @@ X$('SchoolsTeachers',
                                 'id':teacher.id
                                 };
                         self.submit(request);
-                    } else {
-                        self.show_message(0, "Κονσόλα Μηνυμάτων", 200);
-                    }
+                    } //else { self.show_message(0, "Κονσόλα Μηνυμάτων", 200); }
                 }, {classname:'warning', ok:'Ναι, διάγραψε και τα εργαστήρια', cancel:'Όχι'});
             }
             

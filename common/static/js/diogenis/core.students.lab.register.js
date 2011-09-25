@@ -84,6 +84,10 @@ X$('StudentRegister',
             if ( step_is_not_set ) parent.addClass('isset');
             lesson = ($this.val()) ? $this.data() : '';
             
+            try {
+            _gaq.push(['_trackEvent', 'StudentRegister', 'Selected', 'course_id: '+lesson]);
+            } catch(e) {}
+            
             if( lesson ){
                 self.submit({lesson:lesson});
             }

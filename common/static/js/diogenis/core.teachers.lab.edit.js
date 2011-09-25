@@ -58,6 +58,17 @@ X$('StudentEdit',
                         lab['old'] = $lab.data();
                         
                         request = {lab:lab, students:students, action:'transfer'};
+                        
+                        if(self.url === 'pending'){
+                            try {
+                            _gaq.push(['_trackEvent', 'StudentEdit', 'Transferred Pending', students.length+' students']);
+                            } catch(e) {}
+                        } else {
+                            try {
+                            _gaq.push(['_trackEvent', 'StudentEdit', 'Transferred', students.length+' students']);
+                            } catch(e) {}
+                        }
+                        
                         self.submit(request);
                     }
                     
@@ -65,8 +76,17 @@ X$('StudentEdit',
                         smoke.confirm('Θα πρέπει να ενημερωθούν οι φοιτητές για την διαγραφή τους από την ομάδα. Θέλετε να συνεχίσετε;',function(e){
                             if(e){
                                 request = {students:students, action:'delete'};
+                                
+                                try {
+                                _gaq.push(['_trackEvent', 'StudentEdit', 'Deleted', students.length+' students']);
+                                } catch(e) {}
+                                
                                 self.submit(request);
-                            } //else {}
+                            } else {
+                                try {
+                                _gaq.push(['_trackEvent', 'StudentEdit', 'Canceled Delete', students.length+' students']);
+                                } catch(e) {}
+                            }
                         }, {classname:'warning', ok:'Ναι, διάγραψε τις εγγραφές', cancel:'Όχι'});
                     }
                     

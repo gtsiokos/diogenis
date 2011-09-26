@@ -78,7 +78,8 @@ def manage_labs(request, username):
                                             'id':sibling.hash_id,
                                             'name':sibling.classroom.name,
                                             'day':sibling.day[:3],
-                                            'hour':get_lab_hour(sibling)
+                                            'hour':get_lab_hour(sibling),
+                                            'students':{'registered':sibling.registered_students_count, 'max':sibling.max_students}
                                             })
             
             labs_context.append({

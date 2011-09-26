@@ -173,7 +173,7 @@ class Lab(models.Model):
     empty_seats = property(_get_empty_seats)
     
     def _get_sibling_labs_plus_self(self):
-        return Lab.objects.filter(course__lesson=self.course.lesson, course__school=self.course.school, teacher=self.teacher, start_hour__gt=1).order_by('start_hour').select_related()
+        return Lab.objects.filter(course__lesson=self.course.lesson, course__school=self.course.school, start_hour__gt=1).order_by('start_hour').select_related()
     
     sibling_labs_plus_self = property(_get_sibling_labs_plus_self)
     

@@ -29,7 +29,7 @@
 						        <span class="description">Μετακίνηση σε...</span>
 						        <ul class="transfer">
 							    {% for s in lab.sibling_labs %}
-								    <li data-id="{{ s.id }}"><span class="name">{{ s.name }}</span> &ndash; <span class="day">{{ s.day }}</span> &ndash; <span class="hour">{{ s.hour.start.raw }}-{{ s.hour.end.raw }}</span></li>
+								    <li data-id="{{ s.id }}"><span class="name">{{ s.name }}</span> &ndash; <span class="day">{{ s.day }}</span>(<span class="hour">{{ s.hour.start.raw }}-{{ s.hour.end.raw }}</span>) &ndash; <span class="subscribed-students"><strong>{{ s.students.registered }}/{{ s.students.max }}</strong></span></li>
 							    {% endfor %}
 							    </ul>
 							    <button class="button option warning delete">Διαγραφή Εγγραφών</button>

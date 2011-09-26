@@ -72,15 +72,9 @@ def manage_labs(request, username):
                                 })
             
             sibling_labs = lab.sibling_labs if not pending_students_request else lab.sibling_labs_plus_self
-            sibling_labs_context = []
-            for sibling in sibling_labs:
-                sibling_labs_context.append({
-                                            'id':sibling.hash_id,
-                                            'name':sibling.classroom.name,
-                                            'day':sibling.day[:3],
-                                            'hour':get_lab_hour(sibling),
-                                            'students':{'registered':sibling.registered_students_count, 'max':sibling.max_students}
-                                            })
+            sibling_labs_context = {}
+            sibling_labs_context['owners'] = map(get_sibling_context, sibling_labs['owners'])
+            sibling_labs_context['others'] = map(get_sibling_context, sibling_labs['others'])
             
             labs_context.append({
                             'id':lab.hash_id,
@@ -101,7 +95,14 @@ def manage_labs(request, username):
         return render(request, template, context)
     else:
         raise Http404
-
+    
+def get_sibling_context(lab):
+    return {'id':lab.hash_id,
+            'name':lab.classroom.name,
+            'day':lab.day[:3],
+            'hour':get_lab_hour(lab),
+            'students':{'registered':lab.registered_students_count, 'max':lab.max_students}
+            }
 
 @user_passes_test(user_is_teacher, login_url="/login/")
 def submit_student_to_lab(request):

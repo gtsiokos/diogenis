@@ -13,9 +13,7 @@ def index(request):
     Handles index page, redirects logged-in users
     '''
     user = request.user
-    if user.is_authenticated and user.is_active and user is not None:
-        if user.is_superuser:
-            return HttpResponseRedirect('/system/admin/')
+    if user.is_authenticated and user.is_active and user is not None and not user.is_superuser:
         try:
             student = Student.objects.get(user=user)
             profile = u'/students/%s/' % user.username

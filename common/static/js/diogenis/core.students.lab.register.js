@@ -14,6 +14,7 @@ X$('StudentRegister',
     $modal_messages     : undefined,
     $loader             : undefined,
     $submit_lab         : undefined,
+    msg                 : {1:'ok', 2:'error', 3:'warning'},
 
 
     init: function() {
@@ -62,12 +63,19 @@ X$('StudentRegister',
         return this;
     },
     
-    
     clean_messages: function() {
         var self = this;
         self.$modal_messages.find('p').fadeOut(100).delay(100).removeClass();
+        
+        return this;
     },
     
+    show_message: function(status, new_msg, new_speed) {
+        var self = this;
+        var speed = new_speed || 150;
+        
+        self.clean_messages().$modal_messages.find('p').addClass(self.msg[status]).text(new_msg).fadeIn(speed);
+    },
     
     handle_events: function(){
         var self = this,
@@ -253,6 +261,7 @@ X$('StudentRegister',
                         } else { parentClass.addClass('focused'); self.$select['lab'].focus(); }
                     }
                     else if (data.action == 'availability') {
+                        self.show_message(3, data.msg, 200);
                         self.$submit_lab.text("Υποβολή").fadeIn(350);
                     }
                     else if (data.action == 'submit') {
@@ -264,25 +273,24 @@ X$('StudentRegister',
                 }
                 else if (data.status == 3){
                     if (data.action == 'availability') {
-                        self.$modal_messages.find('p').addClass('warning').text(data.msg).fadeIn(200);
+                        self.show_message(data.status, data.msg, 200);
                         self.$submit_lab.text("Υποβολή Αιτήματος").fadeIn(350);
                     }
                 }
                 else if (data.status == 2){
                 
                     if (data.action == 'teachers') {
-                        self.$modal_messages.find('p').addClass('error').text(data.msg).fadeIn(200);
+                        self.show_message(data.status, data.msg, 200);
                     }
                     else if (data.action == 'classes') {
                         self.$select['lab'].attr('disabled', 'disabled').children().not(':first-child').remove();
                         self.$submit_lab.hide();
                         self.$select['lab'].parent('li').hide().removeClass('isset').removeClass('focused').addClass('disabled');
-                        self.$modal_messages.find('p').addClass('error').text(data.msg).fadeIn(200);
+                        self.show_message(data.status, data.msg, 200);
                     }
                     else if (data.action == 'submit') {
                         self.$loader.hide();
-                        self.$modal_messages.find('p').addClass('error').text(data.msg).fadeIn(200);
-                                                            
+                        self.show_message(data.status, data.msg, 200);
                     }
                 }
             },
@@ -290,7 +298,7 @@ X$('StudentRegister',
                 var ms = "Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων";
                 if(xhr.status==500){
                     self.$loader.hide();
-                    self.$modal_messages.find('p').addClass('error').text(ms).fadeIn(200);
+                    self.show_message(2, ms, 200);
                 }
             }
         });

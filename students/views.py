@@ -122,7 +122,8 @@ def add_new_lab(request):
         
         if action == "availability":                                    #prompts user to verify a pending subscription in case lab is full
             if lab_available:
-                data = {'status':1, 'action':action}
+                msg = u"Η υποβολή είναι οριστική, συμβουλευτείτε το πρόγραμμα σας πριν προχωρήσετε"
+                data = {'status':1, 'action':action, 'msg':msg}
             else:
                 msg = u"To εργαστήριο %s δεν έχει ελεύθερες θέσεις. Θέλετε να υποβάλεται αίτημα στον καθηγητή για την έγκριση της εγγραφή σας?" % lab.classroom.name
                 data = {'status':3, 'action':action, 'msg':msg}

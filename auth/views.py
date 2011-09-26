@@ -95,8 +95,6 @@ def signup(request):
                 if credentials:
                     try:
                         user = User.objects.get(username=credentials['username'])
-                        subscriptions = Subscription.objects.filter(student__user=user)
-                        subscriptions.delete()
                     except:
                         user = User(
                             username = credentials['username'],
@@ -138,6 +136,9 @@ def signup(request):
                 student.save()
                 student.schools.add(school)
                 student.save()
+                
+                subscriptions = Subscription.objects.filter(student=student)
+                subscriptions.delete()
                 
                 if student.user is not None and student.user.is_active:
                     msg = u"H εγγραφή ολοκληρώθηκε, μπορείτε να κάνετε login με τα στοιχεία σας από τον Διόνυσο"

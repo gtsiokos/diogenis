@@ -26,7 +26,7 @@
 		
 		-moz-box-shadow: 	0 1px 1px #fff, 0 0 3px #fff inset;
 		-webkit-box-shadow: 0 1px 1px #fff, 0 0 3px #fff inset;
-		box-shadow: 		0 1px 1px #fff, 0 0 3px #fff inset;
+		box-shadow: 		0 1px 1px #fff, 0 0 1px #fff inset, 0 -1px 0 rgba(255,255,255,0.2) inset;
 	}
 	
 	:active.button.important {
@@ -65,22 +65,22 @@
 		border: solid 1px #3e7fbd;
 		text-shadow: #214363 0 1px 1px;
 		
-		background: -webkit-gradient(linear, left top, left bottom, from(#70a1cf), to(#5690c7)); 
-		background: -webkit-linear-gradient(top, #70a1cf, #5690c7); 
-		background:    -moz-linear-gradient(top, #70a1cf, #5690c7); 
-		background:     -ms-linear-gradient(top, #70a1cf, #5690c7); 
-		background:      -o-linear-gradient(top, #70a1cf, #5690c7); 
-		background:         linear-gradient(top, #70a1cf, #5690c7);
-		filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#70a1cf', EndColorStr='#5690c7');
+		background: -webkit-gradient(linear, left top, left bottom, from(#7ca9d4), to(#5690c7)); 
+		background: -webkit-linear-gradient(top, #7ca9d4, #5690c7); 
+		background:    -moz-linear-gradient(top, #7ca9d4, #5690c7); 
+		background:     -ms-linear-gradient(top, #7ca9d4, #5690c7); 
+		background:      -o-linear-gradient(top, #7ca9d4, #5690c7); 
+		background:         linear-gradient(top, #7ca9d4, #5690c7);
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#7ca9d4', EndColorStr='#5690c7');
 	}
 	:hover.button.regular, :focus.button.regular {
-		background: -webkit-gradient(linear, left top, left bottom, from(#89b2d8), to(#5690c7)); 
-		background: -webkit-linear-gradient(top, #89b2d8, #5690c7); 
-		background:    -moz-linear-gradient(top, #89b2d8, #5690c7); 
-		background:     -ms-linear-gradient(top, #89b2d8, #5690c7); 
-		background:      -o-linear-gradient(top, #89b2d8, #5690c7); 
-		background:         linear-gradient(top, #89b2d8, #5690c7);
-		filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#89b2d8', EndColorStr='#5690c7');
+		background: -webkit-gradient(linear, left top, left bottom, from(#89b2d8), to(#6398cb)); 
+		background: -webkit-linear-gradient(top, #89b2d8, #6398cb); 
+		background:    -moz-linear-gradient(top, #89b2d8, #6398cb); 
+		background:     -ms-linear-gradient(top, #89b2d8, #6398cb); 
+		background:      -o-linear-gradient(top, #89b2d8, #6398cb); 
+		background:         linear-gradient(top, #89b2d8, #6398cb);
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#89b2d8', EndColorStr='#6398cb');
 	}
 	:active.button.regular {
 		text-shadow: #326596 0 1px 0, #326596 0 -1px 0, #326596 1px 0 0, #326596 -1px 0 0;

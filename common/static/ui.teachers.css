@@ -48,9 +48,17 @@ div.logged div.lab {
 		display: block; float: left; width: 186px;
 		padding: 10px 0 11px 38px;
 		font: normal 14px/1 'Droid Sans Bold', Verdana;
-		background: #5690C7 url("./img/labs_info_bg.png") top left repeat-x; color: #fcfcfc;
-		border: solid 1px #2e5d8a; border-right: solid 1px #96badc;
-		text-shadow: 1px 1px 1px #2E5D8A;
+		background: #5690C7; color: #fff;
+		border: solid 1px #366ea3; border-color: #366ea3 #96badc #2e5d8a #366ea3;
+		text-shadow: 1px 1px 1px #366ea3;
+		
+		background: -webkit-gradient(linear, left top, left bottom, from(#96badc), to(#5690c7)); 
+		background: -webkit-linear-gradient(top, #96badc, #5690c7); 
+		background:    -moz-linear-gradient(top, #96badc, #5690c7); 
+		background:     -ms-linear-gradient(top, #96badc, #5690c7); 
+		background:      -o-linear-gradient(top, #96badc, #5690c7); 
+		background:         linear-gradient(top, #96badc, #5690c7);
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#96badc', EndColorStr='#5690c7');
 	}
 	
 	div.lab h4>span.edit {
@@ -58,6 +66,7 @@ div.logged div.lab {
 		padding: 10px 13px 10px 13px;
 		font: normal 13px/1 Verdana, Arial, Helvetica, sans-serif;
 		letter-spacing: 0.00em; word-spacing: 0.05em;
+		filter: progid:DXImageTransform.Microsoft.gradient(enabled=false) !important;
 		background: #FFF1BF url("./img/transfer_labs_bg.png") right 0px no-repeat; color: #ae8800;
 		border: solid 1px #d0a300;
 		text-align: center; text-shadow: none;
@@ -142,6 +151,17 @@ div.logged div.lab {
 			color: #696969;
 			border-right: solid 1px #ccc;
 		}
+		div.lab table th.header {
+		    cursor: pointer;
+		}
+		div.lab table th.headerSortDown { background: transparent url("./img/labs_tablesorting_arrows.png") 15px 15px no-repeat; }
+		div.lab table th.headerSortUp { background: transparent url("./img/labs_tablesorting_arrows.png") 15px -54px no-repeat; }
+		div.lab table th.header:hover,
+	    div.lab table th.headerSortUp:hover,
+	    div.lab table th.headerSortDown:hover {
+		    background-color: #dedede;
+		}
+		
 		div.lab table th.selection { width: 45px; border-left: solid 1px #aaa; }
 		div.lab table th.am { width: 170px; border-right: solid 1px #aaa; }
 		

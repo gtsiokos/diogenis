@@ -17,6 +17,10 @@ X$('StudentEdit',
         self.events = self.handle_events();
         self.listen_events();
         
+        self.$labs.find('table').tablesorter({
+                                            //sortList: [[1,0]],
+                                            headers: { 0: {sorter: false}, 3: {sorter: false}, 4: {sorter: false} }
+                                            });
         self.$labs.find('table td>input').removeAttr('disabled').attr('checked', false);
         
         return this;

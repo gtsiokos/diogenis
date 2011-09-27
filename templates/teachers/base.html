@@ -131,6 +131,13 @@
 	{% endblock %}
 {% endblock %}
 
+{% block before_compressed_js %}
+
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tablesorter.min.js"></script>
+    
+{% endblock %}
+
 {% block extra_js_bottom %}
 	{% spaceless %}
 
@@ -145,3 +152,4 @@
 	
     {% endspaceless %}
 {% endblock %}
+

@@ -61,6 +61,9 @@
 			</div>
 			{% block footer %}<div id="spinner"></div>{% endblock %}
 		</div>
+		
+		{% block before_compressed_js %}{% endblock %}
+		
 		{% compress js %}
 		{% block extra_js_bottom %}
 			
@@ -81,7 +84,7 @@
 		{% endblock %}
 		{% endcompress %}
 		
-		{% block uncompressed_js_bottom %}
+		{% block after_compressed_js %}
 		    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.spin.js"></script>
 		    <script type="text/javascript">
                 var _gaq = _gaq || [];

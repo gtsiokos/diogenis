@@ -86,14 +86,16 @@ class Subscription(models.Model):
     
     def save(self, *args, **kwargs):
         self.check_valid_school()
+        available = self.check_availability()
         if self.id is not None:
-            available = self.check_availability()
-            if not available:
+            if not available:   #In case you try to change registered lab from django admin
                 raise ValidationError(u"Κάποιοι σπουδαστές έχουν δηλώσει άλλα εργαστήρια αυτές τις ώρες")
             if self.absences < 0:
                 self.absences = 0
             super(Subscription, self).save(*args, **kwargs)
         else:   #Initial save()
+            if not available:
+                raise ValidationError(u"Έχετε δηλώσει άλλο εργαστήριο αυτές τις ώρες, δοκιμάστε άλλη ώρα ή επιλέξτε άλλον καθηγητή")
             super(Subscription, self).save(*args, **kwargs)
             if not self.hash_id:
                 self.hash_id = get_hashed_id(self.id)

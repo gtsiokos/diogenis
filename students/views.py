@@ -112,9 +112,7 @@ def add_new_lab(request):
             lab_available = False
             try:
                 lab = Lab.objects.get(hash_id=lab_id)
-                students_count = Subscription.objects.filter(lab=lab).count()
-                available_seats = lab.max_students - students_count
-                lab_available = (True if available_seats > 0 else False)    #if the requested lab has available seats
+                lab_available = (True if lab.empty_seats > 0 else False)    #if the requested lab has available seats
             except:
                 msg = u"Το εργαστήριο που ζητήσατε δεν βρέθηκε"
                 data = {'status':2, 'action':action, 'msg':msg}
@@ -142,8 +140,12 @@ def add_new_lab(request):
                     subscription.in_transit = True
                     msg = u"Στείλαμε το αίτημα σας στον καθηγητή"
                 
-                subscription.save()
-                data = {'status':1, 'action':action, 'msg':msg}
+                try:
+                    subscription.save()
+                    data = {'status':1, 'action':action, 'msg':msg}
+                except ValidationError, e:
+                    msg =  e.messages[0]
+                    data = {'status':2, 'action':action, 'msg':msg}
         
         if not data:
             error_msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"

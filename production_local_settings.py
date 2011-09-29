@@ -69,7 +69,7 @@ BLITZ_ACCOUNTS = (
 )
 
 ##Django Compressor Settings
-COMPRESS = True
+COMPRESS_ENABLED = True
 #COMPRESS_PARSER = parser.LxmlParser
 
 from diogenis.settings import INSTALLED_APPS, MIDDLEWARE_CLASSES

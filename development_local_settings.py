@@ -62,7 +62,7 @@ STATICFILES_DIRS = (
 EMAIL_HOST_USER = 'root'
 
 ##Django Compressor Settings
-COMPRESS = False
+COMPRESS_ENABLED = False
 #COMPRESS_PARSER = parser.LxmlParser
 
 ##Django Debug Toolbar Settings

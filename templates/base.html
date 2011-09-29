@@ -59,7 +59,15 @@
 				{% block sidebar %}{% endblock %}
 				{% block content %}{% endblock %}
 			</div>
-			{% block footer %}<div id="spinner"></div>{% endblock %}
+			{% block footer %}
+		    <div id="footer">
+		        <p>
+		            <a href="{% url about %}">Ποιοί είμαστε</a>&ensp;<small>|</small>&ensp;
+		            <a href="http://tsiokos.posterous.com/">Blog</a>&ensp;<small>|</small>&ensp;
+		            <strong>powered by:</strong> <a href="http://linuxteam.cs.teilar.gr/">linuxteam teilar</a>
+		         </p>
+		    </div>
+			{% endblock %}
 		</div>
 		
 		{% block before_compressed_js %}{% endblock %}

@@ -197,9 +197,29 @@ a { text-decoration: none; }
 #content {
 	display:block; float: left; position: relative; z-index: 4;
 	padding-bottom: 50px;
-	
-	
 }
+
+#footer {
+    margin: 0 0 25px 0;
+}
+
+#footer p {
+    width: 333px; margin: 0 auto;
+    font: normal 11px/1 Verdana, Arial, Helvetica, sans-serif; letter-spacing: 0.05em;
+    color: #9C9217;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.6);
+}
+#footer p>a {
+    color: #9C9217;
+}
+#footer p>a:hover,
+#footer p>a:focus {
+    color: #141414;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+#footer p>small { font-size:88%; }
+
 div.not-logged {
 	width: 978px;
 	background: #fafafa; background: rgba(250, 250, 250, 0.7);
@@ -214,11 +234,13 @@ div.not-logged {
     
     div.not-logged div.box h2 {
         display: block;
-        margin: 0 0 11px 0;
+        margin: 22px 0 11px 0;
         color: #9C9217;
         font: normal 19px/1 Verdana,Arial,Helvetica,sans-serif;
         text-shadow: 1px 1px 1px #FCFCFC;
     }
+    div.not-logged div.box h2:first-child { margin-top:0; }
+    
     div.not-logged div.box p { color: #444; font: normal 15px/1.44 Verdana,Arial,Helvetica,sans-serif; }
     div.not-logged div.box p.new { margin-top:11px; }
     
@@ -297,6 +319,80 @@ div.logged {
 								text-shadow: 1px 1px 0 #fff;
 								}
 	
+	
+	/********************************^
+	//Personas
+	//^*****************************/
+	
+	div.not-logged div.box div.persona {
+	    width: 222px; min-height: 188px; display:inline-block; position: relative; overflow:hidden;
+	    margin: 0 22px 0 0; padding: 0 0 167px 0;
+	    background: #fff; color: #333;
+	    border: solid 1px #666;
+	    
+	    background: -webkit-gradient(linear, left top, left bottom, from(#f3f3f3), to(#ffffff)); 
+        background: -webkit-linear-gradient(top, #f3f3f3, #ffffff); 
+        background:    -moz-linear-gradient(top, #f3f3f3, #ffffff); 
+        background:     -ms-linear-gradient(top, #f3f3f3, #ffffff); 
+        background:      -o-linear-gradient(top, #f3f3f3, #ffffff); 
+        background:         linear-gradient(top, #f3f3f3, #ffffff);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#f3f3f3', EndColorStr='#ffffff');
+        
+        -moz-box-shadow: 	0 1px 5px #888, 0 1px 0 #fff inset;
+        -webkit-box-shadow: 0 1px 5px #888, 0 1px 0 #fff inset;
+        box-shadow: 		0 1px 5px #888, 0 1px 0 #fff inset;
+        
+        -webkit-transition: all 0.2s ease-out;
+        -moz-transition: all 0.2s ease-out;
+        -o-transition: all 0.2s ease-out;
+        transition: all 0.2s ease-out;
+	}
+	div.not-logged div.box div.persona:hover {
+	    border-color: #141414;
+	    -moz-box-shadow: 	0 1px 5px #666, 0 1px 0 #fff inset;
+        -webkit-box-shadow: 0 1px 5px #666, 0 1px 0 #fff inset;
+        box-shadow: 		0 1px 5px #666, 0 1px 0 #fff inset;
+	}
+	
+	div.persona span.name {
+	    display: block;
+	    margin: 8px 0 11px 9px;
+	    color: #666;
+	    font: normal 19px/1.3 'Droid Sans', Verdana;
+	    text-shadow: 1px 1px 0 #fff;
+	}
+	
+	div.persona span.overlay {
+	    position:absolute; bottom:0; left:0;
+	}
+	div.persona span.overlay:before {
+	    content:"";
+	    position:absolute; top:0; bottom:0; left:0; right:0;
+	    -moz-box-shadow: 	0 0 40px rgba(0,0,0,0.77) inset;
+        -webkit-box-shadow: 0 0 40px rgba(0,0,0,0.77) inset;
+        box-shadow: 		0 0 40px rgba(0,0,0,0.77) inset;
+        -webkit-transition: all 0.2s ease-out;
+        -moz-transition: all 0.2s ease-out;
+        -o-transition: all 0.2s ease-out;
+        transition: all 0.2s ease-out;
+	}
+	div.not-logged div.box div.persona:hover span.overlay:before {
+	    -moz-box-shadow: 	0 0 40px rgba(0,0,0,0.55) inset;
+        -webkit-box-shadow: 0 0 40px rgba(0,0,0,0.55) inset;
+        box-shadow: 		0 0 40px rgba(0,0,0,0.55) inset;
+	}
+	
+	div.box>ul.description,
+	div.persona ul.description              { margin: 0 5px 0 9px; position: relative; padding: 0 0 0 100px; color: #666; }
+	div.box>ul.description                  { margin-left:0; margin-right:0; padding-left:150px; }
+	
+	div.box ul.description>li,
+	div.persona ul.description>li           { display: block; margin-bottom: 11px; font: normal 11px/1.5 Verdana,Arial,Helvetica,sans-serif; }
+	div.box ul.description strong.type,
+	div.persona ul.description strong.type  { position: absolute; left:0; color: #444; }
+	
+	div.not-logged div.box div.persona img { float:left; }
+	
 	/********************************^
 	//Signup Login Forms
 	//^*****************************/
@@ -321,6 +417,7 @@ div.logged {
 								        -webkit-transition: color 0.1s ease-out;  /* Saf3.2+, Chrome */
 								        -moz-transition: color 0.1s ease-out;  /* FF4+ */
 								        -o-transition: color 0.1s ease-out;  /* Opera 10.5+ */
+								        transition: color 0.1s ease-out;
 								        }
 	#user label:hover			        { cursor: pointer; }
 	#user .entry                        { width: 100%; position: relative; }

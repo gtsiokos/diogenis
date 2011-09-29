@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Ποιοί είμαστε | {% endblock title %}
+
+{% block content %}
+<div id="content" class="not-logged" style="overflow: hidden;">
+	<div class="box" style="width:410px;">
+	    <h2>Ποιοί είμαστε</h2>
+	    <p>Το project Diogenis αποτελεί το magnum opus της ακαδημαϊκής μας πορείας στο τμήμα Τεχνολογίας Πληροφορικής & Τηλεπικοινωνιών του Τ.Ε.Ι. Λάρισας, στη δια βίου προσπάθειά μας για την βελτίωση των ικανοτήτων και της κατανόησης μας απέναντι στο γνωστικό αντικείμενο της Πληροφορικής.</p>
+	    <p class="new">Αυτή η σελίδα είναι αφιερωμένη στους ανθρώπους που βρίσκονται στο παρασκήνιο.</p>
+	    <h2>Ευχαριστίες</h2>
+	    <p>Θα θέλαμε να ευχαριστήσουμε και να αναγνωρίσουμε τη συνεισφορά των ανθρώπων που πίστεψαν στο στόχο μας.</p>
+        <ul style="margin-top:22px;" class="description">
+            <li>
+                <strong class="type">κ. Ιατρέλλη Όμηρο</strong>
+                Υπεύθυνος καθηγητής της πτυχιακής και πρωτεργάτης της αναβάθμισης της πτυχιακής σε υπηρεσία
+            </li>
+            <li style="margin-bottom:0;">
+	            <strong class="type">κ. Υψηλάντη Παντελή</strong>
+                Αντιπρόεδρος του Τ.Ε.Ι. Λάρισας
+            </li>
+        </ul>
+	</div>
+	<div class="box" style="width:490px; margin-right:0; margin-left: 20px;">
+	    <h2>Δημιουργοί</h2>
+	    <div class="persona">
+	        <span class="name">Γιώργος Τσιώκος</span>
+	        <ul class="description">
+	            <li>
+	                <strong class="type">Καθήκοντα: </strong>
+	                Python/Django coding,<br/> Front-end design
+	            </li>
+	            <li>
+    	            <strong class="type">Ενδιαφέροντα: </strong>
+	                Django lover,<br/> JS enthusiast,<br/> UX engineer
+	            </li>
+	        </ul>
+	        <span class="overlay"><img src="{{ STATIC_URL }}img/personas/george_tsiokos.png"></span>
+	    </div>
+	    <div class="persona" style="margin-right:0;">
+	        <span class="name">Στέφανος Χρούσης</span>
+	        <ul class="description">
+	            <li>
+	                <strong class="type">Καθήκοντα: </strong>
+	                Python coding,<br/> Project consulting,<br/> Use-case analysis
+	            </li>
+	            <li>
+    	            <strong class="type">Ενδιαφέροντα: </strong>
+	                Python, linux enthusiast
+	            </li>
+	        </ul>
+	        <span class="overlay"><img src="{{ STATIC_URL }}img/personas/stefanos_chrousis.png"></span>
+	    </div>
+	</div>
+	<div class="box" style="width:770px;">
+	    <h2>Συντελεστές</h2>
+	    <div class="persona">
+	        <span class="name">Θεόδωρος Χατζημίχος</span>
+	        <ul class="description">
+	            <li>
+	                <strong class="type">Καθήκοντα: </strong>
+	                Python/Django Coding, System Administration
+	            </li>
+
+	            <li>
+    	            <strong class="type">Ενδιαφέροντα: </strong>
+	                Python/Django, KDE/Qt, Gentoo, Linux, Sysadmin/<br/>Networking
+	            </li>
+	        </ul>
+	        <span class="overlay"><img src="{{ STATIC_URL }}img/personas/theo_chatzimichos.png"></span>
+	    </div>
+	    <div class="persona">
+	        <span class="name">Δημήτρης Παπαπούλιος</span>
+	        <ul class="description">
+	            <li>
+	                <strong class="type">Καθήκοντα: </strong>
+	                System Administration
+	            </li>
+                <li>
+    	            <strong class="type">Ενδιαφέροντα: </strong>
+	                Linux, Gentoo KDE, Sysadmin/<br/>Networking
+	            </li>
+	        </ul>
+	        <span class="overlay"><img src="{{ STATIC_URL }}img/personas/dimitris_papapoulios.png"></span>
+	    </div>
+	    <div class="persona">
+	        <span class="name">Αλέξανδρος Π. Νάτσιος</span>
+	        <ul class="description">
+	            <li>
+	                <strong class="type">Καθήκοντα: </strong>
+	                System Administration
+	            </li>
+	            <li>
+    	            <strong class="type">Ενδιαφέροντα: </strong>
+	                Linux, Sysadmin/<br/>Networking, Ruby/RoR enthusiast
+	            </li>
+	        </ul>
+	    </div>
+	</div>
+</div>
+{% endblock content %}

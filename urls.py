@@ -2,6 +2,7 @@ from django.conf.urls.defaults import *
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
 from django.http import HttpResponse
+from django.views.generic import TemplateView
 
 from diogenis.views import index
 from diogenis.auth.views import login, logout, signup
@@ -16,7 +17,8 @@ urlpatterns = patterns('',
     url(r'^teachers/', include('diogenis.teachers.urls')),
     url(r'^students/', include('diogenis.students.urls')),
     url(r'^schools/', include('diogenis.schools.urls')),
-    url(r'^signup/', signup, name='signup'),
+    url(r'^signup/$', signup, name='signup'),
+    url(r'^about/$', TemplateView.as_view(template_name='about.html'), name='about'),
     url(r'^login/$', login, name='login'),
     url(r'^logout/$', logout, name='logout'),
     url(r'^$', index, name='index'),

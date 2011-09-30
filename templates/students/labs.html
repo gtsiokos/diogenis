@@ -4,9 +4,21 @@
 
 <div id="content" class="logged">
 	{{ block.super }}
-	{% if subscriptions %}
+	{% if not subscriptions.verified and not subscriptions.in_transit %}
+	<div id="ui-messages">
+		<p class="warning">Δεν έχετε προσθέσει τα εργαστήρια σας στον Διογένη</p>
+	</div>
+	{% else %}
+	    {% if subscriptions.in_transit %}
+	    <div id="ui-messages">
+    		<p class="warning">Υπάρχουν εργαστήρια στα οποία μείνατε στην Αίθουσα Αναμονής. Επικοινωνήστε με τον αρμόδιο καθηγητή για την μεταφορά σας σε άλλο εργαστήριο.</p>
+	    </div>
+	    {% endif %}
+	{% endif %}
+	{% if subscriptions.verified %}
+	    <h3>Δηλωμένα Εργαστήρια</h3>
 		<dl class="labs">
-		{% for subscription in subscriptions %}
+		{% for subscription in subscriptions.verified %}
 			<dt>
 			    {{ subscription.lesson }}
 			    {% if subscription.absences.value %}
@@ -22,10 +34,26 @@
 			</dd>
 		{% endfor %}
 		</dl>
-	{% else %}
-	<div id="ui-messages">
-		<p class="warning">Δεν έχετε προσθέσει τα εργαστήρια σας στον Διογένη</p>
-	</div>
+	{% endif %}
+	{% if subscriptions.in_transit %}
+	    <h3>Αίθουσα Αναμονής</h3>
+		<dl class="labs">
+		{% for subscription in subscriptions.in_transit %}
+			<dt>
+			    {{ subscription.lesson }}
+			    {% if subscription.absences.value %}
+			        <span class="absences {{subscription.absences.importance}}">
+			        {{subscription.absences.value}} Απουσί{{ subscription.absences.value|pluralize:"α,ες" }}
+			        </span>
+			    {% endif %}
+			 </dt>
+			<dd>
+				<span class="lab-name">{{ subscription.classroom }}</span>
+				<span class="lab-date">{{ subscription.day }} {{ subscription.hour.start.humanized }} - {{ subscription.hour.end.humanized }}</span>
+				<span class="teacher-name">{{ subscription.teacher }}</span>
+			</dd>
+		{% endfor %}
+		</dl>
 	{% endif %}
 </div>
 

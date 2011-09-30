@@ -8,6 +8,14 @@
 
 */
 
+div.logged h3 {
+	float: left;
+	margin: 16px 8px 10px 19px;
+	font: bold 18px/1.1 Verdana, Arial, Helvetica, sans-serif;
+	color: #c1c1c1;
+	text-shadow: 1px -1px 0 #fff;
+}
+
 div.logged dl.labs {
 	float: left; width: 640px;
 	margin: 16px 0 25px 19px;

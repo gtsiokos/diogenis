@@ -51,21 +51,29 @@ class Student(UserProfile):
         
         return {'objects':courses, 'context':context}
     
+    def _map_subscriptions(self, subscription):
+        hour = get_lab_hour(subscription.lab)
+        return  {
+                'lesson':subscription.lab.course.lesson.name,
+                'classroom':subscription.lab.classroom.name,
+                'day':subscription.lab.day,
+                'hour':hour,
+                'absences':subscription.opinionated_absences,
+                'teacher':subscription.lab.teacher.user.get_full_name(),
+                }
+    
     def get_subscriptions(self):
         context = []
         subscriptions = Subscription.objects.filter(student=self).select_related()
-        for subscription in subscriptions:
-            hour = get_lab_hour(subscription.lab)
-            context.append ({
-                            'lesson':subscription.lab.course.lesson.name,
-                            'classroom':subscription.lab.classroom.name,
-                            'day':subscription.lab.day,
-                            'hour':hour,
-                            'absences':subscription.opinionated_absences,
-                            'teacher':subscription.lab.teacher.user.get_full_name(),
-                            })
         
-        return {'objects':subscriptions, 'context':context}
+        verified = subscriptions.filter(in_transit=False)
+        verified = map(self._map_subscriptions, verified)
+        
+        in_transit = subscriptions.filter(in_transit=True)
+        in_transit = map(self._map_subscriptions, in_transit)
+        
+        context = {'verified':verified, 'in_transit':in_transit}
+        return {'context':context}
 
 
 class Subscription(models.Model):

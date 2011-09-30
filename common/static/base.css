@@ -196,7 +196,6 @@ a { text-decoration: none; }
 
 #content {
 	display:block; float: left; position: relative; z-index: 4;
-	padding-bottom: 50px;
 }
 
 #footer {
@@ -225,6 +224,7 @@ div.not-logged {
 	width: 978px;
 	background: #fafafa; background: rgba(250, 250, 250, 0.7);
 	border: solid 1px #E6DB55;
+	padding-bottom: 50px;
 	
 	-moz-border-radius: 7px;
 	-webkit-border-radius: 7px;
@@ -255,9 +255,10 @@ div.not-logged {
 	}
 	
 div.logged {
-	width: 680px; min-height: 450px;
+	width: 680px; min-height: 280px;
 	background: #fafafa;
 	border: solid 1px #E6DB55; border-left: 0;
+	padding-bottom: 220px;
 	
 	-moz-border-radius: 0 7px 7px 0;
 	-webkit-border-radius: 0 7px 7px 0;

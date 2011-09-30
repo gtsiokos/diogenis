@@ -29,9 +29,9 @@ X$('Sidebar',
                         
     set_sidebar_height: function(){
                             var self = this,
-                                content_height = Math.round($("#content").height());
+                                content_height = Math.round($("#content").outerHeight());
                             
-                            self.$sidebar.height(content_height+12);
+                            self.$sidebar.height(content_height-41);
                         }
 });
 

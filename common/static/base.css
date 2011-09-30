@@ -326,7 +326,7 @@ div.logged {
 	//^*****************************/
 	
 	div.not-logged div.box div.persona {
-	    width: 222px; min-height: 188px; display:inline-block; position: relative; overflow:hidden;
+	    width:222px; min-height:188px; display:block; position:relative; overflow:hidden; float:left;
 	    margin: 0 22px 0 0; padding: 0 0 167px 0;
 	    background: #fff; color: #333;
 	    border: solid 1px #666;

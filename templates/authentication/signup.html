@@ -22,7 +22,8 @@
 
 {% block footer %}
     
-   {% include "handlebars/signup.html" %}
-   {% include "handlebars/messages.html" %}
+    {{ block.super }}
+    {% include "handlebars/signup.html" %}
+    {% include "handlebars/messages.html" %}
     
 {% endblock %}

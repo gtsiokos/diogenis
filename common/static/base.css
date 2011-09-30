@@ -204,9 +204,10 @@ a { text-decoration: none; }
 }
 
 #footer p {
-    width: 333px; margin: 0 auto;
+    width: 500px; margin: 0 auto;
     font: normal 11px/1 Verdana, Arial, Helvetica, sans-serif; letter-spacing: 0.05em;
     color: #9C9217;
+    text-align: center;
     text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.6);
 }
 #footer p>a {

@@ -74,6 +74,7 @@ def signup(request):
     '''
     if request.method == 'POST' and request.is_ajax():
         json_data = simplejson.loads(request.raw_post_data)
+        data = {}
         
         try:
             action = json_data['action']

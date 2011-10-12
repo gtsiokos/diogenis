@@ -114,7 +114,6 @@ def submit_student_to_lab(request):
     if request.method == "POST" and request.is_ajax():
         json_data = simplejson.loads(request.raw_post_data)
         data = {}
-        
         try:
             lab =   {
                     'new':json_data['lab']['new'],
@@ -156,7 +155,6 @@ def delete_subscription(request):
     if request.method == "POST" and request.is_ajax():
         json_data = simplejson.loads(request.raw_post_data)
         data = {}
-        
         try:
             action = json_data['action']
             students = json_data['students']
@@ -191,6 +189,7 @@ def add_new_lab(request):
     '''
     if request.method == "POST" and request.is_ajax():
         json_data = simplejson.loads(request.raw_post_data)
+        data = {}
         
         teacher = Teacher.objects.get(user=request.user)
         hour = set_hour_range(1,1)
@@ -255,7 +254,7 @@ def update_absences(request):
     '''
     if request.method == "POST" and request.is_ajax():
         json_data = simplejson.loads(request.raw_post_data)
-        #import ipdb; ipdb.set_trace();
+        data = {}
         try:
             action = json_data['action']
             subscription_id = json_data['subscription']['id']

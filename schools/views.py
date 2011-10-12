@@ -73,6 +73,7 @@ class ClassroomView(AuthenticatedSchoolMixin, View):
 
     def get_list_json(self, request):
         request = request.GET
+        response = {}
         try:
             action = request.get('action', '')    #[action] defines different view handling
         except KeyError:
@@ -90,7 +91,6 @@ class ClassroomView(AuthenticatedSchoolMixin, View):
     def create_update_classroom(self, request):
         request = simplejson.loads(request.raw_post_data)
         response = {}
-        
         try:
             action = request['action']    #[action] defines different view handling
             classroom_id = request.get('id', '')
@@ -117,7 +117,6 @@ class ClassroomView(AuthenticatedSchoolMixin, View):
     def delete_classroom(self, request):
         request = simplejson.loads(request.raw_post_data)
         response = {}
-        
         try:
             action = request['action']    #[action] defines different view handling
             classroom_id = request.get('id', '')
@@ -166,6 +165,7 @@ class TeacherView(AuthenticatedSchoolMixin, View):
     
     def get_list_json(self, request):
         request = request.GET
+        response = {}
         try:
             action = request.get('action', '')    #[action] defines different view handling
         except KeyError:
@@ -184,7 +184,6 @@ class TeacherView(AuthenticatedSchoolMixin, View):
     def create_update_teacher(self, request):
         request = simplejson.loads(request.raw_post_data)
         response = {}
-        
         try:
             action = request['action']    #[action] defines different view handling
             teacher_id = request.get('id', '')
@@ -254,7 +253,6 @@ class TeacherView(AuthenticatedSchoolMixin, View):
     def delete_teacher(self, request):
         request = simplejson.loads(request.raw_post_data)
         response = {}
-        
         try:
             action = request['action']    #[action] defines different view handling
             teacher_id = request.get('id', '')

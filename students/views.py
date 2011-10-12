@@ -53,6 +53,7 @@ def add_new_lab(request):
     '''
     if request.method == 'POST' and request.is_ajax():
         json_data = simplejson.loads(request.raw_post_data)
+        data = {}
         
         student = Student.objects.get(user=request.user)
         schools = student.schools.all()

@@ -24,6 +24,7 @@
 	font-style: normal;
 }
 
+html { overflow-y: scroll; }
 body { background: #f4f4d6 url('./img/background.png') top left repeat; font-family: Verdana, Arial, Helvetica, sans-serif; }
 body.wait { cursor: wait !important; }
 a { text-decoration: none; }

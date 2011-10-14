@@ -140,7 +140,8 @@ class Subscription(models.Model):
         
         return False if flag==0 else True
     
-    def _get_opinionated_absences(self):
+    @property
+    def opinionated_absences(self):
         absences = self.absences
         result = {}
         result['value'] = self.absences
@@ -151,5 +152,4 @@ class Subscription(models.Model):
         else:
             result['importance'] = ''
         return result
-    opinionated_absences = property(_get_opinionated_absences)
 

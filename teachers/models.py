@@ -161,33 +161,28 @@ class Lab(models.Model):
         
         return False if flag==0 else True
     
-    def _get_registered_students_count(self):
+    @property
+    def registered_students_count(self):
         subscriptions = Subscription.objects.filter(lab=self)
         return len(subscriptions)
     
-    registered_students_count = property(_get_registered_students_count)
-    
-    def _get_empty_seats(self):
+    @property
+    def empty_seats(self):
         registered_students_count = self.registered_students_count
         return ( self.max_students-registered_students_count if self.max_students>registered_students_count else 0 )
     
-    empty_seats = property(_get_empty_seats)
-    
-    def _get_sibling_labs_plus_self(self):
+    @property
+    def sibling_labs_plus_self(self):
         all_labs = Lab.objects.filter(course=self.course, start_hour__gt=1).order_by('start_hour').select_related()
         owners_labs = all_labs.filter(teacher=self.teacher)
         owners_labs_ids = owners_labs.values_list('id', flat=True)
         others_labs = all_labs.exclude(id__in=owners_labs_ids)
         return {'owners':owners_labs, 'others':others_labs}
     
-    sibling_labs_plus_self = property(_get_sibling_labs_plus_self)
-    
-    def _get_sibling_labs(self):
+    @property
+    def sibling_labs(self):
         labs = self.sibling_labs_plus_self
         #import ipdb; ipdb.set_trace();
         labs['owners'] = labs['owners'].exclude(id=self.id)
         return labs
-    
-    sibling_labs = property(_get_sibling_labs)
-    
     

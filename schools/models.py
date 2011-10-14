@@ -110,7 +110,6 @@ class CoursesUpload(models.Model):
             course = Course(lesson=lesson, school=self.school)
             course.save()
             
-    
     def delete(self, *args, **kwargs):
         try:
             self.file.delete()

@@ -4,9 +4,7 @@
 
 from django.db import models
 from django.core.exceptions import ValidationError
-
 from django.core.cache import cache
-from redis.exceptions import ResponseError
 
 from diogenis.settings import REDIS as r
 from diogenis.auth.models import UserProfile
@@ -45,10 +43,7 @@ class Student(UserProfile):
         username = self.user.username
         keys = r.keys(u'*students/%s*' % username)
         for key in keys:
-            try:
-                r.delete(key)
-            except ResponseError:
-                r.delete(key)
+            r.delete(key)
         return None
     
     def get_courses_by_school(self):

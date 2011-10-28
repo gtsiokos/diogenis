@@ -36,8 +36,6 @@ def request_passes_test(test_func, login_url=None, redirect_field_name=REDIRECT_
 
 
 from django.core.cache import cache
-from redis.exceptions import ResponseError
-
 from diogenis.settings import CACHES as caches
 
 class cache_view(object):
@@ -73,10 +71,7 @@ class cache_view(object):
                     cache.set(key, response, self.timeout)
                 return response
             
-            try:
-                response = cache_response()
-            except ResponseError:
-                response = cache_response()
+            response = cache_response()
             return response
         return wrap
     

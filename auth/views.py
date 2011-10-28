@@ -8,8 +8,6 @@ from django.shortcuts import render
 from django.contrib import auth
 from django.utils import simplejson
 
-from redis.exceptions import ResponseError
-
 from django.contrib.auth.models import User
 from diogenis.teachers.models import Teacher
 from diogenis.students.models import Student, Subscription
@@ -38,10 +36,7 @@ def login(request):
                 remember = True
             user = auth.authenticate(username=usr, password=pwd)
             if user is not None and user.is_active and not user.is_superuser:
-                try:
-                    auth.login(request, user)
-                except ResponseError:
-                    auth.login(request, user)
+                auth.login(request, user)
                 if remember==False:
                     request.session.set_expiry(0)
                 try:
@@ -66,10 +61,7 @@ def logout(request):
     '''
     Logs out user
     '''
-    try:
-        auth.logout(request)
-    except ResponseError:
-        auth.logout(request)
+    auth.logout(request)
     return HttpResponseRedirect('/')
 
 

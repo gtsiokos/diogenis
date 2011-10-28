@@ -93,7 +93,7 @@ CACHES = {
         'LOCATION': 'localhost:6379',
         'TIMEOUT': 6*60*60,
         'OPTIONS': {
-            'DB': 1,
+            'DB': 0,
             'PASSWORD': '',
 #            'PARSER_CLASS': 'redis.connection.HiredisParser'
         },

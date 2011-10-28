@@ -10,91 +10,90 @@ import datetime
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
-
-from django.contrib.auth.decorators import user_passes_test
 from django.utils import simplejson
 
 from diogenis.teachers.models import *
 from diogenis.students.models import *
 from diogenis.schools.models import *
 
+from diogenis.common.decorators import request_passes_test, cache_view
 from diogenis.common.helpers import humanize_time, set_hour_range
 from diogenis.teachers.helpers import get_lab_hour, pdf_exporter
 
-def user_is_teacher(user):
+def user_is_teacher(request, username=None, **kwargs):
     try:
-        request_user = Teacher.objects.get(user=user)
-        return user.is_authenticated() and request_user.is_teacher
+        user = request.user
+        teacher = Teacher.objects.get(user=user)
+        if username:
+            return user.is_authenticated() and username == user.username
+        return user.is_authenticated()
     except:
         return False
 
-
-@user_passes_test(user_is_teacher, login_url="/login/")
+@request_passes_test(user_is_teacher, login_url="/login/")
+@cache_view(48*60*60)
 def manage_labs(request, username):
     '''
     Manages teacher's views.
     
     Handling Templates: /teachers/labs.html | /teachers/pending-students.html
     '''
-    if username == request.user.username:
-        #import ipdb; ipdb.set_trace();
-        pending_students_request = request.path.endswith('pending-students/')        #[Boolean] checking current url path
-        teacher = Teacher.objects.get(user=request.user)
-        courses = teacher.get_courses_by_school()
+    #import ipdb; ipdb.set_trace();
+    pending_students_request = request.path.endswith('pending-students/')        #[Boolean] checking current url path
+    teacher = Teacher.objects.get(user=request.user)
+    courses = teacher.get_courses_by_school()
+    
+    #####################################################################
+    # Builds the context making related dicts/lists with lesson names,
+    # teacher's labs, and the registered students for each lab.
+    #####################################################################        
+    results = []
+    labs = Lab.objects.filter(teacher=teacher, start_hour__gt=1).order_by('course__lesson__name', 'start_hour').select_related()
+    
+    labs_context = []
+    for lab in labs:
+        hour = get_lab_hour(lab)
+        lesson = lab.course.lesson
+        school = lab.course.school
         
-        #####################################################################
-        # Builds the context making related dicts/lists with lesson names,
-        # teacher's labs, and the registered students for each lab.
-        #####################################################################        
-        results = []
-        labs = Lab.objects.filter(teacher=teacher, start_hour__gt=1).order_by('course__lesson__name', 'start_hour').select_related()
+        if pending_students_request:
+            subscriptions = Subscription.objects.filter(lab=lab, in_transit=True).order_by('student').select_related()
+        else:
+            subscriptions = Subscription.objects.filter(lab=lab, in_transit=False).order_by('student').select_related()
         
-        labs_context = []
-        for lab in labs:
-            hour = get_lab_hour(lab)
-            lesson = lab.course.lesson
-            school = lab.course.school
-            
-            if pending_students_request:
-                subscriptions = Subscription.objects.filter(lab=lab, in_transit=True).order_by('student').select_related()
-            else:
-                subscriptions = Subscription.objects.filter(lab=lab, in_transit=False).order_by('student').select_related()
-            
-            students = []
-            for subscription in subscriptions:
-                students.append({
-                                'first':subscription.student.user.first_name,
-                                'last':subscription.student.user.last_name,
-                                'am':subscription.student.am,
-                                'subscription_id':subscription.hash_id,
-                                'absences':subscription.opinionated_absences,
-                                'id':subscription.student.hash_id
-                                })
-            
-            sibling_labs = lab.sibling_labs if not pending_students_request else lab.sibling_labs_plus_self
-            sibling_labs_context = {}
-            sibling_labs_context['owners'] = map(get_sibling_context, sibling_labs['owners'])
-            sibling_labs_context['others'] = map(get_sibling_context, sibling_labs['others'])
-            
-            labs_context.append({
-                            'id':lab.hash_id,
-                            'lesson': {'name':lesson.name},
-                            'classroom': {'name':lab.classroom.name},
-                            'day':lab.day,
-                            'hour':hour,
-                            'students':students,
-                            'sibling_labs':sibling_labs_context,
-                            'empty_seats':lab.empty_seats
+        students = []
+        for subscription in subscriptions:
+            students.append({
+                            'first':subscription.student.user.first_name,
+                            'last':subscription.student.user.last_name,
+                            'am':subscription.student.am,
+                            'subscription_id':subscription.hash_id,
+                            'absences':subscription.opinionated_absences,
+                            'id':subscription.student.hash_id
                             })
-            
-        context =   {
-                    'labs':labs_context,
-                    'courses':courses['context']
-                    }
-        template = ('teachers/pending_students.html' if pending_students_request else 'teachers/labs.html')
-        return render(request, template, context)
-    else:
-        raise Http404
+        
+        sibling_labs = lab.sibling_labs if not pending_students_request else lab.sibling_labs_plus_self
+        sibling_labs_context = {}
+        sibling_labs_context['owners'] = map(get_sibling_context, sibling_labs['owners'])
+        sibling_labs_context['others'] = map(get_sibling_context, sibling_labs['others'])
+        
+        labs_context.append({
+                        'id':lab.hash_id,
+                        'lesson': {'name':lesson.name},
+                        'classroom': {'name':lab.classroom.name},
+                        'day':lab.day,
+                        'hour':hour,
+                        'students':students,
+                        'sibling_labs':sibling_labs_context,
+                        'empty_seats':lab.empty_seats
+                        })
+        
+    context =   {
+                'labs':labs_context,
+                'courses':courses['context']
+                }
+    template = ('teachers/pending_students.html' if pending_students_request else 'teachers/labs.html')
+    return render(request, template, context)
     
 def get_sibling_context(lab):
     return {'id':lab.hash_id,
@@ -104,7 +103,7 @@ def get_sibling_context(lab):
             'students':{'registered':lab.registered_students_count, 'max':lab.max_students}
             }
 
-@user_passes_test(user_is_teacher, login_url="/login/")
+@request_passes_test(user_is_teacher, login_url="/login/")
 def submit_student_to_lab(request):
     '''
     Manages JSON request for transferring student(s) across lesson-specific labs.
@@ -150,7 +149,7 @@ def submit_student_to_lab(request):
         data = simplejson.dumps(data)
         return HttpResponse(data, mimetype='application/javascript')
 
-@user_passes_test(user_is_teacher, login_url="/login/")
+@request_passes_test(user_is_teacher, login_url="/login/")
 def delete_subscription(request):
     if request.method == "POST" and request.is_ajax():
         json_data = simplejson.loads(request.raw_post_data)
@@ -172,15 +171,14 @@ def delete_subscription(request):
         data = simplejson.dumps(data)
         return HttpResponse(data, mimetype='application/javascript')
 
-@user_passes_test(user_is_teacher, login_url="/login/")
+@request_passes_test(user_is_teacher, login_url="/login/")
 def delete_lab(request, username, hash_id):
-    if username == request.user.username:
-        lab = Lab.objects.filter(hash_id=hash_id)
-        lab.delete()
-        return HttpResponseRedirect('/teachers/%s/' % username)
+    lab = Lab.objects.get(hash_id=hash_id)
+    lab.delete()
+    return HttpResponseRedirect('/teachers/%s/' % username)
     
 
-@user_passes_test(user_is_teacher, login_url="/login/")
+@request_passes_test(user_is_teacher, login_url="/login/")
 def add_new_lab(request):
     '''
     Manages JSON request for creating a new lab.
@@ -245,7 +243,7 @@ def add_new_lab(request):
         return HttpResponse(data, mimetype='application/javascript')
 
 
-@user_passes_test(user_is_teacher, login_url="/login/")
+@request_passes_test(user_is_teacher, login_url="/login/")
 def update_absences(request):
     '''
     Manages JSON request for updating student absences.
@@ -281,7 +279,7 @@ def update_absences(request):
         return HttpResponse(data, mimetype='application/javascript')
 
 
-@user_passes_test(user_is_teacher, login_url="/login/")
+@request_passes_test(user_is_teacher, login_url="/login/")
 def export_pdf(request, hash_id, csrf_token):
     '''
     ###

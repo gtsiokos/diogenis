@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os.path
+import redis
 
 # Change PROJECT_ROOT to reflect your own dir
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -77,3 +78,18 @@ DEVELOPER_APPS = (
     'compressor',
 )
 INSTALLED_APPS += DEVELOPER_APPS
+
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': 'localhost:6379',
+        'TIMEOUT': 6*60*60,
+        'OPTIONS': {
+            'DB': 1,
+            'PASSWORD': '',
+#            'PARSER_CLASS': 'redis.connection.HiredisParser'
+        },
+    },
+}
+
+REDIS = redis.Redis(host='localhost', port=6379)

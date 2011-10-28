@@ -4,7 +4,6 @@
 
 from django.db import models, transaction
 
-
 from diogenis.auth.models import UserProfile
 
 from diogenis.common.helpers import get_hashed_id
@@ -98,6 +97,9 @@ class CoursesUpload(models.Model):
         return u'%s' % self.school.title
     
     def save(self, *args, **kwargs):
+        from diogenis.students.models import Student
+        from diogenis.teachers.models import Teacher
+        
         super(CoursesUpload, self).save(*args, **kwargs)
         lessons_list = get_lessons(self.file.path)
         #import ipdb; ipdb.set_trace();
@@ -109,10 +111,18 @@ class CoursesUpload(models.Model):
             lesson.save()
             course = Course(lesson=lesson, school=self.school)
             course.save()
+        
+        students = Student.objects.filter(schools__in=[self.school])
+        [student.clear_cache() for student in students]
+        teachers = Teacher.objects.filter(schools__in=[self.school])
+        [teacher.clear_cache() for teacher in teachers]
             
     def delete(self, *args, **kwargs):
         try:
             self.file.delete()
+            
+            students = Student.objects.filter(schools__in=[self.school])
+            [student.clear_cache() for student in students]
         except:
             pass
         super(CoursesUpload, self).delete(*args, **kwargs)

@@ -3,6 +3,7 @@
 
 import os.path
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Local time zone for this installation. Choices can be found here:

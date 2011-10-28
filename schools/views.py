@@ -130,7 +130,6 @@ class ClassroomView(AuthenticatedSchoolMixin, View):
         Lab.objects.filter(course__school=self.school, classroom=classroom).delete()
         
         if many_schools:
-            print 'mpike edw'
             self.school.classrooms.remove(classroom)
         else:
             classroom.delete()

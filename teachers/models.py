@@ -3,9 +3,12 @@
 #coding: UTF-8
 
 from django.db import models
-from django.db.models import Q
 from django.core.exceptions import ValidationError
 
+from django.core.cache import cache
+from redis.exceptions import ResponseError
+
+from diogenis.settings import REDIS as r
 from diogenis.auth.models import UserProfile
 from diogenis.schools.models import Course
 from diogenis.students.models import Subscription
@@ -33,6 +36,16 @@ class Teacher(UserProfile):
         if not self.hash_id:
             self.hash_id = get_hashed_id(self.user.id)
             super(Teacher, self).save(*args, **kwargs)
+    
+    def clear_cache(self):
+        username = self.user.username
+        keys = r.keys(u'*teachers/%s*' % username)
+        for key in keys:
+            try:
+                r.delete(key)
+            except ResponseError:
+                r.delete(key)
+        return None
     
     def get_courses_by_school(self):
         context = []
@@ -185,4 +198,5 @@ class Lab(models.Model):
         #import ipdb; ipdb.set_trace();
         labs['owners'] = labs['owners'].exclude(id=self.id)
         return labs
-    
+
+import diogenis.teachers.signals

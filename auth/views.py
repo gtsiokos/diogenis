@@ -6,8 +6,9 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.db import IntegrityError
 from django.shortcuts import render
 from django.contrib import auth
-
 from django.utils import simplejson
+
+from redis.exceptions import ResponseError
 
 from django.contrib.auth.models import User
 from diogenis.teachers.models import Teacher
@@ -37,7 +38,10 @@ def login(request):
                 remember = True
             user = auth.authenticate(username=usr, password=pwd)
             if user is not None and user.is_active and not user.is_superuser:
-                auth.login(request, user)
+                try:
+                    auth.login(request, user)
+                except ResponseError:
+                    auth.login(request, user)
                 if remember==False:
                     request.session.set_expiry(0)
                 try:
@@ -62,7 +66,10 @@ def logout(request):
     '''
     Logs out user
     '''
-    auth.logout(request)
+    try:
+        auth.logout(request)
+    except ResponseError:
+        auth.logout(request)
     return HttpResponseRedirect('/')
 
 

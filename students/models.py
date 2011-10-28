@@ -5,6 +5,10 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 
+from django.core.cache import cache
+from redis.exceptions import ResponseError
+
+from diogenis.settings import REDIS as r
 from diogenis.auth.models import UserProfile
 from diogenis.schools.models import Course
 
@@ -36,6 +40,16 @@ class Student(UserProfile):
         if not self.hash_id:
             self.hash_id = get_hashed_id(self.user.id)
             super(Student, self).save(*args, **kwargs)
+    
+    def clear_cache(self):
+        username = self.user.username
+        keys = r.keys(u'*students/%s*' % username)
+        for key in keys:
+            try:
+                r.delete(key)
+            except ResponseError:
+                r.delete(key)
+        return None
     
     def get_courses_by_school(self):
         context = []
@@ -153,3 +167,4 @@ class Subscription(models.Model):
             result['importance'] = ''
         return result
 
+import diogenis.students.signals

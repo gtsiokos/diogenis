@@ -4,47 +4,47 @@
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
-
-from django.contrib.auth.decorators import user_passes_test
 from django.utils import simplejson
 
 from diogenis.students.models import *
 from diogenis.teachers.models import *
 from diogenis.schools.models import *
 
+from diogenis.common.decorators import request_passes_test, cache_view
 from diogenis.common.helpers import humanize_time, set_hour_range
 from diogenis.teachers.helpers import get_lab_hour
 
-def user_is_student(user):
+def user_is_student(request, username=None, **kwargs):
     try:
-        request_user = Student.objects.get(user=user)
-        return user.is_authenticated() and not request_user.is_teacher
+        user = request.user
+        student = Student.objects.get(user=user)
+        if username:
+            return user.is_authenticated() and username == user.username
+        return user.is_authenticated()
     except:
         return False
 
-@user_passes_test(user_is_student, login_url='/login/')
+@request_passes_test(user_is_student, login_url='/login/')
+@cache_view(48*60*60)
 def display_labs(request, username):
     '''
     Manages student's view.
     
     Handling Template:    /students/labs.html
     '''
-    if username == request.user.username:
-        student = Student.objects.get(user=request.user)
-        
-        courses = student.get_courses_by_school()
-        subscriptions = student.get_subscriptions()
-        
-        context =   {
-                    'subscriptions':subscriptions['context'],
-                    'courses':courses['context']
-                    }
-        return render(request, 'students/labs.html', context)
-    else:
-        raise Http404
+    student = Student.objects.get(user=request.user)
+    
+    courses = student.get_courses_by_school()
+    subscriptions = student.get_subscriptions()
+    
+    context =   {
+                'subscriptions':subscriptions['context'],
+                'courses':courses['context']
+                }
+    return render(request, 'students/labs.html', context)
 
 
-@user_passes_test(user_is_student, login_url="/login/")
+@request_passes_test(user_is_student, login_url='/login/')
 def add_new_lab(request):
     '''
     Manages JSON request for lab subscription.

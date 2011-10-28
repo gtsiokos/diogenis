@@ -6,7 +6,6 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.cache import cache
 
-from diogenis.settings import REDIS as r
 from diogenis.auth.models import UserProfile
 from diogenis.schools.models import Course
 from diogenis.students.models import Subscription
@@ -36,6 +35,7 @@ class Teacher(UserProfile):
             super(Teacher, self).save(*args, **kwargs)
     
     def clear_cache(self):
+        from diogenis.settings import REDIS as r
         username = self.user.username
         keys = r.keys(u'*teachers/%s*' % username)
         for key in keys:

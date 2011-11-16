@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # -*- coding: utf8 -*-
 
@@ -11,8 +12,6 @@ from diogenis.teachers.models import *
 from diogenis.schools.models import *
 
 from diogenis.common.decorators import request_passes_test, cache_view
-from diogenis.common.helpers import humanize_time, set_hour_range
-from diogenis.teachers.helpers import get_lab_hour
 
 def user_is_student(request, username=None, **kwargs):
     try:
@@ -95,7 +94,7 @@ def add_new_lab(request):
             if available_labs:                #checks whether requested teacher has registered labs
                 classes_list = []
                 for lab in available_labs:
-                    hour = get_lab_hour(lab)
+                    hour = lab.hour
                     classes_list.append({'id':lab.hash_id, 'lesson':lab.course.lesson.name, 'day':lab.day, 'start_hour':hour['start']['humanized'], 'end_hour':hour['end']['humanized'] })
                 
                 data = {'status':1, 'action':action, 'classes':classes_list}

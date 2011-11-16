@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # -*- coding: utf8 -*-
-from diogenis.common.helpers import humanize_time
+
 try:
     from reportlab.lib.pagesizes import letter
     from reportlab.lib.styles import getSampleStyleSheet
@@ -11,18 +11,6 @@ try:
     from reportlab.pdfbase.ttfonts import TTFont
 except:
     pass
-
-
-def get_lab_hour(lab):
-    '''
-    Expects: Lab object model
-    Returns: [Dict] with hour ranges in raw and greek humanized way.
-    '''
-    hour = {
-            'start':{'raw':lab.start_hour, 'humanized':humanize_time(lab.start_hour)},
-            'end':{'raw':lab.end_hour, 'humanized':humanize_time(lab.end_hour)},
-            }
-    return hour
 
 def normalize_locale(text):
     '''

@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#coding: UTF-8
-#most workable and usefull Ver:2
 # -*- coding: utf8 -*-
 
 import os
@@ -17,8 +15,7 @@ from diogenis.students.models import *
 from diogenis.schools.models import *
 
 from diogenis.common.decorators import request_passes_test, cache_view
-from diogenis.common.helpers import humanize_time, set_hour_range
-from diogenis.teachers.helpers import get_lab_hour, pdf_exporter
+from diogenis.teachers.helpers import pdf_exporter
 
 def user_is_teacher(request, username=None, **kwargs):
     try:
@@ -52,7 +49,6 @@ def manage_labs(request, username):
     
     labs_context = []
     for lab in labs:
-        hour = get_lab_hour(lab)
         lesson = lab.course.lesson
         school = lab.course.school
         
@@ -82,7 +78,7 @@ def manage_labs(request, username):
                         'lesson': {'name':lesson.name},
                         'classroom': {'name':lab.classroom.name},
                         'day':lab.day,
-                        'hour':hour,
+                        'hour':lab.hour,
                         'students':students,
                         'sibling_labs':sibling_labs_context,
                         'empty_seats':lab.empty_seats
@@ -99,7 +95,7 @@ def get_sibling_context(lab):
     return {'id':lab.hash_id,
             'name':lab.classroom.name,
             'day':lab.day[:3],
-            'hour':get_lab_hour(lab),
+            'hour':lab.hour,
             'students':{'registered':lab.registered_students_count, 'max':lab.max_students}
             }
 
@@ -188,10 +184,9 @@ def add_new_lab(request):
     if request.method == "POST" and request.is_ajax():
         json_data = simplejson.loads(request.raw_post_data)
         data = {}
+        hour = {}
         
         teacher = Teacher.objects.get(user=request.user)
-        hour = set_hour_range(1,1)
-        
         try:
             action = json_data['action']
             course_id = json_data['course_id']
@@ -227,8 +222,9 @@ def add_new_lab(request):
             classroom = Classroom.objects.get(hash_id=classroom_id)
             teacher = Teacher.objects.get(user=request.user)
             
-            lab = Lab(course=course, classroom=classroom, teacher=teacher, day=day, start_hour=hour['start'], end_hour=hour['end'], max_students=max_students)
             try:
+                lab = Lab(course=course, classroom=classroom, teacher=teacher, day=day, max_students=max_students)
+                lab.hour = hour
                 lab.save()
                 msg = u"Η προσθήκη ολοκληρώθηκε"
                 data = {'status':1, 'action':action, 'msg':msg}

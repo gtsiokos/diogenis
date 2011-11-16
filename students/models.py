@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#coding: UTF-8
+# -*- coding: utf8 -*-
 
 from django.db import models
 from django.core.exceptions import ValidationError
@@ -11,7 +11,6 @@ from diogenis.auth.models import UserProfile
 from diogenis.schools.models import Course
 
 from diogenis.common.helpers import get_hashed_id
-from diogenis.teachers.helpers import get_lab_hour
 
 class Student(UserProfile):
     '''
@@ -61,12 +60,11 @@ class Student(UserProfile):
         return {'objects':courses, 'context':context}
     
     def _map_subscriptions(self, subscription):
-        hour = get_lab_hour(subscription.lab)
         return  {
                 'lesson':subscription.lab.course.lesson.name,
                 'classroom':subscription.lab.classroom.name,
                 'day':subscription.lab.day,
-                'hour':hour,
+                'hour':subscription.lab.hour,
                 'absences':subscription.opinionated_absences,
                 'teacher':subscription.lab.teacher.user.get_full_name(),
                 }

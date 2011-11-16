@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#coding: UTF-8
+# -*- coding: utf8 -*-
 
 from django.db import models
 from django.core.exceptions import ValidationError
@@ -11,7 +11,7 @@ from diogenis.auth.models import UserProfile
 from diogenis.schools.models import Course
 from diogenis.students.models import Subscription
 
-from diogenis.common.helpers import get_hashed_id
+from diogenis.common.helpers import get_hashed_id, humanize_time
 
 
 class Teacher(UserProfile):
@@ -170,6 +170,22 @@ class Lab(models.Model):
         return False if flag==0 else True
     
     @property
+    def hour(self):
+        '''
+        Returns: [Dict] with hour ranges in raw and greek humanized way.
+        '''
+        hour = {
+                'start':{'raw':self.start_hour, 'humanized':humanize_time(self.start_hour)},
+                'end':{'raw':self.end_hour, 'humanized':humanize_time(self.end_hour)},
+                }
+        return hour
+        
+    @hour.setter
+    def hour(self, hour):
+        self.start_hour = hour.get('start', 1)
+        self.end_hour = hour.get('end', 1)
+    
+    @property
     def registered_students_count(self):
         subscriptions = Subscription.objects.filter(lab=self)
         return len(subscriptions)
@@ -190,7 +206,6 @@ class Lab(models.Model):
     @property
     def sibling_labs(self):
         labs = self.sibling_labs_plus_self
-        #import ipdb; ipdb.set_trace();
         labs['owners'] = labs['owners'].exclude(id=self.id)
         return labs
 

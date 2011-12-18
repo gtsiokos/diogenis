@@ -276,13 +276,13 @@ def update_absences(request):
 
 
 @request_passes_test(user_is_teacher, login_url="/login/")
-def export_pdf(request, hash_id, csrf_token):
+def export_pdf(request, hash_id):
     '''
     ###
     # Needs to be documented by Lomar
     ###
     '''
-    if request.method == "GET" and csrf_token == request.COOKIES['csrftoken']:
+    if request.method == "GET":
         lab = Lab.objects.get(hash_id=hash_id)
         
         teacher = Teacher.objects.get(user=request.user)

@@ -4,14 +4,46 @@
 
 <script id="authenticate-tpl" type="text/x-handlebars-template">
 	<span data-action="authenticate"></span>
-	<div class="entry">
-		<label for="signup-username">Username στον Διόνυσο</label>
-		<input id="signup-username" name="signup-username" type="text" />
-	</div>
-    <div class="entry">
-		<label for="signup-password">Κωδικός στον Διόνυσο</label>
-		<input id="signup-password" name="signup-password" type="password" />
-	</div>
+	{{#if old_layout}}
+	    <div class="box" style="width: 500px; position: absolute; top: 130px; left: 400px;">
+	        <h2>Δεν μπορώ να εγγραφώ!</h2>
+	        <p>Εφόσον είναι αδύνατο να εγγραφείτε και με τον δεύτερο τρόπο, <a href="mailto:support.diogenis@teilar.gr">επικοινωνήστε μαζί μας</a>.</p>
+	    </div>
+	    <div class="entry">
+		    <label for="signup-username">Username στον Διόνυσο</label>
+		    <input id="signup-username" name="signup-username" type="text" data-type="username"/>
+	    </div>
+        <div class="entry">
+		    <label for="signup-password">Κωδικός στον Διόνυσο</label>
+		    <input id="signup-password" name="signup-password" type="password" data-type="password"/>
+	    </div>
+	{{else}}
+	    <div class="box" style="width: 500px; position: absolute; top: 150px; left: 400px;">
+	        <h2>Βοήθεια</h2>
+	        <p>Η επαλήθευση των στοιχείων από τον Διόνυσο είναι μια επίπονη διαδικασία.</p>
+	        <p class="new">Σε περίπτωση σφάλματος και εφόσον ο Διόνυσος λειτουργεί δοκιμάστε τον <a href="#" id="toggle-layout">εναλλακτικό τρόπο εγγραφής</a>.</p>
+	    </div>
+	    <div class="entry">
+		    <label for="signup-username">Username στον Διόνυσο</label>
+		    <input id="signup-username" name="signup-username" type="text" data-type="username"/>
+	    </div>
+        <div class="entry">
+		    <label for="signup-password">Κωδικός στον Διόνυσο</label>
+		    <input id="signup-password" name="signup-password" type="password" data-type="password"/>
+	    </div>
+	    <div class="entry">
+		    <label for="signup-registration-number">Αριθμός Μητρώου</label>
+		    <input id="signup-registration-number" name="signup-registration-number" type="text" data-type="registration-number"/>
+	    </div>
+	    <div class="entry">
+		    <label for="signup-first-name">Όνομα</label>
+		    <input id="signup-first-name" name="signup-first-name" type="text" data-type="first-name"/>
+	    </div>
+	    <div class="entry">
+		    <label for="signup-last-name">Επώνυμο</label>
+		    <input id="signup-last-name" name="signup-last-name" type="text" data-type="last-name"/>
+	    </div>
+	{{/if}}
 	<button class="button regular important">Εγγραφή</button>	
 </script>
 
@@ -38,7 +70,7 @@
     <ul class="credentials">
         <li><strong>Αριθμός Μητρώου</strong><span>{{credentials.registration_number}}</span></li>
         <li><strong>Όνομ/πώνυμο</strong><span>{{credentials.first_name}} {{credentials.last_name}}</span></li>
-        <li><strong>Έτος Εισαγωγής</strong><span>{{credentials.introduction_year}}</span></li>
+        {{#if credentials.introduction_year}}<li><strong>Έτος Εισαγωγής</strong><span>{{credentials.introduction_year}}</span></li>{{/if}}
     </ul>
 	<button class="button regular important">Είσοδος</button>	
 </script>

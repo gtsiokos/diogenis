@@ -14,7 +14,7 @@ from diogenis.students.models import Student, Subscription
 from diogenis.schools.models import School
 
 from diogenis.auth.forms import StudentSignupForm
-from diogenis.auth.dionysos import get_student_credentials
+from diogenis.auth.dionysos import DionysosAuthentication, get_student_credentials
 
 
 def login(request):
@@ -85,14 +85,21 @@ def signup(request):
             try:
                 username = json_data['username']
                 password = json_data['password']
+                registration_number = json_data.get('registration-number', '')
+                first_name = json_data.get('first-name', '')
+                last_name = json_data.get('last-name', '')
             except KeyError:
                 msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
                 data = {'status':2, 'msg':msg}
             
             form = StudentSignupForm({'username':username,'password':password})
             if form.is_valid():
-                credentials = get_student_credentials(username, password)
-                if credentials:
+                if registration_number:
+                    authentication = DionysosAuthentication(username=username, password=password, registration_number=registration_number, first_name=first_name, last_name=last_name)
+                else:
+                    authentication = DionysosAuthentication(username=username, password=password)
+                if authentication.is_valid():
+                    credentials = authentication.valid_credentials
                     try:
                         user = User.objects.get(username=credentials['username'])
                     except:

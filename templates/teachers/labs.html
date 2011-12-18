@@ -90,7 +90,7 @@
 					    {% if lab.empty_seats == 0 %}
 					    <p><span class="empty-seats no-seat">Συμπληρώθηκε</span></p>
 					    {% endif %}
-					    <a class="export-pdf" href="/teachers/export-pdf/{{ lab.id }}/{{csrf_token_value}}/">Εξαγωγή PDF</a>
+					    <a class="export-pdf" href="/teachers/export-pdf/{{ lab.id }}/">Εξαγωγή PDF</a>
 				    </div>
 			    {% else %}
 				    <div class="extras">

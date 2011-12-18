@@ -11,5 +11,5 @@ urlpatterns = patterns('',
     url(r'^add-new-lab/$', add_new_lab),
     url(r'^delete-subscription/$', delete_subscription),
     url(r'^update-absences/$', update_absences),
-    url(r'^export-pdf/(?P<hash_id>[a-zA-Z0-9]{0,64})/(?P<csrf_token>[a-zA-Z0-9]{0,64})/$', export_pdf),
+    url(r'^export-pdf/(?P<hash_id>[a-zA-Z0-9]{0,64})/$', export_pdf),
 )

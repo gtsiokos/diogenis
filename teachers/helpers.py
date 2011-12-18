@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # -*- coding: utf8 -*-
 
+from diogenis.common.helpers import humanize_time
 try:
     from reportlab.lib.pagesizes import letter
     from reportlab.lib.styles import getSampleStyleSheet

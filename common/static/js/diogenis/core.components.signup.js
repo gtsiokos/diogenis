@@ -43,7 +43,8 @@ X$('StudentSignup',
     
     handle_events:  function(){
                         var self = this,
-                        	focus = {};
+                        	focus = {},
+                        	toggle_layout;
                         
                         var submit = function(){
                             self.$button.unbind('click');
@@ -67,7 +68,12 @@ X$('StudentSignup',
                         	self.$user.find('div.entry').removeClass('active');
                         };
                         
-                        return {submit:submit, focus:focus};
+                        toggle_layout = function(){
+                            self.$user.empty().append( self.render( self.templates.authenticate,{'old_layout':true}) );
+                            self.listen_events();
+                        }
+                        
+                        return {submit:submit, focus:focus, toggle_layout:toggle_layout};
                     },
     
     listen_events:  function(){
@@ -76,11 +82,13 @@ X$('StudentSignup',
                         
                         self.$span = self.$user.find('span:first');
                         self.$button = self.$user.find('button');
+                        $toggle = $('#toggle-layout');
                         
                         self.$button.bind('click', events.submit);
                         self.$user.find('input').bind('focus', events.focus['in'] )
                        							.bind('blur', events.focus['out'] );
                        	
+                       	$toggle.bind('click', events.toggle_layout);
                        	$('#school').chosen();
                     },
     
@@ -92,14 +100,13 @@ X$('StudentSignup',
                             incomplete = false;
                         
                         if(action==='authenticate'){
-                            var username = $('#signup-username').val(),
-                                password = $('#signup-password').val();
+                            var inputs = $('#user div.entry input');
                             
-                            request =   {
-                                        action:action,
-                                        username:username,
-                                        password:password
-                                        };
+                            request = {action:action};
+                            for(var i=0, input; input = inputs[i]; i++){
+                                input = $(input);
+                                request[input.data('type')] = input.val();
+                            }
                         }
                         if(action==='signup'){
                             var school = $('#school'),

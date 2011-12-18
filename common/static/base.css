@@ -246,6 +246,30 @@ div.not-logged {
     div.not-logged div.box p { color: #444; font: normal 15px/1.44 Verdana,Arial,Helvetica,sans-serif; }
     div.not-logged div.box p.new { margin-top:11px; }
     
+    div.not-logged div.box a {
+        display: inline-block;
+        margin: 1px 3px 0 2px; padding: 0 4px 2px 4px;
+        color: #fcfcfc;
+        border: solid 1px #999;
+        background: #a3a3a3;
+        text-shadow: 1px 1px 0px #888;
+        
+        -moz-border-radius: 3px;
+	    -webkit-border-radius: 3px;
+	    border-radius: 3px;
+    }
+    
+    div.not-logged div.box a:hover,
+    div.not-logged div.box a:active {
+        border-color: #555;
+        background: #777;
+        text-shadow: 1px 1px 1px #555;
+        
+		-moz-box-shadow: 0 0 2px #333 inset;
+		-webkit-box-shadow: 0 0 2px #333 inset;
+		box-shadow: 0 0 2px #333 inset;
+    }
+    
     div.not-logged h2.decoration {
 		position: absolute; top: -22px; right: -15px; z-index: -1;
 		font: bold 133px/1 Helvetica,sans-serif;

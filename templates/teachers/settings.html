@@ -1,0 +1,44 @@
+{% extends "teachers/base.html" %}
+{% load diogenis_extras %}
+
+{% block content %}
+
+<div id="content" class="logged">
+	{{ block.super }}
+	<div id="ui-messages">
+		{% if message %}
+			{% if message.status == 1 %}
+				<p class="ok">{{ message.msg }}</p>
+			{% endif %}
+			{% if message.status == 2 %}
+				<p class="error">{{ message.msg }}</p>
+			{% endif %}
+			{% if message.status == 3 %}
+				<p class="warning">{{ message.msg }}</p>
+			{% endif %}
+		{% else %}
+			<p>Κονσόλα Μηνυμάτων</p>
+		{% endif %}
+	</div>
+	<ul class="ui-categories">
+	    <li>
+	        <h3>Αλλαγή Κωδικού στον Λογαριασμό σας</h3>
+	        <p>Συμπληρώστε εδώ τον νέο σας κωδικό:</p>
+	        <form id="change-password" action="" method="POST">
+	            <input type="password" id="password" name="password"> 
+	            {% csrf_token %}
+	            <input id="change-password-button" class="button less important regular" type="submit" value="Αλλαγή Κωδικού" style="width:144px;">
+	        </form>
+	    </li>
+	</ul>
+	
+</div>
+
+{% endblock content %}
+
+{% block footer %}
+    
+    {{ block.super }}
+    {% include "handlebars/teachers/absences.html" %}
+   
+{% endblock %}

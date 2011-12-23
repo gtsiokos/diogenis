@@ -7,7 +7,7 @@ X$('TeacherAbsences',
 {
     $absences_widget        : $('#content>div.lab td.absences'),
     $active_widget          : undefined,
-    $modal_messages         : $('#modal-messages'),
+    $messages         : $('#ui-messages'),
     templates               : {
                                 absences:$('#absences-tpl').html()
                               },
@@ -27,7 +27,7 @@ X$('TeacherAbsences',
     
     clean_messages: function() {
         var self = this;
-        self.$modal_messages.find('p').fadeOut(100).delay(100).removeClass();
+        self.$messages.find('p').fadeOut(100).delay(100).removeClass();
         
         return this;
     },
@@ -36,7 +36,7 @@ X$('TeacherAbsences',
         var self = this,
             speed = new_speed || 150;
         
-        self.clean_messages().$modal_messages.find('p').addClass(self.msg[status]).text(new_msg).fadeIn(speed);
+        self.clean_messages().$messages.find('p').addClass(self.msg[status]).text(new_msg).fadeIn(speed);
     },
     
     handle_events: function(){

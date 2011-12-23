@@ -8,7 +8,7 @@
 
 */
 
-div.logged h3 {
+div.logged > h3 {
 	float: left;
 	margin: 16px 8px 10px 19px;
 	font: bold 18px/1.1 Verdana, Arial, Helvetica, sans-serif;
@@ -49,7 +49,6 @@ div.logged dl.labs {
         background:     -ms-linear-gradient(top, #f1f1f1, #e9e9e9); 
         background:      -o-linear-gradient(top, #f1f1f1, #e9e9e9); 
         background:         linear-gradient(top, #f1f1f1, #e9e9e9);
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#f1f1f1', EndColorStr='#e9e9e9');
         
         -moz-box-shadow: 	0 1px 0 #ccc;
         -webkit-box-shadow: 0 1px 0 #ccc;

@@ -19,15 +19,6 @@ from diogenis.students.models import *
 
 from diogenis.schools.forms import CoursesUploadForm as Form
 
-
-#from diogenis.common.helpers import humanize_time, set_hour_range
-#from diogenis.teachers.helpers import get_lab_hour
-
-def user_is_school(self):
-    request_user = School.objects.get(user=user)
-    return user.is_authenticated() and request_user.is_school
-
-
 class IndexView(AuthenticatedSchoolMixin, View):
     
     def get(self, request, username):

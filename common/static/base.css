@@ -246,7 +246,7 @@ div.not-logged {
     div.not-logged div.box p { color: #444; font: normal 15px/1.44 Verdana,Arial,Helvetica,sans-serif; }
     div.not-logged div.box p.new { margin-top:11px; }
     
-    div.not-logged div.box a {
+    div.not-logged div.box p>a {
         display: inline-block;
         margin: 1px 3px 0 2px; padding: 0 4px 2px 4px;
         color: #fcfcfc;
@@ -259,8 +259,8 @@ div.not-logged {
 	    border-radius: 3px;
     }
     
-    div.not-logged div.box a:hover,
-    div.not-logged div.box a:active {
+    div.not-logged div.box p>a:hover,
+    div.not-logged div.box p>a:active {
         border-color: #555;
         background: #777;
         text-shadow: 1px 1px 1px #555;
@@ -363,7 +363,6 @@ div.logged {
         background:     -ms-linear-gradient(top, #f3f3f3, #ffffff); 
         background:      -o-linear-gradient(top, #f3f3f3, #ffffff); 
         background:         linear-gradient(top, #f3f3f3, #ffffff);
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#f3f3f3', EndColorStr='#ffffff');
         
         -moz-box-shadow: 	0 1px 5px #888, 0 1px 0 #fff inset;
         -webkit-box-shadow: 0 1px 5px #888, 0 1px 0 #fff inset;

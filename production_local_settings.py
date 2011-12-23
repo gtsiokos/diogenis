@@ -93,3 +93,6 @@ CACHES = {
 }
 
 REDIS = redis.Redis(host='localhost', port=6379)
+#Disables Redis caching views using 'common.decorators.cache_view'
+REDIS_CACHES_VIEWS = True
+

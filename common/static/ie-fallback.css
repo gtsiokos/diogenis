@@ -1,0 +1,97 @@
+/*
+base.css
+*/
+
+div.not-logged div.box div.persona {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#f3f3f3', EndColorStr='#ffffff');
+}
+
+/*
+ui.base.css
+*/
+
+.button.regular {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#7ca9d4', EndColorStr='#5690c7');
+}
+:hover.button.regular, :focus.button.regular {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#89b2d8', EndColorStr='#6398cb');
+}
+
+.button.warning {
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#cf090d', EndColorStr='#DC0A09');
+}
+
+ul.ui-options a.listed {
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#F9F9F9', EndColorStr='#E3E3E3');
+}
+ul.ui-options a:active.listed {
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#EEEEEE', EndColorStr='#F9F9F9');
+}
+
+ul.ui-entries>li.active             {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#FFF1BF', EndColorStr='#ffe68c');
+}
+
+ul.ui-categories>li {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#f0f0f0', EndColorStr='#fafafa');
+}
+
+#ui-messages p {
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#f1f1f1', EndColorStr='#e9e9e9');
+}
+
+	#ui-messages p.ok {
+		filter: progid:DXImageTransform.Microsoft.gradient(enabled=false) !important;
+	}
+
+	#ui-messages p.error{
+		filter: progid:DXImageTransform.Microsoft.gradient(enabled=false) !important;
+	}
+
+	#ui-messages p.warning{
+		filter: progid:DXImageTransform.Microsoft.gradient(enabled=false) !important;
+	}
+
+/*
+ui.students.css
+*/
+
+dl.labs dt span.absences {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#f1f1f1', EndColorStr='#e9e9e9');
+}
+
+/*
+ui.teachers.css
+*/
+
+div.lab h4>span {
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#96badc', EndColorStr='#5690c7');
+}
+
+div.lab h4>span.edit {
+	filter: progid:DXImageTransform.Microsoft.gradient(enabled=false) !important;
+}
+
+div.lab div.ui-absences span.add {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#f1f1f1', EndColorStr='#e9e9e9');
+}
+div.lab div.ui-absences span.remove {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#d4d4d4', EndColorStr='#c3c3c3');
+}
+
+div.lab div.ui-absences span.add:hover {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#d3f8d4', EndColorStr='#b6f3b7');
+}
+
+div.lab div.ui-absences span.remove:hover {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffebe8', EndColorStr='#ffcdc6');
+}
+
+div.lab div.ui-absences.warning span.add {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#fff1bf', EndColorStr='#ffea9d');
+}
+
+div.lab div.ui-absences.warning span.remove {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#D0A300', EndColorStr='#ae8800');
+}
+

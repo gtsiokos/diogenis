@@ -37,6 +37,7 @@ def request_passes_test(test_func, login_url=None, redirect_field_name=REDIRECT_
 
 from django.core.cache import cache
 from diogenis.settings import CACHES as caches
+from diogenis.local_settings import REDIS_CACHES_VIEWS as redis_is_caching
 
 class cache_view(object):
     '''
@@ -71,7 +72,7 @@ class cache_view(object):
                     cache.set(key, response, self.timeout)
                 return response
             
-            response = cache_response()
+            response = cache_response() if redis_is_caching else func(*args, **kwargs)
             return response
         return wrap
     

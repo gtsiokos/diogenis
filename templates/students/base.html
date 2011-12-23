@@ -5,12 +5,16 @@
 	<link rel="stylesheet" href="{{ STATIC_URL }}modal.css">
 {% endblock %}
 
+{% block user_type_specific_actions %}
+<li><a href="{% url students.settings user.username %}">⌘&ensp;Οι Ρυθμίσεις μου</a></li>
+{% endblock %}
+
 {% block sidebar %}
 <div id="sidebar">
 	<a id="add-lab" class="button important regular" href="#">Προσθήκη Εργαστηρίου</a>
 	<ul id="navigation">
 		<li>
-			<a class="first last active" href="{% url students.index user.username %}">
+			<a class="first last {% block display-labs-active %}{% endblock %}" href="{% url students.index user.username %}">
 				<img src="{{ STATIC_URL }}img/black_board_icon.png" />
 				Δηλωμένα Εργαστήρια
 			</a>

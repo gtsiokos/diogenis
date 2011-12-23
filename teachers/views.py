@@ -7,6 +7,7 @@ import datetime
 
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.views.generic import View
 from django.shortcuts import render
 from django.utils import simplejson
 
@@ -15,6 +16,7 @@ from diogenis.students.models import *
 from diogenis.schools.models import *
 
 from diogenis.common.decorators import request_passes_test, cache_view
+from diogenis.teachers.mixins import AuthenticatedTeacherMixin
 from diogenis.teachers.helpers import pdf_exporter
 
 def user_is_teacher(request, username=None, **kwargs):
@@ -295,5 +297,24 @@ def export_pdf(request, hash_id):
         response['Content-Disposition'] = 'attachment; filename=%s' % filename
         pdf_exporter(lab,response)
         return response
+
+
+class SettingsView(AuthenticatedTeacherMixin, View):
+    
+    def get(self, request, username):
+        #self.school = School.objects.get(user=request.user)
+        return render(request, 'teachers/settings.html', {})
+        
+    def post(self, request, username):
+        user = request.user
+        user.set_password(request.POST['password'])
+        user.save()
+        
+        message = {'status':1, 'msg':u'Η αλλαγή κωδικού στον Διογένη ολοκληρώθηκε'}
+        context =   {
+                    'message':message,
+                    }
+        return render(request, 'teachers/settings.html', context)
         
 
+settings = SettingsView.as_view()

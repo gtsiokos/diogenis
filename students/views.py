@@ -4,6 +4,7 @@
 
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.views.generic import View
 from django.shortcuts import render
 from django.utils import simplejson
 
@@ -12,6 +13,8 @@ from diogenis.teachers.models import *
 from diogenis.schools.models import *
 
 from diogenis.common.decorators import request_passes_test, cache_view
+from diogenis.auth.dionysos import DionysosAuthentication
+from diogenis.students.mixins import AuthenticatedStudentMixin
 
 def user_is_student(request, username=None, **kwargs):
     try:
@@ -153,4 +156,34 @@ def add_new_lab(request):
         data = simplejson.dumps(data)
         return HttpResponse(data, mimetype='application/javascript')
         
-            
+
+class SettingsView(AuthenticatedStudentMixin, View):
+    
+    def get(self, request, username):
+        return render(request, 'students/settings.html', {})
+        
+    def post(self, request, username):
+        message = {}
+        password = request.POST.get('password','')
+        user = request.user
+        student = Student.objects.get(user=user)
+        
+        if password:
+            authentication = DionysosAuthentication(username=user.username, password=password, registration_number=student.am, first_name=user.first_name, last_name=user.last_name)
+            if authentication.is_valid():
+                user.set_password(password)
+                user.save()
+            else:
+                message = {'status':2, 'msg':u'Ο νέος κωδικός δεν αντιστοιχεί σε αυτόν που χρησιμοποιείτε στον Διόνυσο, η αλλαγή ακυρώθηκε'}
+        else:
+            message = {'status':2, 'msg':u'Ο κωδικός σας δεν μπορεί να είναι κενός'}
+        
+        if not message:    
+            message = {'status':1, 'msg':u'Η αλλαγή κωδικού στον Διογένη ολοκληρώθηκε'}
+        context =   {
+                    'message':message,
+                    }
+        return render(request, 'students/settings.html', context)
+        
+
+settings = SettingsView.as_view()

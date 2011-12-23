@@ -14,7 +14,7 @@ from diogenis.students.models import Student, Subscription
 from diogenis.schools.models import School
 
 from diogenis.auth.forms import StudentSignupForm
-from diogenis.auth.dionysos import DionysosAuthentication, get_student_credentials
+from diogenis.auth.dionysos import DionysosAuthentication
 
 
 def login(request):
@@ -69,7 +69,7 @@ def signup(request):
     '''
     Signup form for students.
     
-    Uses get_student_credentials for retrieving student's data from dionysos.teilar.gr
+    Uses DionysosAuthentication for retrieving student's data from dionysos.teilar.gr
     '''
     if request.method == 'POST' and request.is_ajax():
         json_data = simplejson.loads(request.raw_post_data)

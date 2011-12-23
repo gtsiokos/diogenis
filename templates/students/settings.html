@@ -1,0 +1,36 @@
+{% extends "students/base.html" %}
+
+{% block content %}
+
+<div id="content" class="logged">
+	{{ block.super }}
+	<div id="ui-messages">
+		{% if message %}
+			{% if message.status == 1 %}
+				<p class="ok">{{ message.msg }}</p>
+			{% endif %}
+			{% if message.status == 2 %}
+				<p class="error">{{ message.msg }}</p>
+			{% endif %}
+			{% if message.status == 3 %}
+				<p class="warning">{{ message.msg }}</p>
+			{% endif %}
+		{% else %}
+			<p>Κονσόλα Μηνυμάτων</p>
+		{% endif %}
+	</div>
+	<ul class="ui-categories">
+	    <li>
+	        <h3>Αλλαγή Κωδικού στον Λογαριασμό σας</h3>
+	        <p>Σε περίπτωση που <strong>έχετε αλλάξει τον κωδικό σας στον Διόνυσο</strong>, συμπληρώστε εδώ τον νέο σας κωδικό:</p>
+	        <form id="change-password" action="" method="POST">
+	            <input type="password" id="password" name="password"> 
+	            {% csrf_token %}
+	            <input class="button less important regular" type="submit" value="Αλλαγή Κωδικού" style="width:144px;">
+	        </form>
+	        <p class="new">Με αυτόν τον τρόπο διατηρείτε τα δύο συστήματα συγχρονισμένα και δεν θα αντιμετωπίσετε προβλήματα σε μελλοντικές αναβαθμίσεις.</p>
+	    </li>
+	</ul>
+</div>
+
+{% endblock content %}

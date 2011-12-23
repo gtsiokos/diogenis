@@ -6,6 +6,10 @@
 	<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}modal.css" />
 {% endblock %}
 
+{% block user_type_specific_actions %}
+<li><a href="{% url teachers.settings user.username %}">⌘&ensp;Οι Ρυθμίσεις μου</a></li>
+{% endblock %}
+
 {% block sidebar %}
 <div id="sidebar">
 	<a id="add-lab" class="button important regular" href="#">Προσθήκη Εργαστηρίου</a>
@@ -149,6 +153,7 @@
 	<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/core.teachers.lab.create.js"></script>
 	<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/core.teachers.absences.js"></script>
 	<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/core.teachers.lab.edit.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/core.teachers.settings.js"></script>
 	
     {% endspaceless %}
 {% endblock %}

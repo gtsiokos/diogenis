@@ -28,7 +28,8 @@ ul.ui-options a:active.listed {
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#EEEEEE', EndColorStr='#F9F9F9');
 }
 
-ul.ui-entries>li.active             {
+ul.ui-entries>li:hover,
+ul.ui-entries>li.active {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#FFF1BF', EndColorStr='#ffe68c');
 }
 

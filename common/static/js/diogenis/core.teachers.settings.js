@@ -21,7 +21,7 @@ X$('TeacherSettings',
             e.stopPropagation();
             
             var input = self.$form.find('input:first'),
-                text = 'Ο νέος κωδικός σας είναι ο "'+input.val()+'";'
+                text = 'Ο νέος κωδικός σας είναι ο "'+input.val()+'";';
             
             smoke.confirm(text,function(e){
                 if(e){

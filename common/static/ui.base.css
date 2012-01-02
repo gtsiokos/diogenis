@@ -338,7 +338,7 @@ ul.ui-categories li>form input[type="password"]:focus{
 #ui-messages					{ display: none; margin: 0 0 22px; }
 div.logged #ui-messages 		{ display: block; float: left; width: 648px; margin: 35px 16px 22px 16px; }
 
-	#ui-messages p {
+	.ui-messages p {
 		display: block; width: 500px; position: relative;
 		margin: 0 auto; padding: 10px 12px 12px 12px;
 		font: normal 14px Verdana, Arial, Helvetica, sans-serif;
@@ -362,13 +362,13 @@ div.logged #ui-messages 		{ display: block; float: left; width: 648px; margin: 3
         box-shadow: 		0 -1px 1px #fcfcfc inset;
 	}
 
-	#ui-messages p.ok {
+	.ui-messages p.ok {
 		padding: 10px 12px 12px 47px;
 		background: #D3F8D4 url('./img/ok_icon.png') 6px 44% no-repeat; color: #333333;
 		border: solid 1px #7ed082;
 	}
 
-		#ui-messages p.ok a {
+		.ui-messages p.ok a {
 			position: absolute; top: 6px; right: 7px;
 			padding: 5px 7px 7px 24px;
 			background: #555 url('./img/reload_icon_17x17.png') 4px 5px no-repeat; color: #fff;
@@ -379,15 +379,15 @@ div.logged #ui-messages 		{ display: block; float: left; width: 648px; margin: 3
 			-webkit-border-radius: 5px;
 			border-radius: 5px;
 		}
-		#ui-messages p.ok a:hover, #ui-messages p.ok a:focus { background-color: #333; }
+		.ui-messages p.ok a:hover, .ui-messages p.ok a:focus { background-color: #333; }
 
-	#ui-messages p.error{
+	.ui-messages p.error{
 		padding: 10px 12px 12px 47px;
 		background: #FFEBE8 url('./img/error_icon.png') 6px 44% no-repeat; color: #333333;
 		border: solid 1px #CC0000;		
 	}
 
-	#ui-messages p.warning{
+	.ui-messages p.warning{
 		padding: 10px 12px 12px 47px;
 		background: #FFFFE0 url('./img/warning_icon.png') 6px 44% no-repeat; color: #333333;
 		border: solid 1px #c9bc1d;		

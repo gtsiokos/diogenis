@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # -*- coding: utf8 -*-
 
@@ -7,16 +8,14 @@ import datetime
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.views.generic import View
 from django.shortcuts import render
-
-from django.contrib.auth.decorators import user_passes_test
 from django.utils import simplejson
 
-from diogenis.common.mixins import AuthenticatedSchoolMixin
 from django.contrib.auth.models import User
 from diogenis.schools.models import *
 from diogenis.teachers.models import *
 from diogenis.students.models import *
 
+from diogenis.schools.mixins import AuthenticatedSchoolMixin
 from diogenis.schools.forms import CoursesUploadForm as Form
 
 class IndexView(AuthenticatedSchoolMixin, View):
@@ -38,6 +37,15 @@ class IndexView(AuthenticatedSchoolMixin, View):
         
         context = {'message':message}
         return render(request, 'schools/index.html', context)
+        
+class SubscriptionsActivationView(AuthenticatedSchoolMixin, View):
+    
+    def post(self, request, username):
+        activate = request.POST.get('activate', False)
+        request.user.is_active = True if activate else False
+        request.user.save()
+        
+        return HttpResponseRedirect('/')
 
 class ClassroomView(AuthenticatedSchoolMixin, View):
     
@@ -267,5 +275,6 @@ class TeacherView(AuthenticatedSchoolMixin, View):
         
     
 index = IndexView.as_view()
+subscriptions_activation = SubscriptionsActivationView.as_view()
 classroom = ClassroomView.as_view()
 teacher = TeacherView.as_view()

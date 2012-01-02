@@ -5,7 +5,7 @@
 
 <div id="content" data-username="{{ user.username }}" class="logged">
 	{{ block.super }}
-	<div id="ui-messages">
+	<div id="ui-messages" class="ui-messages">
 		{% if message %}
 			{% if message.status == 1 %}
 				<p class="ok">{{ message.msg }}</p>
@@ -21,14 +21,28 @@
 		{% endif %}
 	</div>
 	<ul class="ui-categories">
-	    <!--<li>
-	        <h3>Εισαγωγή</h3>
-	    </li>-->
 	    <li>
 	        <h3>Νέο Πρόγραμμα Σπουδών</h3>
 	        <p>Μόλις ανεβάσετε <strong>το αρχείο excel (.xls)</strong> τα μαθήματα του τμήματος θα ανανεωθούν αυτόματα.</p>
-	        <form id="courses-upload" action="/schools/{{ user.username }}/" enctype="multipart/form-data" method="POST">
+	        <form id="courses-upload" action="{% url schools.index user.username %}" enctype="multipart/form-data" method="POST">
 	            <input type="file" id="file" name="file" value="Αναζήτηση"> 
+	            {% csrf_token %}
+	        </form>
+	    </li>
+	    <li>
+	        <h3>Δηλώσεις Εργαστηρίων</h3>
+	        <form id="subscriptions-activation" action="{% url schools.subscriptions_activation user.username %}" method="POST">
+	            <div class="ui-messages">
+	                {% if user.is_active %}
+	                <p class="ok">
+	                    <input type="checkbox" class="activate" name="activate" checked="True"/>&ensp;Οι εγγραφές είναι ενεργοποιημένες</input>
+	                </p>
+	                {% else %}
+	                <p class="error">
+	                    <input type="checkbox" class="activate" name="activate"/>&ensp;Οι εγγραφές είναι απενεργοποιημένες</input>
+	                </p>
+	                {% endif %}
+	            </div>
 	            {% csrf_token %}
 	        </form>
 	    </li>

@@ -6,12 +6,12 @@
 <div id="content" class="logged">
 	{{ block.super }}
 	{% if not subscriptions.verified and not subscriptions.in_transit %}
-	<div id="ui-messages">
+	<div id="ui-messages" class="ui-messages">
 		<p class="warning">Δεν έχετε προσθέσει τα εργαστήρια σας στον Διογένη</p>
 	</div>
 	{% else %}
 	    {% if subscriptions.in_transit %}
-	    <div id="ui-messages">
+	    <div id="ui-messages" class="ui-messages">
     		<p class="warning">Υπάρχουν εργαστήρια στα οποία μείνατε στην Αίθουσα Αναμονής. Επικοινωνήστε με τον αρμόδιο καθηγητή για την μεταφορά σας σε άλλο εργαστήριο.</p>
 	    </div>
 	    {% endif %}

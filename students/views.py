@@ -13,6 +13,7 @@ from diogenis.teachers.models import *
 from diogenis.schools.models import *
 
 from diogenis.common.decorators import request_passes_test, cache_view
+from diogenis.students.decorators import student_has_subscriptions_enabled
 from diogenis.auth.dionysos import DionysosAuthentication
 from diogenis.students.mixins import AuthenticatedStudentMixin
 
@@ -27,6 +28,7 @@ def user_is_student(request, username=None, **kwargs):
         return False
 
 @request_passes_test(user_is_student, login_url='/login/')
+@student_has_subscriptions_enabled
 @cache_view(48*60*60)
 def display_labs(request, username):
     '''

@@ -1,3 +1,13 @@
+
+#subscriptions-activation .ui-messages p {
+    width:277px;
+    margin:0; padding-left:12px;
+    background-image:none;
+}
+#subscriptions-activation .ui-messages input.activate {
+    vertical-align: bottom;
+}
+
 #sidebar #new-teacher               { margin: 0 0 0 70px; width: 152px; }
 #sidebar #new-classroom             { margin: 0 0 0 69px; }
 

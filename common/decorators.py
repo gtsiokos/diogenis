@@ -43,7 +43,7 @@ class cache_view(object):
     '''
     Custom decorator, uses django low-level cache api for caching views.
     
-    Key example: 'students:display_labs:[student.user.username]'
+    Key example: '/students/[username]/'
     Current use: diogenis.students.views -> display_labs
     '''
 

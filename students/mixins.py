@@ -6,6 +6,7 @@ from django.http import Http404
 from django.contrib.auth.decorators import user_passes_test
 from django.utils.decorators import method_decorator
 
+from diogenis.students.decorators import student_has_subscriptions_enabled
 from diogenis.students.models import Student
 
 def user_is_student(user):
@@ -18,6 +19,7 @@ def user_is_student(user):
 class AuthenticatedStudentMixin(object):
     
     @method_decorator(user_passes_test(user_is_student, login_url='/login/'))
+    @method_decorator(student_has_subscriptions_enabled)
     def dispatch(self, request, *args, **kwargs):
         username = kwargs.get('username')
         if username != request.user.username: raise Http404

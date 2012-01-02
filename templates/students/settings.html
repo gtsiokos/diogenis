@@ -4,7 +4,7 @@
 
 <div id="content" class="logged">
 	{{ block.super }}
-	<div id="ui-messages">
+	<div id="ui-messages" class="ui-messages">
 		{% if message %}
 			{% if message.status == 1 %}
 				<p class="ok">{{ message.msg }}</p>

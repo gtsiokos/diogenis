@@ -35,7 +35,7 @@ def login(request):
             if post.has_key('remember'):
                 remember = True
             user = auth.authenticate(username=usr, password=pwd)
-            if user is not None and user.is_active and not user.is_superuser:
+            if user is not None and not user.is_superuser:
                 auth.login(request, user)
                 if remember==False:
                     request.session.set_expiry(0)

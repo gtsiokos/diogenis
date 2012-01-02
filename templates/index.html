@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block alerts %}
-	<div id="ui-messages" {% if message %}style="display:block"{% endif %}>
+	<div id="ui-messages" class="ui-messages" {% if message %}style="display:block"{% endif %}>
 	{% if message %}
 			<p class="error">{{ message }}</p>
 	{% endif %}

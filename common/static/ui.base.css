@@ -336,7 +336,8 @@ ul.ui-categories li>form input[type="password"]:focus{
 //^*****************************/	
 
 #ui-messages					{ display: none; margin: 0 0 22px; }
-div.logged #ui-messages 		{ display: block; float: left; width: 648px; margin: 35px 16px 22px 16px; }
+div.logged #ui-messages,
+div.logged .ui-messages 		{ display: block; float: left; width: 648px; margin: 35px 16px 22px 16px; }
 
 	.ui-messages p {
 		display: block; width: 500px; position: relative;
@@ -392,5 +393,10 @@ div.logged #ui-messages 		{ display: block; float: left; width: 648px; margin: 3
 		background: #FFFFE0 url('./img/warning_icon.png') 6px 44% no-repeat; color: #333333;
 		border: solid 1px #c9bc1d;		
 	}
-		
-		
+	
+	.ui-messages p.info{
+		padding: 10px 12px 12px 47px;
+		background: #E4EDF6 url('./img/info_icon.png') 6px 44% no-repeat; color: #326596;
+		border: solid 1px #5690C7;		
+	}
+    

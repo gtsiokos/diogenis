@@ -317,14 +317,20 @@ div.logged {
 								-moz-border-radius: 14px;
 								-webkit-border-radius: 14px;
 								border-radius: 14px;
+								
+								-webkit-transition: all 0.2s ease-out;  /* Saf3.2+, Chrome */
+						        -moz-transition: all 0.2s ease-out;  /* FF4+ */
+						        -o-transition: all 0.2s ease-out;  /* Opera 10.5+ */
+          						transition: all 0.2s ease-out;
 								}
 	#promo>li:hover 			{ border-color: #bbb; border-color: rgba(0,0,0,0.25); }
-	#promo>li:hover div			{ border-color: #949494; }
+	#promo>li:hover div			{ border-color: #949494; background: rgba(243,243,243,0.88); }
 	#promo>li:hover em			{ color: #5690C7; }
 	#promo>li div				{
 								width: 260px; height: 83px; position: relative; /*#### to ypsos eksartatai apo to padding-top, ola mazi prepei na einai 260px ####*/
 								padding: 177px 0 0 0;
 								background: #f3f3f3;
+								background: rgba(243,243,243,0.7);
 								border: solid 1px #bbb;
 							
 								-moz-border-radius: 6px;
@@ -484,8 +490,18 @@ div.logged {
 	                                    position: absolute; top: 2px; right: 22px;
                                         }
                                         
-    #user ul.credentials                { font: normal 11px/1.8 Verdana, Arial, Helvetica, sans-serif; color: #777; }
-    #user ul.credentials li             { width: 360px; position: relative; display: block; border: solid 1px #fff; border-top-color: #ddd; border-left:0; border-right:0; }
+    #user ul.credentials                { font: normal 11px/1.8 Verdana, Arial, Helvetica, sans-serif; color: #777; height: 188px; }
+    #user ul.credentials li             { width: 350px; position: relative; display: block; border: solid 1px #fff; border-top-color: #ddd; border-left:0; border-right:0; }
     #user ul.credentials li:first-child { border-top:0; }
     #user ul.credentials li:last-child  { border-bottom:0; }
     #user ul.credentials li>span        { width: 400px; position: absolute; left: 133px; }
+    
+    #user div.terms p { font-size:11px; }
+    #user div.terms ol {
+        list-style-type: decimal;
+        color: #444;
+        font-size: 11px;
+    }
+    
+    #user div.terms ol>li { margin-top: 11px; }
+    

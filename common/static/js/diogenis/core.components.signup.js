@@ -110,12 +110,13 @@ X$('StudentSignup',
                         }
                         if(action==='signup'){
                             var school = $('#school'),
+                                agree_terms = $('#agree-terms').is(':checked'),
                                 school_id = (school.val()) ? school.find(':selected').data('id') : '';
                             
-                            request['action'] = r['action'];
-                            delete r['action'];
+                            request['action'] = action;
                             request['student'] = r;
                             request['school_id'] = school_id;
+                            request['agree_terms'] = agree_terms || '';
                         }
                         
                         for(var item in request){

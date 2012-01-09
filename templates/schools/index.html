@@ -32,7 +32,7 @@
 	    <li>
 	        <h3>Δηλώσεις Εργαστηρίων</h3>
 	        <form id="subscriptions-activation" action="{% url schools.subscriptions_activation user.username %}" method="POST">
-	            <div class="ui-messages">
+	            <div class="ui-messages" style="float:none; margin:0;">
 	                {% if user.is_active %}
 	                <p class="ok">
 	                    <input type="checkbox" class="activate" name="activate" checked="True"/>&ensp;Οι εγγραφές είναι ενεργοποιημένες</input>

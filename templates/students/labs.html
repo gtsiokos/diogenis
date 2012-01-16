@@ -56,9 +56,11 @@
 		{% endfor %}
 		</dl>
 	{% endif %}
+	{% if subscriptions.verified or subscriptions.in_transit %}
 	<div class="ui-messages">
 		<p class="info">Θυμηθείτε να ελέγχετε συχνά τον λογαριασμό σας, ειδικά την εβδομάδα εγγραφών, για τυχόν μεταφορά σας σε άλλο εργαστήριο από τον καθηγητή της ομάδας σας.</p>
 	</div>
+	{% endif %}
 </div>
 
 {% endblock content %}

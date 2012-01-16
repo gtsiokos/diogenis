@@ -208,7 +208,7 @@ a { text-decoration: none; }
 
 #footer p {
     width: 500px; margin: 0 auto;
-    font: normal 11px/1 Verdana, Arial, Helvetica, sans-serif; letter-spacing: 0.05em;
+    font: normal 11px/1.7 Verdana, Arial, Helvetica, sans-serif; letter-spacing: 0.05em;
     color: #9C9217;
     text-align: center;
     text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.6);
@@ -223,6 +223,16 @@ a { text-decoration: none; }
 }
 
 #footer p>small { font-size:88%; }
+
+#footer hr {
+    border: 0;
+    width: 440px; height: 1px;
+    background-image: -webkit-linear-gradient(left, rgba(156,146,23,0), rgba(156,146,23,0.75), rgba(156,146,23,0));
+    background-image:    -moz-linear-gradient(left, rgba(156,146,23,0), rgba(156,146,23,0.75), rgba(156,146,23,0)); 
+    background-image:     -ms-linear-gradient(left, rgba(156,146,23,0), rgba(156,146,23,0.75), rgba(156,146,23,0)); 
+    background-image:      -o-linear-gradient(left, rgba(156,146,23,0), rgba(156,146,23,0.75), rgba(156,146,23,0));
+    background-image:         linear-gradient(left, rgba(156,146,23,0), rgba(156,146,23,0.75), rgba(156,146,23,0)); 
+}
 
 div.not-logged {
 	width: 978px;

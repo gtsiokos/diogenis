@@ -5,7 +5,7 @@ X$('Helpers',
     //hash: undefined,
     
     init:               function(){
-                            this.getCsrfToken().setGlobalAjax();
+                            this.getCsrfToken().setGlobalAjax().generateFooterEmail();
                             return this;
                         },
     
@@ -108,6 +108,23 @@ X$('Helpers',
                             theBody.ajaxComplete(function(){
                                 theBody.removeClass("wait");
                             });
+                            
+                            return this;
+                        },
+
+    //********************************
+    //Generates email for search-bots defence
+    //********************************                          
+    generateFooterEmail:function(){
+                            var is_temporary = true,
+                                $email = $("#footer-email"),
+                                domain = $email.attr('rel').replace('http://', '@');
+                            
+                            if(is_temporary){
+	                            $email.attr('href', 'mailto:onnotes@gmail.com');
+                            }else{
+                                $email.attr('href', 'mailto:contact'+domain);
+                            }
                             
                             return this;
                         }

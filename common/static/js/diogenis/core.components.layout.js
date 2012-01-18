@@ -7,7 +7,7 @@ X$('Sidebar',
     
     init:               function(){
                             if(this.$sidebar[0]){
-                                this.set_sidebar_height();
+                                //this.set_sidebar_height();
                                 if(this.$navigation[0]) this.handle_events().position_navigation();
                             }
                         },

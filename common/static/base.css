@@ -11,15 +11,19 @@
 @font-face {
 	font-family: 'Droid Sans';
 	src: url('./font/droidsans.eot');
-	src: local('☺'), url('./font/droidsans.woff') format('woff'), url('./font/droidsans.ttf') format('truetype');
+    src: url('./font/droidsans.eot?#iefix') format('embedded-opentype'),
+         url('./font/droidsans.woff') format('woff'),
+         url('./font/droidsans.ttf') format('truetype');
 	font-weight: normal;
 	font-style: normal;
 }
 
 @font-face {
 	font-family: 'Droid Sans Bold';
-	src: url('./font/droidsans-bold.eot');
-	src: local('☺'), url('./font/droidsans-bold.woff') format('woff'), url('./font/droidsans-bold.ttf') format('truetype');
+    src: url('./font/droidsans-bold.eot');
+    src: url('./font/droidsans-bold.eot?#iefix') format('embedded-opentype'),
+         url('./font/droidsans-bold.woff') format('woff'),
+         url('./font/droidsans-bold.ttf') format('truetype');
 	font-weight: normal;
 	font-style: normal;
 }

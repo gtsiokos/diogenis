@@ -47,13 +47,10 @@ def manage_labs(request, username):
     # teacher's labs, and the registered students for each lab.
     #####################################################################        
     results = []
-    labs = Lab.objects.filter(teacher=teacher, start_hour__gt=1).order_by('course__lesson__name', 'start_hour').select_related()
+    labs = Lab.objects.filter(teacher=teacher, start_hour__gt=1).order_by('course__lesson__name', 'start_hour').select_related('course__lesson__name', 'classroom__name')
     
     labs_context = []
     for lab in labs:
-        lesson = lab.course.lesson
-        school = lab.course.school
-        
         if pending_students_request:
             subscriptions = Subscription.objects.filter(lab=lab, in_transit=True).order_by('student').select_related()
         else:
@@ -77,7 +74,7 @@ def manage_labs(request, username):
         
         labs_context.append({
                         'id':lab.hash_id,
-                        'lesson': {'name':lesson.name},
+                        'lesson': {'name':lab.course.lesson.name},
                         'classroom': {'name':lab.classroom.name},
                         'day':lab.day,
                         'hour':lab.hour,

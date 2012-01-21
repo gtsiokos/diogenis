@@ -197,7 +197,7 @@ class Lab(models.Model):
     
     @property
     def sibling_labs_plus_self(self):
-        all_labs = Lab.objects.filter(course=self.course, start_hour__gt=1).order_by('start_hour').select_related()
+        all_labs = Lab.objects.filter(course=self.course, start_hour__gt=1).order_by('start_hour').select_related('classroom__name')
         owners_labs = all_labs.filter(teacher=self.teacher)
         owners_labs_ids = owners_labs.values_list('id', flat=True)
         others_labs = all_labs.exclude(id__in=owners_labs_ids)

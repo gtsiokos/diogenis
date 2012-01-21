@@ -71,7 +71,7 @@ class Student(UserProfile):
     
     def get_subscriptions(self):
         context = []
-        subscriptions = Subscription.objects.filter(student=self).select_related()
+        subscriptions = Subscription.objects.filter(student=self).select_related('lab__course__lesson__name', 'lab__classroom__name', 'lab__teacher__user')
         
         verified = subscriptions.filter(in_transit=False)
         verified = map(self._map_subscriptions, verified)

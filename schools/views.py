@@ -171,7 +171,7 @@ class TeacherView(AuthenticatedSchoolMixin, View):
             response = {'status':2, 'msg':msg}
         
         teachers = [teacher.json(selected_school=self.school) for teacher in self.school.teacher_set.all().order_by('user__last_name', 'user__first_name')]
-        courses = [course.json() for course in Course.objects.filter(school=self.school)]
+        courses = [course.json() for course in Course.objects.filter(school=self.school).select_related()]
         response = {'action':action, 'status':1, 'teachers':teachers, 'courses':courses}
         
         if not response:

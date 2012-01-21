@@ -69,7 +69,7 @@ class Teacher(UserProfile):
         
         if selected_school:
             courses_list = Lab.objects.filter(teacher=self, course__school=selected_school).values_list('course__hash_id', flat=True)
-            school_courses = Course.objects.filter(school=selected_school)
+            school_courses = Course.objects.filter(school=selected_school).select_related()
             
             courses = []
             for course in school_courses:

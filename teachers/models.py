@@ -22,6 +22,7 @@ class Teacher(UserProfile):
     hash_id = models.CharField(max_length=255, unique=True, blank=True, null=True)
     
     class Meta:
+        ordering = ['user__last_name', 'user__first_name']
         verbose_name = u"Καθηγητής"
         verbose_name_plural = u"Καθηγητές"
     
@@ -90,9 +91,9 @@ class Classroom(models.Model):
     hash_id = models.CharField(max_length=255, unique=True, blank=True, null=True)
     
     class Meta:
+        ordering = ['name']
         verbose_name = u"Αίθουσα"
         verbose_name_plural = u"Αίθουσες"
-        ordering = ['name']
         
     def __unicode__(self):
         return self.name
@@ -121,9 +122,9 @@ class Lab(models.Model):
     hash_id = models.CharField(max_length=255, unique=True, blank=True, null=True)
     
     class Meta:
+        ordering = ['course']
         verbose_name = u"Εργαστήριο"
         verbose_name_plural = u"Εργαστήρια"
-        ordering = ['course']
     
     def __unicode__(self):
         to_string = u'%s | %s - %s' % (self.course.school.title, self.course.lesson.name, self.teacher.user.get_full_name())

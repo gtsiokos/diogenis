@@ -64,12 +64,12 @@ class Course(models.Model):
     hash_id = models.CharField(max_length=255, unique=True, blank=True, null=True)
     
     class Meta:
-        ordering = ['lesson', 'school']
+        ordering = ['school', 'lesson']
         verbose_name = u"Μάθημα ανά Τμήμα"
         verbose_name_plural = u"Μαθήματα ανά Τμήμα"
         
     def __unicode__(self):
-        return u'[ %s ] %s' % (self.lesson.name, self.school.title)
+        return u'%s | %s' % (self.school.title, self.lesson.name)
         
     def save(self, *args, **kwargs):
         super(Course, self).save(*args, **kwargs)

@@ -93,11 +93,12 @@ class Subscription(models.Model):
     hash_id = models.CharField(max_length=255, unique=True, blank=True, null=True)
     
     class Meta:
+        ordering = ['student']
         verbose_name = u"Εγγραφή"
         verbose_name_plural = u"Εγγραφές"
     
     def __unicode__(self):
-        return u'%s [ %s - %s ]' % (self.student.user.get_full_name(), self.lab.classroom.name, self.lab.teacher.user.get_full_name())
+        return u'[%s] %s - %s' % (self.student.am, self.student.user.get_full_name(), self.lab.course.lesson.name)
     
     def save(self, *args, **kwargs):
         self.check_valid_school()

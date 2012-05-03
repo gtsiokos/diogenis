@@ -257,3 +257,47 @@ X$('DropdownWidget',
 
 });
 
+X$('SelectAllLabStudents',
+{
+    $labs: $('#content').find('div.lab'),
+    events: undefined,
+    
+    init: function(){
+        this.events = this.handle_events();
+        this.listen_events();
+    },
+                    
+    handle_events: function(){
+        var self = this;
+        
+        var checkbox = function(e){
+            var $target = $(e.target),
+                $parent = $target.parents('table'),
+                data = $target.data(),
+                option =    {
+                            selected: $target.attr('checked') || false
+                            };
+            
+            if(option.selected) {
+                $parent.find('tbody input[type="checkbox"]').attr('checked',true);
+                $target.attr('title', data.deselect_tooltip).attr('checked',true);
+            } else {
+                $parent.find('tbody input[type="checkbox"]').attr('checked',false);
+                $target.attr('title', data.select_tooltip).attr('checked',false);
+            }
+        };
+        
+        return {checkbox:checkbox};
+    },
+    
+    listen_events: function(){
+        var self = this,
+            events = self.events;
+        
+        self.$labs.delegate('input.select-all-students', 'click', events.checkbox);
+        return this;
+    }
+
+});
+
+

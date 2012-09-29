@@ -2,11 +2,11 @@
 //********************************
 //
 //********************************
-    
-X$('SchoolsClassrooms').extends('SchoolsEntries',
+
+X$('SchoolsLessons').extends('SchoolsEntries',
 {
     $buttons:           {
-	                    new_classroom: $('#new-classroom')
+	                    new_lesson: $('#new-lesson')
 	                    },
 	
 	init: function() {
@@ -56,7 +56,7 @@ X$('SchoolsClassrooms').extends('SchoolsEntries',
                 if(valid_entries) self.submit(request);
             }
             if(option['delete']) {
-                smoke.confirm('Θα διαγραφούν όλα τα εργαστήρια σε αυτή την αίθουσα. Θέλετε να συνεχίσετε;',function(e){
+                smoke.confirm('Θα διαγραφούν όλα τα εργαστήρια αυτού του μαθήματος. Θέλετε να συνεχίσετε;',function(e){
                     if(e){
                         request =   {
                                 'type':'POST',
@@ -78,7 +78,7 @@ X$('SchoolsClassrooms').extends('SchoolsEntries',
         var check_valid_entries = function(request){
             var msg = '';
             
-            if(!request['name']) msg = "Συμπληρώστε το όνομα της αίθουσας";
+            if(!request['name']) msg = "Συμπληρώστε το όνομα του μαθήματος";
             
             if(msg){
                 self.show_message(3, msg, 200);
@@ -86,22 +86,22 @@ X$('SchoolsClassrooms').extends('SchoolsEntries',
             } else { return true; }
         };
         
-        var new_classroom = function(){
+        var new_lesson = function(){
             var $this = $this,
-                msg = "Προσθέστε την καινούρια αίθουσα του τμήματος";
+                msg = "Προσθέστε ένα μάθημα στο τμήμα σας";
             
             var context =   {   
-                            entries: [ {id:false, 'name':"Όνομα Αίθουσας"} ]
+                            entries: [ {id:false, 'name':"Όνομα Μαθήματος"} ]
                             };
             self.rendering.list(context);
             
-            var $new_classroom = self.$entries.find('li:first');
-            self.rendering.edit.apply($new_classroom, context.entries);
+            var $new_lesson = self.$entries.find('li:first');
+            self.rendering.edit.apply($new_lesson, context.entries);
             self.show_message(0, msg, 200);
             
         };
         
-        return {options:options, new_classroom:new_classroom};
+        return {options:options, new_lesson:new_lesson};
     },
     
     handle_rendering: function(){
@@ -127,9 +127,8 @@ X$('SchoolsClassrooms').extends('SchoolsEntries',
             events = self.events;
         
         self.$entries.delegate('li ul.ui-options', 'click', events.options);
-        self.$buttons.new_classroom.bind('click', events.new_classroom);
+        self.$buttons.new_lesson.bind('click', events.new_lesson);
     },
-    
     
 	submit: function(r) {
         var self = this,
@@ -144,7 +143,7 @@ X$('SchoolsClassrooms').extends('SchoolsEntries',
             request = JSON.stringify(r);
         }
         
-        var ajax_url = '/schools/'+self.user.username+'/classrooms/';
+        var ajax_url = '/schools/'+self.user.username+'/lessons/';
         if(r.params) ajax_url += r.params.join('/')+'/';
         
         $.ajax({

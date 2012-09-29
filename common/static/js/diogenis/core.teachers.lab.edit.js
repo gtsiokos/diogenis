@@ -1,14 +1,12 @@
 
-X$('StudentEdit',
+X$('StudentEdit').mixin(['MessagesMixin']).extends('StudentEdit',
 {
     $labs:          $('div.lab', '#content'),
-    $messages:      $('#ui-messages'),
     $dropdown:      $('div.lab span.edit.enabled', '#content'),
     
     url:            undefined,
     $students:      [],
     lab:            { 'new': {}, 'old': {} },
-    status:         {0:'', 1:'ok', 2:'error', 3:'warning'},
     
     init: function(){
         var self = this;
@@ -24,17 +22,6 @@ X$('StudentEdit',
         self.$labs.find('table td>input').removeAttr('disabled').attr('checked', false);
         
         return this;
-    },
-    
-    show_message: function(status_id, msg, speed) {
-        var self = this,
-            speed = speed || 150,
-            status = self.status[status_id];
-            
-        self.$messages.find('p').fadeOut(100, function(){
-            $.scrollTo({top: 0}, 500, {axis:'y'});
-            $(this).removeClass().addClass(status).html(msg).fadeIn(speed);
-        });
     },
     
     handle_events: function(){

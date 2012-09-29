@@ -10,24 +10,39 @@
 	<ul id="navigation">
 		<li>
 			<a class="first {% block index-active %}{% endblock %}" href="{% url schools.index user.username %}">
-				<img src="{{ STATIC_URL }}img/black_board_icon.png" />
+				<img src="{{ STATIC_URL }}img/home_icon.png" />
 				Αρχική
 			</a>
 		</li>
 		<li>
-			<a class="{% block classrooms-active %}{% endblock %}" href="{% url schools.classrooms user.username %}">
+			<a class="{% block lessons-active %}{% endblock %}" href="{% url schools.lessons user.username %}">
 				<img src="{{ STATIC_URL }}img/drawer_icon.png" />
-				Αίθουσες
+				Μαθήματα
 			</a>
 		</li>
 		<li>
 			<a class="last {% block teachers-active %}{% endblock %}" href="{% url schools.teachers user.username %}">
-				<img src="{{ STATIC_URL }}img/black_board_icon.png" />
+				<img src="{{ STATIC_URL }}img/contact_icon.png" />
 				Καθηγητές
+			</a>
+		</li>
+		<li>
+			<a class="{% block classrooms-active %}{% endblock %}" href="{% url schools.classrooms user.username %}">
+				<img src="{{ STATIC_URL }}img/black_board_icon.png" />
+				Αίθουσες
 			</a>
 		</li>
 	</ul>
 </div>
+{% endblock %}
+
+{% block extra_js_bottom %}
+	{% spaceless %}
+
+	{{ block.super }}
+	<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/mixins/messages.js"></script>
+	
+	{% endspaceless %}
 {% endblock %}
 
 

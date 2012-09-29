@@ -18,6 +18,7 @@ from diogenis.students.models import *
 from diogenis.schools.mixins import AuthenticatedSchoolMixin
 from diogenis.schools.forms import CoursesUploadForm as Form
 
+
 class IndexView(AuthenticatedSchoolMixin, View):
     
     def get(self, request, username):
@@ -37,6 +38,7 @@ class IndexView(AuthenticatedSchoolMixin, View):
         
         context = {'message':message}
         return render(request, 'schools/index.html', context)
+
         
 class SubscriptionsActivationView(AuthenticatedSchoolMixin, View):
     
@@ -46,6 +48,7 @@ class SubscriptionsActivationView(AuthenticatedSchoolMixin, View):
         request.user.save()
         
         return HttpResponseRedirect('/')
+
 
 class ClassroomView(AuthenticatedSchoolMixin, View):
     
@@ -80,7 +83,7 @@ class ClassroomView(AuthenticatedSchoolMixin, View):
             response = {'status':2, 'msg':msg}
         
         classrooms = [classroom.json() for classroom in self.school.classrooms.all().order_by('name')]
-        response = {'action':action, 'status':1, 'classrooms':classrooms}
+        response = {'action':action, 'status':1, 'entries':classrooms}
         
         if not response:
             msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
@@ -137,7 +140,101 @@ class ClassroomView(AuthenticatedSchoolMixin, View):
             msg = u"H διαγραφή ολοκληρώθηκε"
             response = {'action':action, 'status':1, 'msg':msg}
         return simplejson.dumps(response)
+
+
+class LessonView(AuthenticatedSchoolMixin, View):
     
+    def get(self, request, username):
+        self.school = School.objects.get(user=request.user)
+        
+        if request.is_ajax():
+            data = self.get_list_json(request)
+            return HttpResponse(data, mimetype='application/javascript')
+            
+        return render(request, 'schools/lessons.html', {})
+        
+    def post(self, request, username, hash_id=None):
+        self.school = School.objects.get(user=request.user)
+        
+        if request.is_ajax():
+            if(hash_id):
+                data = self.delete_lesson(request)
+            else:
+                data = self.create_update_lesson(request)
+            return HttpResponse(data, mimetype='application/javascript')
+        else:
+            raise Http404
+
+    def get_list_json(self, request):
+        request = request.GET
+        response = {}
+        try:
+            action = request.get('action', '')    #[action] defines different view handling
+        except KeyError:
+            msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
+            response = {'status':2, 'msg':msg}
+        
+        lessons = [lesson.json() for lesson in self.school.lessons.all().order_by('name')]
+        response = {'action':action, 'status':1, 'entries':lessons}
+        
+        if not response:
+            msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
+            response = {'status':2, 'msg':msg}
+        return simplejson.dumps(response)
+    
+    def create_update_lesson(self, request):
+        request = simplejson.loads(request.raw_post_data)
+        response = {}
+        try:
+            action = request['action']    #[action] defines different view handling
+            lesson_id = request.get('id', '')
+            name = request.get('name', '')
+        except KeyError:
+            msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
+            response = {'status':2, 'msg':msg}
+        
+        if lesson_id:
+            lesson  = Lesson.objects.get(hash_id=lesson_id)
+            lesson.name = name if name else lesson.name
+            lesson.save()
+        else:
+            lesson = Lesson(name=name)
+            lesson.save()
+            course = Course(school=self.school, lesson=lesson)
+            course.save()
+            
+        if not response:
+            msg = u"H αποθήκευση ολοκληρώθηκε"
+            response = {'action':action, 'status':1, 'msg':msg}
+        return simplejson.dumps(response)
+    
+    def delete_lesson(self, request):
+        request = simplejson.loads(request.raw_post_data)
+        response = {}
+        try:
+            action = request['action']    #[action] defines different view handling
+            lesson_id = request.get('id', '')
+        except KeyError:
+            msg = u"Παρουσιάστηκε σφάλμα κατά την αποστολή των δεδομένων"
+            response = {'status':2, 'msg':msg}
+        
+        lesson = Lesson.objects.get(hash_id=lesson_id)
+        many_schools = True if len(lesson.school_set.all())>1 else False
+        
+        Lab.objects.filter(course__school=self.school, course__lesson=lesson).delete()
+        
+        if many_schools:
+            course = Course(school=self.school, lesson=lesson)
+            course.delete()
+        else:
+            lesson.delete()
+        
+        if not response:
+            msg = u"H διαγραφή ολοκληρώθηκε"
+            response = {'action':action, 'status':1, 'msg':msg}
+        return simplejson.dumps(response)
+
+
 class TeacherView(AuthenticatedSchoolMixin, View):
     
     def get(self, request, username):
@@ -277,4 +374,5 @@ class TeacherView(AuthenticatedSchoolMixin, View):
 index = IndexView.as_view()
 subscriptions_activation = SubscriptionsActivationView.as_view()
 classroom = ClassroomView.as_view()
+lesson = LessonView.as_view()
 teacher = TeacherView.as_view()

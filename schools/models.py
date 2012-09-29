@@ -57,6 +57,12 @@ class Lesson(models.Model):
         if not self.hash_id:
             self.hash_id = get_hashed_id(self.id)
             super(Lesson, self).save(*args, **kwargs)
+    
+    def json(self):
+        return  {
+                'id': self.hash_id,
+                'name': self.name,
+                }
         
 class Course(models.Model):
     school = models.ForeignKey('School')

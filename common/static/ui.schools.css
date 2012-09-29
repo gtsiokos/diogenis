@@ -9,11 +9,16 @@
 }
 
 #sidebar #new-teacher               { margin: 0 0 0 70px; width: 152px; }
-#sidebar #new-classroom             { margin: 0 0 0 69px; }
+#sidebar #new-classroom             { margin: 0 0 0 70px; width: 152px; padding-right: 7px; padding-left: 8px;}
+#sidebar #new-lesson                { margin: 0 0 0 66px; }
 
-#teachers, #classrooms              { width: 640px; }
-
-#classrooms li.classroom span>input {
+#teachers, #entries                 { width: 640px; }
+/*
+#entries li.entry ul.ui-options         { opacity:0.5; }
+#entries li.entry:hover ul.ui-options   { opacity:1.0; }
+#entries li.entry.active ul.ui-options  { opacity:1.0; }
+*/
+#entries li.entry span>input     {
                                     width: 240px;
                                     padding: 5px;
                                     background: #141414; color: #fdfdfd;

@@ -1,9 +1,9 @@
 {% extends "schools/entries.html" %}
 
-{% block classrooms-active %}active{% endblock %}
+{% block lessons-active %}active{% endblock %}
 
 {% block action %}
-<button id="new-classroom" class="button important regular">Προσθήκη Αίθουσας</button>
+<button id="new-lesson" class="button important regular">Προσθήκη Μαθήματος</button>
 {% endblock %}
 
 {% block extra_js_bottom %}
@@ -11,7 +11,7 @@
 
 	{{ block.super }}
 	<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/core.schools.entries.js"></script>
-	<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/core.schools.classrooms.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/core.schools.lessons.js"></script>
 	
 	{% endspaceless %}
 {% endblock %}

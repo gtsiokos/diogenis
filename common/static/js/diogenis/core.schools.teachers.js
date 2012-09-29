@@ -3,12 +3,11 @@
 //
 //********************************
     
-X$('SchoolsTeachers',
+X$('SchoolsTeachers').mixin(['MessagesMixin']).extends('SchoolsTeachers',
 {
     user:               $('#content').data(),
     
     $teachers:			$('#teachers'),
-	$messages:          $('#ui-messages'),
 	$buttons:           {
 	                    new_teacher: $('#new-teacher')
 	                    },
@@ -18,7 +17,6 @@ X$('SchoolsTeachers',
                                     details:$('#details-tpl').html()
                                     }
                         },
-    status:             {0:'', 1:'ok', 2:'error', 3:'warning'},
     
     init: function() {
         var self = this;
@@ -29,17 +27,6 @@ X$('SchoolsTeachers',
         self.submit({type:'GET', action:'get'});
         self.listen_events();
         return this;
-    },
-    
-    show_message: function(status_id, msg, speed) {
-        var self = this,
-            speed = speed || 150,
-            status = self.status[status_id];
-            
-        self.$messages.find('p').fadeOut(100, function(){
-            $.scrollTo({top: 0}, 500, {axis:'y'});
-            $(this).removeClass().addClass(status).text(msg).fadeIn(speed);
-        });
     },
     
     handle_events: function(){

@@ -1,4 +1,5 @@
 {% load compress %}
+{% load diogenis_extras %}
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -20,8 +21,8 @@
         <!--[if lt IE 9]>
             <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}ie-fallback.css" />
         <![endif]-->
+		{% jquery "https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" %}
 		
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 		{% block extra_js_top %}{% endblock %}
 
 	</head>
@@ -85,14 +86,15 @@
 			<script type="text/javascript" src="{{ STATIC_URL }}js/json2.js"></script>
 			<script type="text/javascript" src="{{ STATIC_URL }}js/jsonselect-0.2.1.js"></script>
 			<script type="text/javascript" src="{{ STATIC_URL }}js/smoke/smoke.js"></script>
+			<script type="text/javascript" src="{{ STATIC_URL }}js/owl.deepcopy.js"></script>
 			
 			<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.ba-tinypubsub.min.js"></script>
 			<script type="text/javascript" src="{{ STATIC_URL }}js/chosen/jquery.chosen.min.js"></script>
 			
 			<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.scrollTo-1.4.2-min.js"></script>
 			
-			<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/core.components.layout.js"></script>
-			<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/core.components.helpers.js"></script>
+			<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/components/layout.js"></script>
+			<script type="text/javascript" src="{{ STATIC_URL }}js/diogenis/components/helpers.js"></script>
 		    
 		{% endblock %}
 		{% endcompress %}

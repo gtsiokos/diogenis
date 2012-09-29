@@ -2,23 +2,18 @@
 //********************************
 //
 //********************************
-    
-X$('SchoolsClassrooms').extends('SchoolsEntries',
+
+X$('SchoolsEntries').mixin(['MessagesMixin']).extends('SchoolsEntries',
 {
-    $buttons:           {
-	                    new_classroom: $('#new-classroom')
-	                    },
-	
-	init: function() {
-        var self = this;
-        
-        self.events = self.handle_events();
-        self.rendering = self.handle_rendering();
-        
-        self.submit({type:'GET', action:'get'});
-        self.listen_events();
-        return this;
-    },
+    user:               $('#content').data(),
+    
+    $entries:		    $('#entries'),
+	templates:          {
+                        entries: {
+                                    list:$('#list-tpl').html(),
+                                    edit:$('#edit-tpl').html()
+                                    }
+                        },
     
     handle_events: function(){
         var self = this;

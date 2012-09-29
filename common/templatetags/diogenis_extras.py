@@ -1,4 +1,6 @@
 from django import template
+from diogenis.local_settings import DEBUG as debug
+from diogenis.local_settings import STATIC_URL as static_url
 
 register = template.Library()
 
@@ -54,3 +56,11 @@ def truncatechars(value, arg):
     if not isinstance(value, basestring):
         value = str(value)
     return truncate_chars(value, length)
+    
+@register.simple_tag
+def jquery(url):
+    url = static_url+'/js/jquery.js' if debug else url
+    script_tag = '<script type="text/javascript" src="%s"></script>' % url
+    
+    return script_tag
+

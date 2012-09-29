@@ -1,0 +1,20 @@
+{% extends "schools/base.html" %}
+
+{% block content %}
+
+<div id="content" data-username="{{ user.username }}" class="logged">
+	{{ block.super }}
+	<div id="ui-messages" class="ui-messages">
+	    <p>Κονσόλα Μηνυμάτων</p>
+	</div>
+	<ul id="entries" class="ui-entries"></ul>
+</div>
+
+{% endblock content %}
+
+{% block footer %}
+    
+    {% include "handlebars/schools/entries.html" %}
+   
+{% endblock %}
+

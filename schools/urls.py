@@ -9,4 +9,6 @@ urlpatterns = patterns('',
     url(r'^(?P<username>\w{0,50})/teachers/(?P<hash_id>\w{0,64})/$', teacher),
     url(r'^(?P<username>\w{0,50})/classrooms/$', classroom, name='schools.classrooms'),
     url(r'^(?P<username>\w{0,50})/classrooms/(?P<hash_id>\w{0,64})/$', classroom),
+    url(r'^(?P<username>\w{0,50})/lessons/$', lesson, name='schools.lessons'),
+    url(r'^(?P<username>\w{0,50})/lessons/(?P<hash_id>\w{0,64})/$', lesson),
 )

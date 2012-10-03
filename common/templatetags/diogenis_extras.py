@@ -59,7 +59,7 @@ def truncatechars(value, arg):
     
 @register.simple_tag
 def jquery(url):
-    url = static_url+'/js/jquery.js' if debug else url
+    url = static_url+'js/jquery.js' if debug else url
     script_tag = '<script type="text/javascript" src="%s"></script>' % url
     
     return script_tag

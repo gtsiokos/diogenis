@@ -100,6 +100,7 @@ class DionysosAuthentication(object):
             fullname = u""
             if (splitted > 1) or (dashed > -1):
                 for a_word in string_under_test:
+                    a_word = a_word + " "
                     for a_char in a_word:
                         if a_char == u"-":
                             newstring = newstring + u" "

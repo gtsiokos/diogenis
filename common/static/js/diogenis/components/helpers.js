@@ -116,14 +116,14 @@ X$('Helpers',
     //Generates email for search-bots defence
     //********************************                          
     generateFooterEmail:function(){
-                            var is_temporary = true,
+                            var is_temporary = false,
                                 $email = $("#footer-email"),
                                 domain = $email.attr('rel').replace('http://', '@');
                             
                             if(is_temporary){
 	                            $email.attr('href', 'mailto:onnotes@gmail.com');
                             }else{
-                                $email.attr('href', 'mailto:contact'+domain);
+                                $email.attr('href', 'mailto:diogenis'+domain);
                             }
                             
                             return this;

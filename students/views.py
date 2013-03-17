@@ -199,6 +199,11 @@ def has_laptop(request, username):
     ##
     message = {'status':1, 'msg':u'Οι καθηγητές ενημερώθηκαν για την επιλογή σου'}
     
+    if request.user.last_name.find('+') >= 0:
+        message = {'status':2, 'msg':u'Οι καθηγητές έχουν ήδη ενημερωθεί για την επιλογή σου :D'}
+    else:
+        request.user.last_name = u'+ ' + request.user.last_name
+        request.user.save()
     context = {
               'message':message,
               }

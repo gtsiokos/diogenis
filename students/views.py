@@ -189,3 +189,17 @@ class SettingsView(AuthenticatedStudentMixin, View):
         
 
 settings = SettingsView.as_view()
+
+
+@request_passes_test(user_is_student, login_url='/login/')
+def has_laptop(request, username):
+    ##
+    ## message template as above
+    ## status 1 green notification, status 2 red notification
+    ##
+    message = {'status':1, 'msg':u'Οι καθηγητές ενημερώθηκαν για την επιλογή σου'}
+    
+    context = {
+              'message':message,
+              }
+    return render(request, 'students/settings.html', context)

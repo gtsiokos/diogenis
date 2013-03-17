@@ -21,6 +21,14 @@
 	</div>
 	<ul class="ui-categories">
 	    <li>
+	        <h3>Πληροφορίες προς Καθηγητές</h3>
+	        <p>Έχω φορητό υπολογιστή ή έχω παρακολουθήσει σε προηγούμενο εξάμηνο όλες τις εργαστηριακές ασκήσεις.</p>
+	        <form id="has_laptop" action="{% url students.has_laptop user.username %}" method="POST">
+	            {% csrf_token %}
+	            <input class="button important regular" type="submit" value="Ενημέρωση Καθηγητών">
+	        </form>
+	    </li>
+	    <li>
 	        <h3>Αλλαγή Κωδικού στον Λογαριασμό σας</h3>
 	        <p>Σε περίπτωση που <strong>έχετε αλλάξει τον κωδικό σας στον Διόνυσο</strong>, συμπληρώστε εδώ τον νέο σας κωδικό:</p>
 	        <form id="change-password" action="" method="POST">

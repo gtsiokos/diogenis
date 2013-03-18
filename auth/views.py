@@ -83,8 +83,8 @@ def signup(request):
         
         if action == 'authenticate':
             try:
-                username = json_data['username']
-                password = json_data['password']
+                username = json_data['username'].strip()
+                password = json_data['password'].strip()
                 registration_number = json_data.get('registration-number', '')
                 first_name = json_data.get('first-name', '')
                 last_name = json_data.get('last-name', '')

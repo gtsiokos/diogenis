@@ -1,7 +1,7 @@
 # Diogenis: the online labs registration platform for Technological Institute of Larissa, Greece
 
 Diogenis project is a Django-based web application.
-It started out as university thesis for students [George Tsiokos](http://georgetsiokos.com/) and [Stefanos Chrousis](https://twitter.com/#!/Lopofsky).
+It started out as university thesis for students [George Tsiokos](http://georgetsiokos.com/) and [Stefanos Chrousis](https://www.linkedin.com/in/stefanos-chrousis-68610655/).
 The goal is to solve, with a pragmatic approach, the management of lab registration procedure, since there is no automated system for doing this.
 
 ## Install
